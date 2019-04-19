@@ -1,0 +1,206 @@
+React\Socket\Connection::__set_state(array(
+   'unix' => false,
+   'encryptionEnabled' => false,
+   'stream' => NULL,
+   'input' => 
+  React\Stream\DuplexResourceStream::__set_state(array(
+     'stream' => NULL,
+     'loop' => 
+    React\EventLoop\StreamSelectLoop::__set_state(array(
+       'futureTickQueue' => 
+      React\EventLoop\Tick\FutureTickQueue::__set_state(array(
+         'queue' => 
+        SplQueue::__set_state(array(
+        )),
+      )),
+       'timers' => 
+      React\EventLoop\Timer\Timers::__set_state(array(
+         'time' => 1529773445.830173,
+         'timers' => 
+        array (
+        ),
+         'schedule' => 
+        array (
+        ),
+         'sorted' => true,
+      )),
+       'readStreams' => 
+      array (
+        27 => NULL,
+        28 => NULL,
+      ),
+       'readListeners' => 
+      array (
+        27 => 
+        Closure::__set_state(array(
+        )),
+        28 => 
+        array (
+          0 => NULL,
+          1 => 'handleData',
+        ),
+      ),
+       'writeStreams' => 
+      array (
+      ),
+       'writeListeners' => 
+      array (
+      ),
+       'running' => true,
+       'pcntl' => true,
+       'signals' => 
+      React\EventLoop\SignalsHandler::__set_state(array(
+         'signals' => 
+        array (
+        ),
+      )),
+    )),
+     'bufferSize' => -1,
+     'buffer' => 
+    React\Stream\WritableResourceStream::__set_state(array(
+       'stream' => NULL,
+       'loop' => 
+      React\EventLoop\StreamSelectLoop::__set_state(array(
+         'futureTickQueue' => 
+        React\EventLoop\Tick\FutureTickQueue::__set_state(array(
+           'queue' => 
+          SplQueue::__set_state(array(
+          )),
+        )),
+         'timers' => 
+        React\EventLoop\Timer\Timers::__set_state(array(
+           'time' => 1529773445.830173,
+           'timers' => 
+          array (
+          ),
+           'schedule' => 
+          array (
+          ),
+           'sorted' => true,
+        )),
+         'readStreams' => 
+        array (
+          27 => NULL,
+          28 => NULL,
+        ),
+         'readListeners' => 
+        array (
+          27 => 
+          Closure::__set_state(array(
+          )),
+          28 => 
+          array (
+            0 => NULL,
+            1 => 'handleData',
+          ),
+        ),
+         'writeStreams' => 
+        array (
+        ),
+         'writeListeners' => 
+        array (
+        ),
+         'running' => true,
+         'pcntl' => true,
+         'signals' => 
+        React\EventLoop\SignalsHandler::__set_state(array(
+           'signals' => 
+          array (
+          ),
+        )),
+      )),
+       'softLimit' => 65536,
+       'writeChunkSize' => 8192,
+       'listening' => false,
+       'writable' => true,
+       'closed' => false,
+       'data' => '',
+       'listeners' => 
+      array (
+        'error' => 
+        array (
+          0 => 
+          Closure::__set_state(array(
+          )),
+        ),
+        'close' => 
+        array (
+          0 => 
+          array (
+            0 => NULL,
+            1 => 'close',
+          ),
+        ),
+        'drain' => 
+        array (
+          0 => 
+          Closure::__set_state(array(
+          )),
+        ),
+      ),
+    )),
+     'readable' => true,
+     'writable' => true,
+     'closing' => false,
+     'listening' => true,
+     'listeners' => 
+    array (
+      'data' => 
+      array (
+        0 => 
+        Closure::__set_state(array(
+        )),
+      ),
+      'end' => 
+      array (
+        0 => 
+        Closure::__set_state(array(
+        )),
+      ),
+      'error' => 
+      array (
+        0 => 
+        Closure::__set_state(array(
+        )),
+      ),
+      'close' => 
+      array (
+        0 => 
+        Closure::__set_state(array(
+        )),
+        1 => 
+        array (
+          0 => NULL,
+          1 => 'close',
+        ),
+      ),
+      'pipe' => 
+      array (
+        0 => 
+        Closure::__set_state(array(
+        )),
+      ),
+      'drain' => 
+      array (
+        0 => 
+        Closure::__set_state(array(
+        )),
+      ),
+    ),
+  )),
+   'listeners' => 
+  array (
+    'data' => 
+    array (
+      0 => 
+      Closure::__set_state(array(
+      )),
+    ),
+    'close' => 
+    array (
+      0 => 
+      Closure::__set_state(array(
+      )),
+    ),
+  ),
+))

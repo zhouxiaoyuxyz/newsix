@@ -1,0 +1,120 @@
+<include file="public:header"/>
+<header class="top-fixed bg-yellow bg-inverse">
+	<div class="top-back">
+		<a class="top-addr" href="<{:U('community/detail',array('community_id'=>$detail['community_id']))}>"><i class="icon-angle-left"></i></a>
+	</div>
+		<div class="top-title">
+			入驻（<{$detail.name}>）小区
+		</div>
+	<div class="top-signed">
+		<!--<a href="<{:U('mobile/message/index')}>"><i class="icon-envelope"></i></a>-->
+	</div>
+</header>
+
+
+<form action="<{:U('community/owner',array('community_id'=>$detail['community_id']))}>" method="post" target="x-frame">
+	<div class="line padding border-bottom">
+		<span class="x3 text-gray">当前用户</span>
+		<span class="x9"><{$MEMBER['account']}>（<{$MEMBER['nickname']}>）</span>
+	</div>
+	
+	<div class="line padding border-bottom">
+		<span class="x3 text-gray">住址</span>
+		<select name="dong" id="dong" style="width:100px;">
+			<option>栋（楼号）</option>
+			<volist name="dong_list" id="dong">
+				<option  value="{$dong}">{$dong}</option>
+			</volist>                                                  
+		 </select>
+		 <select name="danyuan"  id="danyuan" style="width:80px;" >
+			 <option>单元</option>
+			 <volist name="city_list" id="city">
+				 <option value="{$city.region_id}" selected="selected">{$city.region_name}</option>
+			 </volist>                                                  
+		  </select>
+		  <select name="number"  id="number" style="width:80px;" >
+			  <option value="0">房号</option>
+			  <volist name="dis_list" id="dis">
+			   <option value="{$dis.region_id}" selected="selected">{$dis.region_name}</option>
+			  </volist>                                              
+		   </select>  
+	</div>
+	
+	
+	<div class="line padding border-bottom">
+		<span class="x3 text-gray">具体地址</span>
+		<span class="x9"><input type="text" name="location" id="location" class="text-input"></span>
+	</div>
+	<div class="line padding border-bottom">
+		<span class="x3 text-gray">姓名</span>
+		<span class="x6"><input type="text" name="name" id="name" class="text-input"></span>
+		<span class="x3"><em class="text-small text-gray">输入您的称呼<em></span>
+	</div>
+	<div class="container">
+		<div class="blank-30"></div>
+		<p><span class="text-dot">重要提示：</span> 请您一定要认真填写相关信息哦~地址范例：13栋1号楼204</p>
+	</div>
+	<div class="container">
+		<div class="blank-30"></div>
+		<button class="button button-big button-block bg-dot">提交修改</button>
+		<div class="blank-30"></div>
+	</div>
+</form>
+
+<script>
+    $("#dong").change(function(){
+    var dong=$(this).val();
+    $.ajax({
+        url:'/city/index.php/Home/Index/get_citys',
+        Type:"POST",
+        data:"dong="+dong,
+        dataType:"json",
+        success:function(data){
+            var city = data.city;
+            var option=$("<option></option>");
+            $(option).val("0");
+            $(option).html("请选择");
+            var option1=$("<option></option>");
+            $(option1).val("0");
+            $(option1).html("请选择");
+            $("#danyuan").html(option);
+            $("#number").html(option1);
+            for(var i in city){
+                var option=$("<option></option>");
+                $(option).val(city[i]['region_id']);
+                $(option).html(city[i]['region_name']);
+                $("#danyuan").append(option);
+            }
+        }
+        
+    });
+});
+</script>
+<script>
+$("#danyuan").change(function(){
+    var danyuan=$(this).val();
+    $.ajax({
+        url:'/city/index.php/Home/Index/get_district',
+        Type:"POST",
+        data:"danyuan="+danyuan,
+        dataType:"json",
+        success:function(data){
+            var district = data.district;
+            var option=$("<option></option>");
+            $(option).val("0");
+            $(option).html("请选择");
+            $("#number").html(option);
+            for(var i in district){
+                var option=$("<option></option>");
+                $(option).val(district[i]['region_id']);
+                $(option).html(district[i]['region_name']);
+                $("#number").append(option);
+            }
+        }
+    });
+});
+</script>
+
+      
+
+<include  file='public:footer'/> 

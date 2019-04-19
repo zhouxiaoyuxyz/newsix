@@ -1,0 +1,140 @@
+<include file="public:header"/>
+<header class="top-fixed bg-yellow bg-inverse">
+	<div class="top-back">
+		<a class="top-addr" href="<{:U('community/detail',array('community_id'=>$detail['community_id']))}>"><i class="icon-angle-left"></i></a>
+	</div>
+		<div class="top-title">
+			入驻（<{$detail.name}>）小区
+		</div>
+	<div class="top-signed">
+		<!--<a href="<{:U('mobile/message/index')}>"><i class="icon-envelope"></i></a>-->
+	</div>
+</header>
+
+
+<form action="<{:U('community/owner',array('community_id'=>$detail['community_id']))}>" method="post" target="x-frame">
+	<div class="line padding border-bottom">
+		<span class="x3 text-gray">当前用户</span>
+		<span class="x9"><{$MEMBER['account']}>（<{$MEMBER['nickname']}>）</span>
+	</div>
+	
+	<div class="line padding border-bottom">
+		<span class="x3 text-gray">住址</span>
+		<select class="x3" name="dong" id="dong"">
+			<option>栋（楼号）</option>
+			<volist name="dong_list" id="dong">
+				<option  value="<{$dong}>"><{$dong}></option>
+			</volist>                                                  
+		 </select>
+		 <select name="danyuan"  id="danyuan" class="x3" >
+			 <option>单元</option>
+			 <volist name="danyuan_list" id="danyuan">
+				 <option value="<{$danyuan}>" selected="selected"><{$danyuan}></option>
+			 </volist>                                                  
+		  </select>
+		  <select name="number"  id="number" class="x3" >
+			  <option value="0">房号</option>
+			  <volist name="number_list" id="number">
+			   <option value="<{$number}>" selected="selected"><{$number}></option>
+			  </volist>                                              
+		   </select>  
+	</div>
+	
+	
+	<div class="line padding border-bottom">
+		<span class="x3 text-gray">户主电话</span>
+		<span class="x9" id="phone"></span>
+	</div>
+	<div class="line padding border-bottom">
+		<span class="x3 text-gray">户主姓名</span>
+		<span class="x9" id="name"></span>
+	</div>
+	<input type="hidden" name="owner_id" id="owner_id" value="" />
+	<div class="container">
+		<div class="blank-30"></div>
+		<p><span class="text-dot">重要提示：</span> 若户主信息不存在或与您预留信息不一致，请及时联系物业修改！</p>
+	</div>
+	<div class="container">
+		<div class="blank-30"></div>
+		<button class="button button-big button-block bg-dot">提交绑定</button>
+		<div class="blank-30"></div>
+	</div>
+</form>
+
+<script>
+    $("#dong").change(function(){
+    var dong=$(this).val();
+    $.ajax({
+        url:'/mobile/community/get_danyuan',
+        Type:"POST",
+        data:"dong="+dong,
+        dataType:"json",
+        success:function(data){
+            var danyuan = data.danyuan;
+            var option=$("<option></option>");
+            $(option).val("0");
+            $(option).html("选择单元");
+            var option1=$("<option></option>");
+            $(option1).val("0");
+            $(option1).html("选择户号");
+            $("#danyuan").html(option);
+            $("#number").html(option1);
+            for(var i in danyuan){
+                var option=$("<option></option>");
+                $(option).val(danyuan[i]);
+                $(option).html(danyuan[i]);
+                $("#danyuan").append(option);
+            }
+        }
+        
+    });
+});
+</script>
+<script>
+$("#danyuan").change(function(){
+    var danyuan=$(this).val();
+	var dong =  $("#dong").val();
+    $.ajax({
+        url:'/mobile/community/get_number',
+        Type:"POST",
+        data:{danyuan:danyuan, dong:dong},
+        dataType:"json",
+        success:function(data){
+            var number = data.number;
+            var option=$("<option></option>");
+            $(option).val("0");
+            $(option).html("选择户号");
+            $("#number").html(option);
+            for(var i in number){
+                var option=$("<option></option>");
+                $(option).val(number[i]);
+                $(option).html(number[i]);
+                $("#number").append(option);
+            }
+        }
+    });
+});
+</script>
+
+  <script>
+$("#number").change(function(){
+    var number=$(this).val();
+	var dong =  $("#dong").val();
+	var danyuan =  $("#danyuan").val();
+    $.ajax({
+        url:'/mobile/community/get_owner',
+        Type:"POST",
+        data:{number:number, danyuan:danyuan, dong:dong},
+        dataType:"json",
+        success:function(data){
+            var owner = data.owner;
+            $("#phone").html(owner.phone);
+            $("#name").html(owner.name);
+			$("#owner_id").val(owner.owner_id);
+          
+        }
+    });
+});
+</script>    
+
+<include  file='public:footer'/> 

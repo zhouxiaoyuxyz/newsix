@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>speech</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/annyang/2.6.1/annyang.js"></script>
+    <script src="https://cdn.bootcss.com/SpeechKITT/1.0.0/speechkitt.min.js"></script>
+</head>
+<body>
+
+<span id="text">init</span>
+
+<script>
+    if (annyang) {
+        annyang.setLanguage('zh-CN');
+        // Add our commands to annyang
+        annyang.addCommands({
+            '我要洗衣服': function() {
+                console.log('recognition: 我要洗衣服!');
+                $("#text").text("我要洗衣服")
+            }
+        });
+        annyang.debug('on');
+
+        // Tell KITT to use annyang
+        SpeechKITT.annyang();
+
+        // Define a stylesheet for KITT to use
+        SpeechKITT.setStylesheet('https://cdn.bootcss.com/SpeechKITT/1.0.0/themes/flat.css');
+
+        // Render KITT's interface
+        SpeechKITT.vroom();
+    }else{
+        alert("no annyang")
+    }
+
+</script>
+
+</body>
+</html>

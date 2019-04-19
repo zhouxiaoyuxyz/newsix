@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的报名</title>
+    <div class="top-back">
+        <a class="top-addr" href="<{:U('life/zhaopin')}>"><i class="icon-angle-left"></i></a>
+    </div>
+    <div class="top-title">
+        我的报名
+    </div>
+    <style>
+        body{padding:0px;}
+    </style>
+    <include  file='public:header'/>
+</head>
+<body>
+<table style="margin:3vh auto;width:80vw;text-align:center;">
+    <tr>
+        <th>序号</th>
+        <th>工作名称</th>
+        <th>工资</th>
+        <th>审核状态</th>
+    </tr>
+    <foreach name="list" item="var">
+        <tr>
+            <td><{$key+1}></td>
+            <td><{$var.job_title}></td>
+            <td><{$var.salary}></td>
+            <if condition="$var['audit']==1">
+                <td>已通过</td>
+                <elseif condition="$var['audit']==2"/><td>未通过</td>
+                <else/> <td>未审核</td>
+            </if>
+        </tr>
+    </foreach>
+</table>
+
+<include  file='public:footer'/>
+</body>
+</html>

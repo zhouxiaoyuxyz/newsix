@@ -1,0 +1,4 @@
+Curl::__set_state(array(
+   'cookie_file' => NULL,
+   'cookie' => false,
+))

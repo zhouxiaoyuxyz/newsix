@@ -1,0 +1,29 @@
+<include  file='public:header'/>
+<link href="/Baocms/Tpl/statics/css/main.css" rel="stylesheet" type="text/css">
+<div class="main">
+<div class="mainBt">
+    <ul>
+        <li class="li1">业主</li>
+        <li class="li2">业主管理</li>
+        <li class="li2 li3">批量导入</li>
+    </ul>
+</div>
+<form   action="<{:U('owner/import')}>" enctype="multipart/form-data" method="post">
+    <div class="mainScAdd">
+        <div class="tableBox">
+            <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+              <tr>
+                    <td class="lfTdBt">选择文件：</td>
+                    <td class="rgTdBt">
+                        <input type="file" name="csv" value=""  />
+                        <code>请按照样本格式要求整理导入业主信息<a href="__PUBLIC__/owner.csv" style="color: red;">导入样本</a></code>
+                    </td>
+                </tr>
+               
+            </table>
+        </div>
+        <div class="smtQr"><input type="submit" value="分析业主" class="smtQrIpt" /></div>
+    </div>
+</form>
+</div>
+<include  file='public:footer'/>       

@@ -1,0 +1,12 @@
+
+<link href="__TMPL__statics/css/newstyle.css" rel="stylesheet" type="text/css" />
+<div class="tuanfabu_tab">
+   <ul>
+     <li class="tuanfabu_tabli <if condition="($ctl eq 'logs') AND ($act eq 'wuyemoney')">on</if>"><a href="<{:U('logs/wuyemoney')}>">物业资金</a></li>
+     <li class="tuanfabu_tabli <if condition="($ctl eq 'logs') AND ($act eq 'index')">on</if>"><a href="<{:U('logs/index')}>">缴费记录</a></li>
+     <li class="tuanfabu_tabli <if condition="($ctl eq 'logs') AND ($act eq 'tjmonth')">on</if>"><a href="<{:U('logs/tjmonth')}>">月统计明细</a></li>
+     <li class="tuanfabu_tabli <if condition="($ctl eq 'logs') AND ($act eq 'tjday')">on</if>"><a href="<{:U('logs/tjday')}>">日结算趋势</a></li>
+     <li class="tuanfabu_tabli <if condition="($ctl eq 'logs') AND ($act eq 'tixianlog')">on</if>"><a href="<{:U('logs/tixianlog')}>">提现日志</a></li>
+     <li class="tuanfabu_tabli <if condition="($ctl eq 'logs') AND ($act eq 'tixian')">on</if>"><a href="<{:U('logs/tixian')}>">申请提现</a></li>
+  </ul>
+</div>

@@ -1,0 +1,38 @@
+<include  file='public:header'/>
+<header class="top-fixed bg-yellow bg-inverse">
+    <meta charset="UTF-8">
+    <title>我的发布</title>
+    <div class="top-back">
+        <a class="top-addr" href="<{:U('life/zhaopin')}>"><i class="icon-angle-left"></i></a>
+    </div>
+    <div class="top-title">
+        我的发布
+    </div>
+    <style>
+        body{padding:0px;}
+    </style>
+</header>
+<div>
+    <table style="margin:10vh auto;width:80vw;text-align:center;">
+        <tr>
+            <th>序号</th>
+            <th>工作名称</th>
+            <th>职位类别</th>
+            <th>审核状态</th>
+            <th>报名详情</th>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$key+1}></td>
+                <td><{$var.title}></td>
+                <td><{$var.zwlb}></td>
+                <if condition="$var['audit']==1">
+                    <td>已审核</td>
+                    <else/><td>未审核</td>
+                </if>
+                <td><a href="<{:U('life/signupdetail',array('cat'=>$var['life_id']))}>">查看</a></td>
+            </tr>
+        </foreach>
+    </table>
+    <div>
+ <include  file='public:footer'/>

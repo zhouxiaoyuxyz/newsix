@@ -1,0 +1,1 @@
+<?php	return array ( 0 => 'area_id', 1 => 'city_id', 2 => 'area_name', 3 => 'orderby', 4 => 'closed', '_autoinc' => true, '_pk' => 'area_id', '_type' => array ( 'area_id' => 'smallint(5) unsigned', 'city_id' => 'smallint(5)', 'area_name' => 'varchar(32)', 'orderby' => 'tinyint(3)', 'closed' => 'tinyint(1)', ), );?>

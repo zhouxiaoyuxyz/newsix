@@ -1,0 +1,257 @@
+<include file='public:header'/>   
+	<header class="top-fixed bg-yellow bg-inverse">
+		<div class="top-back">
+			<a class="top-addr" href="<{:U('tuan/detail',array('tuan_id'=>$detail['tuan_id']))}>"><i class="icon-angle-left"></i></a>
+		</div>
+		<div class="top-title">
+			提交订单
+		</div>
+	</header>  
+	
+	<div class="tuan-order">
+		<form  action="<{:U('tuan/order',array('tuan_id'=>$detail['tuan_id']))}>" method="post" target="x-frame">
+		<div class="blank-10 bg"></div>
+		<div class="line border-top border-bottom">
+			<div class="container">
+				<div class="x12 row border-bottom">
+					<span class="float-left">
+						<{$detail.title}>
+					</span>
+					<span class="float-right">
+						单价：￥<{$detail.tuan_price}>元
+					</span>
+				</div>
+				<div class="x12 row border-bottom">
+					<span class="float-left">
+						数量：<span class="text-small text-gray"></span>
+					</span>
+					<span class="float-right" style="disabled: disabled">
+						<span class="txt txt-small radius-small bg-main jq_jian">-</span>
+						<span class="txt-border txt-small radius-small border-gray"><span class="txt txt-small radius-small  bg-white jq_num">1</span></span>
+						<span class="txt txt-small radius-small bg-main jq_jia">+</span>
+					</span>
+				</div>
+				<div class="x12 row">
+					<span class="float-left">
+						原价
+					</span>
+					<span class="float-right">
+						<del class="text-gray"><span class="rush-price"><{$detail.price}></span>元</del>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="blank-10 bg"></div>
+		<div class="line border-top border-bottom">
+			<div class="container">
+				<div class="x12 row border-bottom">
+					<span class="float-left">
+						可使用积分
+					</span>
+					<span class="float-right"><{$detail.use_integral|default='0'}>积分
+					</span>
+				</div>
+				<div class="x12 row border-bottom">
+					<span class="float-left">
+						总金额
+					</span>
+					<span class="float-right">
+						<em>￥<span id="all_price"><{$detail.tuan_price}></span>元</em>
+					</span>
+				</div>
+				<div class="x12 row">
+					<span class="float-left">
+						手机（自动绑定请勿填写）
+					</span>
+					<span class="float-right">
+						<em>
+						<eq name="mobile_open" value="0">
+						<a href="javascript:;" class="text-dot" id="mobile_btn">还未绑定手机，立即绑定</a>
+						<else />
+						<{$MEMBER['mobile']}><input type="hidden" value="<{$MEMBER['mobile']}>"  id="mobile" name="mobile">
+						</eq>
+						</em>
+					</span>
+				</div>
+				 
+				<div class="x12 row">
+					<span class="float-left">
+						自提地址
+					</span>
+
+					<span class="float-right">
+						<div class="form-x form-auto">
+							   
+								<div class="field form-inline">
+								<select name="city_id" id="city_id" style="float: left;" class="input margin-small-right input-auto"></select>
+
+								<select name="area_id" id="area_id" style="float: left;"  class="input margin-small-right input-auto"></select>
+
+								<select name="business_id" id="business_id" style="float: left;"  class="input margin-small-right input-auto"></select>
+								</div>
+							</div>
+				
+					</span>
+				</div>
+				
+				<script src="<{:U('app/datas/cab',array('name'=>'cityareas'))}>"></script> 
+				
+				<script>
+								var city_id = <?php echo (int)$detail['city_id'];?>;
+								var area_id = <?php echo (int)$detail['area_id'];?>;
+								var business_id = <?php echo (int)$detail['business_id'];?>;
+                                $(document).ready(function () {
+                                    var city_str = ' <option value="0">请选择...</option>';
+                                    for (a in cityareas.city) {
+                                        if (city_id == cityareas.city[a].city_id) {
+                                            city_str += '<option selected="selected" value="' + cityareas.city[a].city_id + '">' + cityareas.city[a].name + '</option>';
+                                        } else {
+                                            city_str += '<option value="' + cityareas.city[a].city_id + '">' + cityareas.city[a].name + '</option>';
+                                        }
+                                    }
+                                    $("#city_id").html(city_str);
+									
+                                    $("#city_id").change(function () {
+                                        if ($("#city_id").val() > 0) {
+                                            city_id = $("#city_id").val();
+                                            var area_str = ' <option value="0">请选择...</option>';
+                                            for (a in cityareas.area) {
+                                                if (cityareas.area[a].city_id == city_id) {
+                                                    if (area_id == cityareas.area[a].area_id) {
+                                                        area_str += '<option selected="selected" value="' + cityareas.area[a].area_id + '">' + cityareas.area[a].area_name + '</option>';
+                                                    } else {
+                                                        area_str += '<option value="' + cityareas.area[a].area_id + '">' + cityareas.area[a].area_name + '</option>';
+                                                    }
+                                                }
+                                            }
+
+                                            $("#area_id").html(area_str);
+                                            $("#business_id").html('<option value="0">请选择...</option>');
+                                        } else {
+
+                                            $("#area_id").html('<option value="0">请选择...</option>');
+                                            $("#business_id").html('<option value="0">请选择...</option>');
+                                        }
+                                    });
+
+
+
+                                    if (city_id > 0) {
+                                        var area_str = ' <option value="0">请选择...</option>';
+                                        for (a in cityareas.area) {
+                                            if (cityareas.area[a].city_id == city_id) {
+                                                if (area_id == cityareas.area[a].area_id) {
+                                                    area_str += '<option selected="selected" value="' + cityareas.area[a].area_id + '">' + cityareas.area[a].area_name + '</option>';
+                                                } else {
+                                                    area_str += '<option value="' + cityareas.area[a].area_id + '">' + cityareas.area[a].area_name + '</option>';
+                                                }
+                                            }
+                                        }
+
+                                        $("#area_id").html(area_str);
+                                    }
+
+                                    $("#area_id").change(function () {
+                                        if ($("#area_id").val() > 0) {
+                                            area_id = $("#area_id").val();
+                                            var business_str = ' <option value="0">请选择...</option>';
+                                            for (a in cityareas.business) {
+                                                if (cityareas.business[a].area_id == area_id) {
+                                                    if (business_id == cityareas.business[a].business_id) {
+                                                        business_str += '<option selected="selected" value="' + cityareas.business[a].business_id + '">' + cityareas.business[a].business_name + '</option>';
+                                                    } else {
+                                                        business_str += '<option value="' + cityareas.business[a].business_id + '">' + cityareas.business[a].business_name + '</option>';
+                                                    }
+                                                }
+                                            }
+
+                                            $("#business_id").html(business_str);
+
+                                        } else {
+                                            $("#business_id").html('<option value="0">请选择...</option>');
+                                        }
+                                    });
+
+
+
+                                    if (area_id > 0) {
+                                        var business_str = ' <option value="0">请选择...</option>';
+                                        for (a in cityareas.business) {
+                                            if (cityareas.business[a].area_id == area_id) {
+                                                if (business_id == cityareas.business[a].business_id) {
+                                                    business_str += '<option selected="selected" value="' + cityareas.business[a].business_id + '">' + cityareas.business[a].business_name + '</option>';
+                                                } else {
+                                                    business_str += '<option value="' + cityareas.business[a].business_id + '">' + cityareas.business[a].business_name + '</option>';
+                                                }
+                                            }
+                                        }
+
+                                        $("#business_id").html(business_str);
+
+                                    }
+
+                                    $("#business_id").change(function () {
+                                        business_id = $(this).val();
+                                    });
+
+                                });
+
+                </script> 
+				
+				
+			</div>
+		</div>
+		<div class="blank-10 bg"></div>
+
+		
+		<div class="blank-40"></div>
+		<div class="container">
+			<button class="button button-block button-big bg-yellow submit" type="submit">确定提交</button>
+		</div>
+		<input type="hidden" value="1"  id="hidden_num" name="num">
+		</form>
+	</div>
+	
+	<script>
+		function changetotal(num) {
+			var price = <{$detail.tuan_price}> ;
+			var tuan_num = <{$detail.num}> ;
+			$("#all_price").html((price * num).toFixed(2));
+		}
+		$(document).ready(function() {
+			$(".jq_jia").click(function() {
+				var num = parseInt($(".jq_num").text());
+				if (num < 99) {
+					num++;
+				}
+				
+				$(".jq_num").text(num);
+				$("#hidden_num").val(num);
+				changetotal(num);
+			});
+			$(".jq_jian").click(function() {
+				var num = parseInt($(".jq_num").text());
+				if (num > 1) {
+					num--;
+				}
+				$(".jq_num").text(num);
+				$("#hidden_num").val(num);
+				changetotal(num);
+			});
+			$(".jq_num").focusout(function() {
+				changetotal($(this).text());
+			});
+			<eq name="mobile_open" value="0">
+			$('.submit').click(function(){
+				check_user_mobile('<{:U("mobile/tuan/tuan_sendsms")}>','<{:U("mobile/tuan/tuan_mobile")}>');
+				return false;
+			});
+			check_user_mobile('<{:U("mobile/tuan/tuan_sendsms")}>','<{:U("mobile/tuan/tuan_mobile")}>');
+			$('#mobile_btn').click(function(){
+				check_user_mobile('<{:U("mobile/tuan/tuan_sendsms")}>','<{:U("mobile/tuan/tuan_mobile")}>');
+			});
+			</eq>
+		});
+	</script>
+    
+<include file='public:footer'/>

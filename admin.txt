@@ -1,0 +1,15 @@
+array (
+  'admin_id' => '13',
+  'username' => 'ceshi',
+  'password' => 'e10adc3949ba59abbe56e057f20f883e',
+  'role_id' => '2',
+  'city_id' => '9',
+  'mobile' => '13311112222',
+  'gold' => '8',
+  'create_time' => '1479305180',
+  'create_ip' => '180.156.42.46',
+  'last_time' => '1528791141',
+  'last_ip' => '124.119.14.26',
+  'is_ip' => '0',
+  'closed' => '0',
+)

@@ -1,0 +1,165 @@
+<include file="public:header"/>
+
+<link href="https://syy.freep.cn/609575/six/style_lifefund.css" rel="stylesheet" type="text/css"/>
+<script src="https://syy.freep.cn/609575/six/http_cdn-bootcss-com_countup-js_1-9-3_countUp.js"></script>
+<style>
+
+    .top-fixed {
+        background: transparent;
+    }
+    .bg-yellow {
+        background-color: transparent;
+    }
+
+    .intro{
+        display: inline-block;
+        font-style: normal;
+        border: 1px solid #ff8943;
+        border-radius: 2px;
+        padding: 0.2rem 0.4rem;
+        color: #ff8943;
+        font-size: 0.9rem;
+        margin: 5px 10px;
+    }
+
+    .state {
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    }
+
+    .on_use {
+        color: white;
+        background: #1890ff;
+        border-radius: 15px;
+        width: 50%;
+    }
+
+    .not_use {
+        color: white;
+        background: #bfbfbf;
+        border-radius: 15px;
+        width: 50%;
+    }
+
+</style>
+
+<script>
+    $(function () {
+        var options = {
+            useEasing: true,
+            useGrouping: true,
+            separator: ',',
+            decimal: '.',
+        };
+        var demo = new CountUp('money', 0, $("#lifefund").text(), 2, 2.5, options);
+        if (!demo.error) {
+            demo.start();
+        } else {
+            console.error(demo.error);
+        }
+    });
+
+    function wantUse() {
+        console.log("want use");
+    }
+
+</script>
+
+<header class="top-fixed bg-yellow bg-inverse">
+    <div class="top-back">
+        <a class="top-addr" href="<{:U('index/index')}>"><i class="icon-angle-left"></i></a>
+    </div>
+</header>
+
+<span id="lifefund" style="display: none">
+   <{:round($lifefund/100,2)}>
+</span>
+
+
+<section class="aui-flexView">
+    <section class="aui-scrollView">
+        <div class="aui-head-body">
+            <img src="https://syy.freep.cn/609575/six/head.png" alt="">
+            <div class="aui-duct-text">
+                <h2>我的生活费</h2>
+                <p>节约每一笔支出  享受更美好生活</p>
+            </div>
+        </div>
+        <div class="aui-duct-body">
+            <h1><span id="money"></span><em>元</em></h1>
+            <span>
+                        <em>物业0缴费</em>
+                        <em>社区新服务</em>
+                        <em>门诊0花费</em>
+                    </span>
+            <button onclick="wantUse()">我要使用</button>
+        </div>
+        <div class="aui-flex">
+            <div class="aui-flex-box">
+                <h2>项目介绍</h2>
+            </div>
+            <div class="aui-arrows">
+                <p><a href="#">详细</a></p>
+            </div>
+        </div>
+        <div class="aui-list-duct">
+            <div class="aui-title-in">
+                <div class="intro">智能零售机节约</div>
+                <div class="intro">自营商城让利</div>
+                <div class="intro">周边商户返现</div>
+                <div class="intro">物业扫码付款</div>
+                <div class="intro">门店扫码取药</div>
+            </div>
+        </div>
+
+        <div class="aui-flex">
+            <div class="aui-flex-box">
+                <h2>已开放小区</h2>
+            </div>
+        </div>
+        <div class="aui-list-duct" style="margin-bottom: 50px">
+            <div class="aui-flex">
+                <div class="aui-flex-box">
+                    <h3>阳光花园</h3>
+                    <p>智能零售设备</p>
+                </div>
+                <div class="aui-flex-box">
+                    <h4>明光超市</h4>
+                </div>
+                <div class="aui-flex-box state">
+                    <div class="on_use">已启用</div>
+                    <span>约900户</span>
+                </div>
+            </div>
+
+            <div class="aui-flex">
+                <div class="aui-flex-box">
+                    <h3>花海帝景</h3>
+                    <p>智能零售设备</p>
+                </div>
+                <div class="aui-flex-box">
+                    <h4>美乐享超市</h4>
+                </div>
+                <div class="aui-flex-box state">
+                    <div class="not_use">未启用</div>
+                    <span>约360户</span>
+                </div>
+            </div>
+
+            <div class="aui-flex">
+                <div class="aui-flex-box">
+                    <h3>生活印象</h3>
+                    <p>智能零售设备</p>
+                </div>
+                <div class="aui-flex-box">
+                    <h4>立田百货超市</h4>
+                </div>
+                <div class="aui-flex-box state">
+                    <div class="not_use">未启用</div>
+                    <span>约1200户</span>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</section>

@@ -1,0 +1,3 @@
+<?php
+//000000086400a:6:{i:9;a:4:{s:7:"cate_id";s:1:"9";s:9:"cate_name";s:12:"推广比赛";s:9:"parent_id";s:1:"0";s:7:"orderby";s:1:"0";}i:10;a:4:{s:7:"cate_id";s:2:"10";s:9:"cate_name";s:6:"招募";s:9:"parent_id";s:1:"0";s:7:"orderby";s:1:"0";}i:11;a:4:{s:7:"cate_id";s:2:"11";s:9:"cate_name";s:9:"近郊游";s:9:"parent_id";s:1:"0";s:7:"orderby";s:1:"0";}i:6;a:4:{s:7:"cate_id";s:1:"6";s:9:"cate_name";s:15:"周末去哪儿";s:9:"parent_id";s:1:"0";s:7:"orderby";s:1:"5";}i:7;a:4:{s:7:"cate_id";s:1:"7";s:9:"cate_name";s:12:"交友茶座";s:9:"parent_id";s:1:"0";s:7:"orderby";s:1:"6";}i:8;a:4:{s:7:"cate_id";s:1:"8";s:9:"cate_name";s:12:"充电学习";s:9:"parent_id";s:1:"0";s:7:"orderby";s:1:"7";}}
+?>

@@ -1,0 +1,10 @@
+array (
+  'connect_id' => '2352',
+  'type' => 'weixin',
+  'open_id' => 'oJhVK1B9ORAZmH7Ia7ijkdHSHUmw',
+  'token' => '20_OccnY68wUVoDR24oaCaShwKuiqE35ieNLNmUP8IBFlYLTv2sbN5z6quNi3pmbv7btxwt_yD7m0j6EsDVunhcAacTsDcZWUuk-J0NXHIk2x0',
+  'nickname' => '六享赵彩虹',
+  'headimgurl' => 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTL2MMM7iaib4hSpsbD073mS3Xqc4BmHRhMqHRJoIoMJstrJRQfg1fZJlGiaAtROpMn9XlvD3u0fvibo1g/132',
+  'unionid' => NULL,
+  'uid' => '2617',
+)

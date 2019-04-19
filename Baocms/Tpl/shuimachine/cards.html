@@ -1,0 +1,73 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">易水源</li>
+        <li class="li2">直饮机</li>
+        <li class="li2 li3">神卡列表</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <p class="attention"><span>注意：</span>本卡采用无记名无计费模式，谨慎使用，如有丢失请及时后台停用或者删除！</p>
+    <div class="jsglNr">
+        <div class="selectNr" style="margin-top: 0px; border-top:none;">
+            <div class="left">
+                <{:BA('shuimachine/addcard','','添加神卡')}>
+            </div>
+              
+            <div class="right">
+                <form class="search_form" method="post" action="<{:U('shuimachine/cards')}>">
+                    <div class="seleHidden" id="seleHidden">
+                        <label>
+                            <span>水卡</span>
+                            <input type="text" name="card_no" value="<{$card_no}>" class="inptText" />
+                            <input type="submit" value="搜索"  class="inptButton" />
+                        </label>
+                    </div>
+                </form>
+            </div>
+              
+              
+        </div>
+        <form  target="baocms_frm" method="post">
+            <div class="tableBox">
+                <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                    <tr>
+                        <td class="w50"><input type="checkbox" class="checkAll" rel="card_id" /></td>
+                        <td class="w50">ID</td>
+                        <td>卡号</td>
+                        <td>单日限制</td>
+                        <td>备注</td>
+                        <td>状态</td>
+                        <td>操作</td>
+                    </tr>
+                    <foreach name="list" item="var">
+                        <tr>
+                            <td><input class="child_grade_id" type="checkbox" name="card_id[]" value="<{$var["card_id"]}>" /></td>
+                            <td><{$var["card_id"]}></td>
+                            <td><a style="color:#F00; font-size:18px; font-weight:bold"><{$var["c_sn"]}></a></td>
+                            <td>每日<{$var["times"]}>次</td>
+                            <td> <{$var["remark"]}></td>
+                           <td><if condition="$var['closed'] eq 0">开启<else/>关闭</if></td>
+                            <td>
+                             <{:BA('shuimachine/editcard',array("card_id"=>$var["card_id"]),'编辑','','remberBtn')}>
+                                <{:BA('shuimachine/deletecard',array("card_id"=>$var["card_id"]),'删除','act','remberBtn')}>
+                            </td>
+                        </tr>
+                    </foreach>
+					
+					
+                </table>
+                <{$page}>
+            </div>
+            <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+                <div class="left">
+                    <{:BA('shuimachine/deletecard','','批量删除','list',' a2')}>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<include  file='public:footer'/>  
+
+
+

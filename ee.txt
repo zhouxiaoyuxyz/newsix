@@ -1,0 +1,4 @@
+array (
+  'ticket' => 'gQGc8DwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyWmhuaTBVQ2xkYWsxMDAwMGcwM3cAAgRjFYpcAwQAAAAA',
+  'url' => 'http://weixin.qq.com/q/02Zhni0UCldak10000g03w',
+)

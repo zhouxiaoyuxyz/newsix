@@ -1,0 +1,101 @@
+<include file="public:header"/>
+<link rel="stylesheet" href="/static/default/wap/css/passport.css">
+<body style="overflow-x:hidden;">
+<iframe id="baocms_frm" name="baocms_frm" style="display:none;"></iframe>
+    <?php if(!$is_app){?>
+	<header class="top-fixed bg-yellow bg-inverse">
+	<div class="top-back">
+		<a class="top-addr" href="<{:U('index/index')}>"><i class="icon-angle-left"></i></a>
+	</div>
+		<div class="top-title">
+			进店消费
+		</div>
+	
+</header>
+    <?php }?>
+    <div id="login" class="page-center-box">
+        <div id="scroll" style="margin-top: 0">
+        
+        	<form action="<{:U('tuan/xiaofei')}>" method="post" target="baocms_frm">
+            <!--<div id="login-input">
+                <input type="text" placeholder="会员手机号" name="account" id="mobile" />
+                <input type="number" placeholder="消费金额" name="fee" id="fee" style="border: 1px solid #f34141;"/>
+                <input type="hidden"  name="shop_id" id="shop_id" value="<{$SHOP.shop_id}>"/>
+                <div class="regist-code"><input type="text" name="scode" placeholder="请输入验证码" /><a href="#" class="regist-code-get">获取验证码</a></div>
+                
+            </div>-->
+			<div class="line padding border-bottom">
+				<span class="x2"><label>账号</label></span>
+				<span class="x10"><input id="mobile" type="text" class="text-input" name="account" placeholder="会员手机号或副卡"></span>
+			</div>
+			
+			<div class="line padding border-bottom">
+				<span class="x2"><label>金额</label></span>
+				<span class="x10"><input id='fee' type="text" class="text-input" name="fee" placeholder="请输入消费金额"></span>
+			</div>
+			<input type="hidden"  name="shop_id" id="shop_id" value="<{$SHOP.shop_id}>"/>
+			<div class="line padding border-bottom">
+				<span class="x2"><label>验证</label></span>
+				<span class="x7"><input id='yzm' type="text" class="text-input" name="scode" placeholder="请输入短信验证码"></span>
+				<span class="x3"><button id="m_zcyz" type="button" class="button button-little bg-dot m_zcyz">获取验证码</button></span>
+			</div>
+			
+			
+
+			<div class="blank-20"></div>
+			<div class="container">
+				<button type="submit" class="button button-block button-big bg-dot">确认消费</button>
+			</div>
+           <!-- <input type="submit" class="submit" value="确认消费" />-->
+            
+            
+            <script type="text/javascript" language="javascript">
+            
+				$(document).ready(function(){
+
+						var mobile_timeout;
+						var mobile_count = 100;
+						var mobile_lock = 0;
+						$(function () {
+							$("#m_zcyz").click(function () {
+								if (mobile_lock == 0) {
+									mobile_lock = 1;
+									$.ajax({
+										url: '<{:U("tuan/xfyz")}>',
+										data: 'mobile=' + $("#mobile").val()+'&fee='+$("#fee").val()+'&shop_id='+$("#shop_id").val(),
+										type: 'post',
+										success: function (data) {
+											if (data == 1) {
+												mobile_count = 60;
+												BtnCount();
+											} else {
+												mobile_lock = 0;
+												alert(data);
+											}
+										}
+									});
+								}
+							});
+						});
+						BtnCount = function () {
+							if (mobile_count == 0) {
+								$('#m_zcyz').html("重新发送");
+								mobile_lock = 0;
+								clearTimeout(mobile_timeout);
+							}
+							else {
+								mobile_count--;
+								$('#m_zcyz').html("获取(" + mobile_count.toString() + ")秒");
+								mobile_timeout = setTimeout(BtnCount, 1000);
+							}
+						};
+
+
+				})
+			
+            </script>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

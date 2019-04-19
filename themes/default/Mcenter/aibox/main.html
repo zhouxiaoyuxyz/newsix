@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+</head>
+
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<php>
+
+    function signc($parameter,$secretKey)
+    {
+    $signStr = "";
+    ksort($parameter);
+    foreach ($parameter as $k => $v) {
+
+    if ($signStr == "") {
+    $signStr = $k . "=" . $v;
+    } else {
+    $signStr .= "&" . $k . "=" . $v;
+    }
+    }
+    return strtoupper(MD5($signStr.$secretKey));
+    }
+
+    $accessKey = "6825691001";
+    $secretKey = 'h9w7c13ju681u665698bcu';
+
+    $data=[
+    'mobile' => 17753293739,
+    'id' => 11,
+    'accessKey' => $accessKey,
+    'timestamp' => time(),
+    'nonce' => 'dddd5678',
+    ];
+
+    $sign = signc($data,$secretKey);
+    $data['sign'] = $sign;
+
+    $url = 'https://wx.ihuanxi.cn/proj/hxApi/wash.php';
+
+    $para = http_build_query($data);
+
+</php>
+
+
+<script>
+    $(document).ready(function () {
+        $(".notice").click(function () {
+            var six_content = '<iframe src="https://www.enjoysix.cn/mobile/news/cate_aibox/cat/13.html" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>';
+            $(".main_content").html(six_content)
+        });
+
+        $(".main_order").click(function () {
+            var six_content = '<iframe src="https://www.enjoysix.cn/mobile/tuan/index_aibox.html" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>';
+            $(".main_content").html(six_content)
+        });
+
+        $(".huanxi").click(function () {
+            var door_content = '<iframe src="https://wx.ihuanxi.cn/proj/hxApi/wash.php?<?php echo $para;?>" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>';
+            $(".main_content").html(door_content)
+        });
+
+        $(".main_service").click(function () {
+            var door_content = '<iframe src="https://www.enjoysix.cn/mobile/ele/shop_aibox/shop_id/71.html" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>';
+            $(".main_content").html(door_content)
+        });
+
+    })
+</script>
+
+<body>
+
+<div class="main_content" style="height: 100vh; width: 100vw">
+
+    <div style="width: 100vw; height: 48vh; display: flex">
+        <div class="" style="margin:1vh 0.5vw 1vh 0.5vw; width: 33.33%; height: 100%; text-align: center; line-height: 50vh; vertical-align: center">
+            <img style="border-radius: 1vh" src="http://tu.027cgb.com/609575/aibox/security.png" height="100%" width="100%"/>
+        </div>
+        <div class="main_order" style="margin:1vh 0.5vw 1vh 0.5vw; width: 33.34%; height: 100%; text-align: center; line-height: 50vh; vertical-align: center">
+            <img style="border-radius: 1vh" src="http://tu.027cgb.com/609575/aibox/04_order.png" height="100%" width="100%"/>
+        </div>
+        <div class="notice" style="margin:1vh 0.5vw 1vh 0.5vw; width: 33.33%; height: 100%; background: aliceblue; text-align: center; line-height: 50vh; vertical-align: center">
+            <img style="border-radius: 1vh" src="http://tu.027cgb.com/609575/aibox/information.png" height="100%" width="100%"/>
+        </div>
+    </div>
+
+    <div style="margin-top: 2vh; width: 100vw; height: 48vh; display: flex">
+        <div class="huanxi" style="margin:1vh 1.5vw 0 1.5vw; width: 50%; height: 100%; text-align: center; vertical-align: center">
+            <img style="border-radius: 3vh; border: 3vh" src="http://tu.027cgb.com/609575/aibox/03_huanxi.png" height="100%" width="100%"/>
+        </div>
+        <div class="main_service" style="margin: 1vh 1.5vw 0 1.5vw; width: 50%; height: 100%; text-align: center; vertical-align: center">
+            <img style="border-radius: 3vh; border: 3vh" src="http://tu.027cgb.com/609575/aibox/02_shangmenfuwu.png" height="100%" width="100%"/>
+        </div>
+    </div>
+
+</div>
+
+
+
+</body>
+</html>

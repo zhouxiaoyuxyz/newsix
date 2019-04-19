@@ -1,0 +1,113 @@
+Model::__set_state(array(
+   '_extModel' => NULL,
+   'db' => 
+  DbMysql::__set_state(array(
+     'dbType' => 'MYSQL',
+     'autoFree' => false,
+     'model' => '_think_',
+     'pconnect' => false,
+     'queryStr' => 'INSERT INTO `bao_userclassifygoldlogs` (`user_id`,`classify_id`,`gold`,`intro`,`create_time`) VALUES (858,0,1,\'增加:qq\',1552737856)',
+     'modelSql' => 
+    array (
+      'Users' => ' update bao_users set classify_gold = (classify_gold + \'1\') where user_id = \'858\' ',
+      'Userclassifygoldlogs' => 'INSERT INTO `bao_userclassifygoldlogs` (`user_id`,`classify_id`,`gold`,`intro`,`create_time`) VALUES (858,0,1,\'增加:qq\',1552737856)',
+    ),
+     'lastInsID' => 1,
+     'numRows' => 1,
+     'numCols' => 0,
+     'transTimes' => 0,
+     'error' => '',
+     'linkID' => 
+    array (
+      0 => NULL,
+    ),
+     '_linkID' => NULL,
+     'queryID' => NULL,
+     'connected' => true,
+     'exp' => 
+    array (
+      'eq' => '=',
+      'neq' => '<>',
+      'gt' => '>',
+      'egt' => '>=',
+      'lt' => '<',
+      'elt' => '<=',
+      'notlike' => 'NOT LIKE',
+      'like' => 'LIKE',
+      'in' => 'IN',
+      'notin' => 'NOT IN',
+      'not in' => 'NOT IN',
+      'between' => 'BETWEEN',
+      'notbetween' => 'NOT BETWEEN',
+      'not between' => 'NOT BETWEEN',
+    ),
+     'selectSql' => 'SELECT%DISTINCT% %FIELD% FROM %TABLE%%JOIN%%WHERE%%GROUP%%HAVING%%ORDER%%LIMIT% %UNION%%COMMENT%',
+     'bind' => 
+    array (
+    ),
+  )),
+   'pk' => 'id',
+   'tablePrefix' => 'bao_',
+   'name' => 'Userclassifygoldlogs',
+   'dbName' => '',
+   'connection' => '',
+   'tableName' => '',
+   'trueTableName' => 'bao_userclassifygoldlogs',
+   'error' => '',
+   'fields' => 
+  array (
+    0 => 'log_id',
+    1 => 'classify_id',
+    2 => 'user_id',
+    3 => 'gold',
+    4 => 'intro',
+    5 => 'create_time',
+    '_autoinc' => true,
+    '_pk' => 'log_id',
+    '_type' => 
+    array (
+      'log_id' => 'int(10) unsigned',
+      'classify_id' => 'int(10)',
+      'user_id' => 'int(10)',
+      'gold' => 'int(11)',
+      'intro' => 'varchar(255)',
+      'create_time' => 'int(11)',
+    ),
+  ),
+   'data' => 
+  array (
+  ),
+   'options' => 
+  array (
+  ),
+   '_validate' => 
+  array (
+  ),
+   '_auto' => 
+  array (
+  ),
+   '_map' => 
+  array (
+  ),
+   '_scope' => 
+  array (
+  ),
+   'autoCheckFields' => true,
+   'patchValidate' => false,
+   'methods' => 
+  array (
+    0 => 'table',
+    1 => 'order',
+    2 => 'alias',
+    3 => 'having',
+    4 => 'group',
+    5 => 'lock',
+    6 => 'distinct',
+    7 => 'auto',
+    8 => 'filter',
+    9 => 'validate',
+    10 => 'result',
+    11 => 'bind',
+    12 => 'token',
+  ),
+))

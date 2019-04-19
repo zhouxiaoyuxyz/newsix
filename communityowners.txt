@@ -1,0 +1,38 @@
+array (
+  0 => 
+  array (
+    'owner_id' => '2',
+    'community_id' => '5',
+    'user_id' => '27',
+    'name' => '尛痞子',
+    'number' => '3005',
+    'location' => '一栋一单元3005',
+    'audit' => '1',
+    'create_time' => '1501563647',
+    'create_ip' => '124.119.14.26',
+  ),
+  1 => 
+  array (
+    'owner_id' => '3',
+    'community_id' => '5',
+    'user_id' => '10',
+    'name' => '张念华',
+    'number' => '0',
+    'location' => '十号楼一单元5552',
+    'audit' => '0',
+    'create_time' => '1502712921',
+    'create_ip' => '112.224.19.102',
+  ),
+  2 => 
+  array (
+    'owner_id' => '14',
+    'community_id' => '5',
+    'user_id' => '2110',
+    'name' => '尛痞子',
+    'number' => '123',
+    'location' => '1-1-609',
+    'audit' => '1',
+    'create_time' => '1513618305',
+    'create_ip' => '124.88.66.126',
+  ),
+)

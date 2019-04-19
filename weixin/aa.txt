@@ -1,0 +1,9 @@
+array (
+  'ToUserName' => 'gh_ba8b1752555a',
+  'FromUserName' => 'oJhVK1IfncYcCYINA1imqSTP5uzk',
+  'CreateTime' => '1554431316',
+  'MsgType' => 'event',
+  'Event' => 'VIEW',
+  'EventKey' => 'https://www.enjoysix.cn/',
+  'MenuId' => '473573439',
+)

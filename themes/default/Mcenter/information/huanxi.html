@@ -1,0 +1,52 @@
+<include file="public:header"/>
+<header class="top-fixed bg-yellow bg-inverse">
+    <div class="top-title">
+        测试打通浣洗接口
+    </div>
+</header>
+
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+
+<php>
+
+    function signc($parameter,$secretKey)
+    {
+        $signStr = "";
+        ksort($parameter);
+        foreach ($parameter as $k => $v) {
+            
+            if ($signStr == "") {
+                $signStr = $k . "=" . $v;
+            } else {
+                $signStr .= "&" . $k . "=" . $v;
+            }
+        }
+        return  strtoupper(MD5($signStr.$secretKey));
+    }
+
+    $accessKey = "6825691001";
+    $secretKey = 'h9w7c13ju681u665698bcu';
+
+    $data=[
+        'mobile' => 17753293739,
+        'id' => 11,
+        'accessKey' => $accessKey,
+        'timestamp' => time(),
+        'nonce' => 'dddd5678',
+    ];
+    $sign = signc($data,$secretKey);
+    $data['sign'] = $sign;
+
+    $url = 'https://wx.ihuanxi.cn/proj/hxApi/wash.php';
+
+    $para = http_build_query($data);
+
+</php>
+<body>
+
+    
+    <div style="width: 100%; text-align: center; vertical-align: center; height: 100px; line-height: 100px">
+        <a href="https://wx.ihuanxi.cn/proj/hxApi/wash.php?<?php echo $para;?>">我要洗衣</a>
+    </div>
+
+</body>

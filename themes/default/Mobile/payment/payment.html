@@ -1,0 +1,157 @@
+<include file='public:header'/>
+<header class="top-fixed bg-yellow bg-inverse">
+    <div class="top-back">
+        <a class="top-addr" href="javascript:history.back();"><i class="icon-angle-left"></i></a>
+    </div>
+    <div class="top-title">
+        订单支付
+    </div>
+</header>
+
+<div class="tuan-order">
+    <div class="blank-10 bg"></div>
+    <div class="line border-top border-bottom">
+        <div class="container">
+            <div class="x12 row border-bottom">
+					<span class="float-left">
+						支付编号
+					</span>
+                <span class="float-right" id="orderId">
+						<{$logs.log_id}>
+					</span>
+            </div>
+            <div class="x12 row border-bottom">
+					<span class="float-left">
+						付款缘由
+					</span>
+                <span class="float-right">
+						<{$types[$logs['type']]}>
+					</span>
+            </div>
+            <div class="x12 row border-bottom">
+					<span class="float-left">
+						支付金额
+					</span>
+                <span class="float-right" id="payment">
+						<{:round($logs['need_pay']/100,2)}>元
+					</span>
+            </div>
+            <div class="x12 row" style="color:#FF3030">
+					<span class="float-left">
+						温馨提醒
+					</span>
+                <span class="float-right">
+						如本订单有返现，请确认交易完成后查看记录
+					</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="blank-50"></div>
+<div class="container">
+    <{$button}>
+</div>
+<script language="JavaScript" src="/static/default/wap/js/md5.js"></script>
+<script>
+    $(document).ready(function () {
+        // $(".button-block").click();
+
+    });
+
+    function callccb() {
+
+        var temp_New1;
+        var INTER_FLAG = '3';
+        var MERCHANTID = '105000073722562';
+        var POSID = '031716071';
+        var BRANCHID = '370000000';
+        var ORDERID = document.getElementById("orderId").innerText;
+        var PAYMENT = document.getElementById("payment").innerText.slice(0, -1);
+        var CURCODE = '01';
+        var TXCODE = "520100";
+        var REMARK1 = '';
+        var REMARK2 = '';
+        var bankURL = 'https://ibsbjstar.ccb.com.cn/CCBIS/ccbMain';
+        var INSTALLNUM = '';
+        var ISSINSCODE = '';
+        var PUB32TR2 = 'd2d0e213669bf28a0052db9b020111';
+        var GATEWAY = 'W1Z1';
+        var CLIENTIP = '';
+        var REGINFO = '';
+        var PROINFO = '';
+        var MER_REFERER = '';
+        var NoCredit = '';
+        var NoDebit = '';
+        var USERNAME = '';
+        var IDNUMBER = '';
+
+        var SMERID = '';
+        var SMERNAME = '';
+        var SMERTYPEID = '';
+        var SMERTYPE = '';
+        var TRADECODE = '';
+        var TRADENAME = '';
+        var PROTYPE = '';
+        var PRONAME = '';
+        var THIRDAPPINFO = 'THIRDAPPINFO=comccbpay000000000000000ccb';
+
+        var TIMEOUT = '';
+
+        var tmp = 'MERCHANTID=' + MERCHANTID + '&POSID=' + POSID + '&BRANCHID=' + BRANCHID + '&ORDERID=' + ORDERID + '&PAYMENT=' + PAYMENT + '&CURCODE=' + CURCODE + '&TXCODE=' + TXCODE + '&REMARK1=' + REMARK1 + '&REMARK2=' + REMARK2;
+        // var tmp0 = 'MERCHANTID=' + MERCHANTID + '&POSID=' + POSID + '&BRANCHID=' + BRANCHID + '&ORDERID=' + ORDERID + '&PAYMENT=' + PAYMENT + '&CURCODE=' + CURCODE + '&TXCODE=520100' + '&REMARK1=' + REMARK1 + '&REMARK2=' + REMARK2;
+
+        var index = INTER_FLAG;
+        var temp_New = tmp;
+
+        if (index == "3") {
+            temp_New = tmp + '&TYPE=1&PUB=' + PUB32TR2 + '&GATEWAY=' + GATEWAY + '&CLIENTIP=' + CLIENTIP + '&REGINFO=' + escape(REGINFO) + '&PROINFO=' + escape(PROINFO) + '&REFERER=' + MER_REFERER;
+            temp_New1 = tmp + '&TYPE=1&GATEWAY=' + GATEWAY + '&CLIENTIP=' + CLIENTIP + '&REGINFO=' + escape(REGINFO) + '&PROINFO=' + escape(PROINFO) + '&REFERER=' + MER_REFERER;
+            if (INSTALLNUM != "") {
+                temp_New = temp_New + '&INSTALLNUM=' + INSTALLNUM;
+                temp_New1 = temp_New1 + '&INSTALLNUM=' + INSTALLNUM;
+            }
+            if (SMERID != "") {
+                temp_New = temp_New + '&SMERID=' + SMERID + '&SMERNAME=' + escape(SMERNAME) + '&SMERTYPEID=' + SMERTYPEID + '&SMERTYPE=' + escape(SMERTYPE) + '&TRADECODE=' + TRADECODE + '&TRADENAME=' + escape(TRADENAME) + '&SMEPROTYPE=' + PROTYPE + '&PRONAME=' + escape(PRONAME);
+                temp_New1 = temp_New1 + '&SMERID=' + SMERID + '&SMERNAME=' + escape(SMERNAME) + '&SMERTYPEID=' + SMERTYPEID + '&SMERTYPE=' + escape(SMERTYPE) + '&TRADECODE=' + TRADECODE + '&TRADENAME=' + escape(TRADENAME) + '&SMEPROTYPE=' + PROTYPE + '&PRONAME=' + escape(PRONAME);
+            }
+            if (THIRDAPPINFO != "") {
+                temp_New = temp_New + '&THIRDAPPINFO=' + THIRDAPPINFO;
+                temp_New1 = temp_New1 + '&THIRDAPPINFO=' + THIRDAPPINFO;
+            }
+            if (TIMEOUT != "") {
+                temp_New = temp_New + '&TIMEOUT=' + TIMEOUT;
+                temp_New1 = temp_New1 + '&TIMEOUT=' + TIMEOUT;
+            }
+
+            if (ISSINSCODE != "") {
+                temp_New = temp_New + '&ISSINSCODE=' + ISSINSCODE;
+                temp_New1 = temp_New1 + '&ISSINSCODE=' + ISSINSCODE;
+            }
+            if (NoCredit != "") {
+                temp_New = temp_New + '&NoCredit=' + NoCredit;
+                temp_New1 = temp_New1 + '&NoCredit=' + NoCredit;
+            }
+            if (NoDebit != "") {
+                temp_New = temp_New + '&NoDebit=' + NoDebit;
+                temp_New1 = temp_New1 + '&NoDebit=' + NoDebit;
+            }
+            if (USERNAME != "" && IDNUMBER != "") {
+                temp_New = temp_New + '&USERNAME=' + escape(USERNAME);
+                temp_New1 = temp_New1 + '&USERNAME=' + escape(USERNAME);
+                temp_New = temp_New + '&IDNUMBER=' + escape(IDNUMBER);
+                temp_New1 = temp_New1 + '&IDNUMBER=' + escape(IDNUMBER);
+            }
+
+        }
+        var strMD5 = hex_md5(temp_New);
+        var URL = bankURL + '?' + temp_New1 + '&MAC=' + strMD5;
+
+        window.location.href= URL;
+    }
+
+</script>
+<div class="blank-20"></div>
+
+
+<include file='public:footer'/>

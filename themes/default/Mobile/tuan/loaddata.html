@@ -1,0 +1,193 @@
+<script>
+    function daojishi(id) {
+        var t = Math.floor($("#" + id).attr('rel'));
+        t--;
+        var d = Math.floor(t / 60 / 60 / 24);
+        var h = Math.floor(t / 60 / 60 % 24);
+        var m = Math.floor(t / 60 % 60);
+        var s = Math.floor(t % 60);
+        if (d < 10) {
+            d = '0' + d;
+        }
+        if (h < 10) {
+            h = '0' + h;
+        }
+        if (m < 10) {
+            m = '0' + m;
+        }
+        if (s < 10) {
+            s = '0' + s;
+        }
+        $("#" + id).attr('rel', t);
+        $("#" + id).html(d + '天' + h + ':' + m + ':' + s);
+    }
+</script>
+
+<style>
+
+    .price-span {
+        color: white;
+        margin-left: 3px;
+        padding: 3px;
+        background: #D91E3C;
+        background: radial-gradient(circle at top left, transparent 3px, #D91E3C 0) top left,
+        radial-gradient(circle at top right, transparent 3px, #D91E3C 0) top right,
+        radial-gradient(circle at bottom right, transparent 3px, #D91E3C 0) bottom right,
+        radial-gradient(circle at bottom left, transparent 3px, #D91E3C 0) bottom left;
+        background-size: 60% 60%;
+        background-repeat: no-repeat;
+    }
+
+    .li-radious {
+        border-bottom: 0px;
+        background: transparent;
+        background: radial-gradient(circle at top left, transparent 7px, #FDF8F1 0) top left,
+        radial-gradient(circle at top right, transparent 7px, #FDF8F1 0) top right,
+        radial-gradient(circle at bottom right, transparent 7px, #FDF8F1 0) bottom right,
+        radial-gradient(circle at bottom left, transparent 7px, #FDF8F1 0) bottom left;
+        background-size: 60% 60%;
+        background-repeat: no-repeat;
+    }
+
+    a{text-decoration: none;}
+    a:visited{text-decoration: none;}
+    a:hover {text-decoration: none;}
+    a:active{text-decoration:none;}
+
+</style>
+
+<foreach name="shops" item="var">
+    <div class="tuan-shop">
+        <!--<div class="shop-con">
+            <div class="shop-name"><a title="<{$var.shop_name}>" href="<{:U('shop/detail',array('shop_id'=>$var['shop_id']))}>"><{$var.shop_name}></a></div>
+            <div class="shop-tags">
+                <img class="distance_icon" src="/static/default/wap/image/tuan/distance.png" alt="" draggable="false">
+                <dis class="shop-local"><{$var.d}></dis>
+            </div>-->
+    </div>
+
+
+    <div class="main-tuan">
+        <ul>
+            <div style="display: flex; flex-direction: row; flex-wrap: wrap; background: #FDF1DE">
+
+                <foreach name="list" item="item">
+
+                    <div style="display: flex; width: 48%; border-radius: 10px; margin: 1%;">
+
+                        <eq name="item.shop_id" value="$var['shop_id']">
+
+                            <php>
+                                if($item['bg_date'] <= $today && $item['end_date'] > $today){
+
+                                $tt = strtotime($item['end_date'])-time();
+                                $item['djs_time'] = $tt;
+                                $item['djs_str'] = '距结束';
+
+                                }elseif($item['bg_date'] >$today){
+                                $tt = strtotime($item['bg_date'])-time();
+                                $item['djs_time'] = $tt;
+                                $item['djs_str'] = '距开始';
+
+                                }
+                            </php>
+                            <script type="text/javascript" language="javascript">
+                                setInterval(function () {
+                                    daojishi("daojishi_<{$item.tuan_id}>");
+                                }, 1000);
+                            </script>
+
+                            <li class="li-radious" style="margin: 0; border-bottom: 0; border-bottom: 0; background-color: transparent">
+                                <a style="display: flex; flex-direction: column; " href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                                    <div style="width: 100%;">
+                                        <img src="__ROOT__/attachs/<{$item.photo}>" alt="" style="width: 100%; height: 180px"/>
+                                    </div>
+
+                                    <div style="display: flex; flex-direction: column;">
+                                        <!--标题-->
+                                        <div style="text-align: center; font-size: 12px; color: black; min-height: 32px; margin-top: 5px">
+                                            <span><{$item.title}></span>
+                                        </div>
+
+                                        <div style="height:1px; background:#B1AEA8; margin: 5px 10px 10px 10px"></div>
+
+                                        <!--抢购时间-->
+                                        <div style="text-align: center; font-size: 10px">
+                                            <!--<span style="color :#35A7CD; "><{$item['djs_str']}></span>
+                                            <span id="daojishi_<{$item.tuan_id}>" rel="<{$item['djs_time']}>" style="color: #35A7CD;">00:00:00:00</span>-->
+                                            
+                                             <span class="am-icon-thumbs-o-up">销售数:<{$item.sold_num}></span>
+                                            <if condition="$item['num'] gt 0">
+                                                
+                                                <span style="font-size: 12px; background-color: #35A7CD; border-radius: 5px; color: white; padding: 0px 3px">剩余<{:round($item['num']/($item['sold_num'] + $item['num']),2)*100}>%</span>
+                                                <else/>
+                                                <span style="font-size: 12px; background-color: #35A7CD; border-radius: 5px; color: white; padding: 0px 3px">已售罄</span>
+                                            </if>
+                                        </div>
+
+                                        <div style="height:1px; background:#B1AEA8; margin: 5px 10px 10px 10px"></div>
+
+                                        <!--价格-->
+                                        <div style="text-align: center; font-size: 12px; color: #D91E3C">
+                                            <span>六享价￥<em style="font-size: 16px"><{:round($item['tuan_price']/100,2)}></em></span>
+
+                                            <if condition="$item['mobile_fan'] gt 0">
+                                                <span class="price-span">补贴<{$item['mobile_fan']/100}>元</span>
+                                                <else/>
+                                                <span class="price-span">无补贴</span>
+                                            </if>
+                                        </div>
+
+                                    </div>
+
+                                </a>
+                            </li>
+
+
+                            <!--
+                            <li>
+                                <a class="line" href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                                    <div class="container">
+                                        <img class="x4" src="__ROOT__/attachs/<{$item.photo}>"/>
+                                        <div class="des x8">
+                                            <h5><{$item.title}></h5>
+                                            <p class="intro">
+                                                <em class="clock_ico"></em>
+                                                <{$item['djs_str']}>
+                                                <span id="daojishi_<{$item.tuan_id}>"
+                                                      rel="<{$item['djs_time']}>">00:00:00:00</span>
+
+                                                <if condition="$item['num'] gt 0">
+                                                    <span class="text-little float-right badge bg-yellow margin-small-top padding-right remaining-percent">剩余<{:round($item['num']/($item['sold_num'] + $item['num']),2)*100}>%</span>
+                                                    <else/>
+                                                    <span class="text-little float-right badge bg-yellow margin-small-top padding-right remaining-percent">已售罄</span>
+                                                </if>
+
+                                            </p>
+                                            <p class="info">
+                                                <span>六享价￥<em><{:round($item['tuan_price']/100,2)}></em></span>
+
+                                                <if condition="$item['mobile_fan'] gt 0">
+                                                    <span class="text-little float-right badge bg-yellow margin-small-top padding-right another-cut">赠送<{$item['mobile_fan']/100}>元</span>
+                                                    <else/>
+                                                    <span
+                                                        class="text-little float-right badge bg-yellow margin-small-top padding-right remaining-percent">无赠送</span>
+                                                </if>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            -->
+
+                        </eq>
+
+                    </div>
+                </foreach>
+
+            </div>
+
+        </ul>
+    </div>
+    </div>
+</foreach>

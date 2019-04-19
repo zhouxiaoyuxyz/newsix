@@ -1,0 +1,27 @@
+<include file="public:header"/>
+<header class="top-fixed bg-yellow bg-inverse">
+	<div class="top-back">
+		<a class="top-addr" href="<{:U('life/zhaopin')}>"><i class="icon-angle-left"></i></a>
+	</div>
+	<div class="top-title">
+		<{$channel[$channel_id]}>信息
+	</div>
+</header>
+
+<div class="life-list" id="life-list"></div>
+<script>
+	$(document).ready(function () {
+		loaddata('<{$nextpage}>', $("#life-list"), true);
+		$("#search-btn").click(function(){
+			if($(".top-search").css("display")=='block'){
+				$(".top-search").hide();
+				$(".top-title").show(200);
+			}
+			else{
+				$(".top-search").show();
+				$(".top-title").hide(200);
+			}
+		});
+	});
+</script>
+<include file="public:footer"/>

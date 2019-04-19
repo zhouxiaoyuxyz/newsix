@@ -1,0 +1,84 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">易水源</li>
+        <li class="li2">直饮机</li>
+        <li class="li2 li3">直饮机列表</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <p class="attention"><span>注意：</span>管理员请随时注意各直饮机水位，水位低于30%请及时到对应小区进行灌装补水！</p>
+    <div class="jsglNr">
+        <div class="selectNr" style="margin-top: 0px; border-top:none;">
+            <div class="left">
+                <{:BA('shuimachine/create','','添加直饮机')}>
+            </div>
+              
+            <div class="right">
+                <form class="search_form" method="post" action="<{:U('shuimachine/index')}>">
+                    <div class="seleHidden" id="seleHidden">
+                      
+                       	<label>
+                            <span>型号:</span>
+                            <input type="text" name="model" value="<{$model}>" class="inptText" />
+                        </label>
+                      
+                        <label>
+                            <span>编号:</span>
+                            <input type="text" name="m_sn" value="<{$m_sn}>" class="inptText" />
+                            <input type="submit" value="搜索"  class="inptButton" />
+                        </label>
+                    </div>
+                </form>
+            </div>
+              
+        </div>
+        <form  target="baocms_frm" method="post">
+            <div class="tableBox">
+                <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                    <tr>
+                        <td class="w50"><input type="checkbox" class="checkAll" rel="machine_id" /></td>
+                        <td class="w50">ID</td>
+                        <td>编号</td>
+                        <td>型号</td>
+                        <td>所属物业</td>
+                        <td>水单价</td>
+                        <td>返现金额</td>
+                        <td>二维码</td>
+                        <td>状态</td>
+                        <td>操作</td>
+                    </tr>
+                    <foreach name="list" item="var">
+                        <tr>
+                            <td><input class="child_grade_id" type="checkbox" name="machine_id[]" value="<{$var["machine_id"]}>" /></td>
+                            <td><{$var["machine_id"]}></td>
+                            <td><a style="color:#F00; font-size:18px; font-weight:bold"><{$var["m_sn"]}></a></td>
+                            <td><{$var["model"]}></td>
+                            <td><{$admins[$var["admin_id"]]['username']}></td>
+                            <td> &yen; <{$var["price"]}>元</td>
+                            <td>&yen; <{$var["fanxian"]}>元</td>
+                           <td><a href="https://cli.im/api/qrcode/code?text=http://www.enjoysix.cn/shui/index/control.html?sn=<{$var['m_sn']}>" target="_blank"style="color:#F00; font-size:18px; font-weight:bold">点击下载</a></td>
+                            <td><{$var["online"]}></td>
+                            <td>
+                             <{:BA('shuimachine/edit',array("machine_id"=>$var["machine_id"]),'编辑','','remberBtn')}>
+                                <{:BA('shuimachine/delete',array("machine_id"=>$var["machine_id"]),'删除','act','remberBtn')}>
+                            </td>
+                        </tr>
+                    </foreach>
+					
+					
+                </table>
+                <{$page}>
+            </div>
+            <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+                <div class="left">
+                    <{:BA('shuimachine/delete','','批量删除','list',' a2')}>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<include  file='public:footer'/>  
+
+
+

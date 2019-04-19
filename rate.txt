@@ -1,0 +1,5 @@
+array (
+  'breaks_profit_rate' => 0.59999999999999998,
+  'platform_rate' => '1.60',
+  'total' => 2.2000000000000002,
+)

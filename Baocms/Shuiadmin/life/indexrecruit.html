@@ -1,0 +1,62 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">频道</li>
+        <li class="li2">分类信息</li>
+        <li class="li2 li3">招聘信息列表</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <p class="attention"><span>注意：</span>不需要启用的字段就不需要填写</p>
+        <form  target="baocms_frm" method="post">
+            <div class="tableBox">
+                <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                    <tr>
+                        <td class="w50"><input type="checkbox" class="checkAll" rel="life_id" /></td>
+                        <td class="w50">ID</td>
+                        <td>标题</td>
+                        <td>分类</td>
+                        <td>用户</td>
+                        <td>联系人</td>
+                        <td>电话</td>
+                        <td>微信</td>
+                        <td>联系地址</td>
+                        <td>创建时间</td>
+                        <td>创建IP</td>
+                        <td>操作</td>
+                    </tr>
+                    <foreach name="list" item="var">
+                        <tr>
+                            <td><input class="child_life_id" type="checkbox" name="life_id[]" value="<{$var.life_id}>" /></td>
+                            <td><{$var.life_id}></td>
+                            <td><{$var.title}></td>
+                            <td><{$cates[$var['cate_id']]['cate_name']}></td>
+                            <td><{$users[$var['user_id']]['account']}></td>
+                            <td><{$var.contact}></td>
+                            <td><{$var.mobile}></td>
+                            <td><{$var.weixin}></td>
+                            <td><{$var.addr}></td>
+                            <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                            <td><{$var.create_ip}></td>
+
+                            <td>
+                                <{:BA('life/edit',array("life_id"=>$var["life_id"]),'编辑','','remberBtn')}>
+                                <{:BA('life/delete',array("life_id"=>$var["life_id"]),'删除','act','remberBtn')}>
+                                <eq name="var.audit" value="0"> <{:BA('life/audit',array("life_id"=>$var["life_id"]),'审核','act','remberBtn')}> </eq>
+
+                            </td>
+                        </tr>
+                    </foreach>
+                </table>
+                <{$page}>
+            </div>
+            <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+                <div class="left">
+                    <{:BA('life/delete','','批量删除','list','a2')}>
+                    <{:BA('life/audit','','批量审核','list','remberBtn')}>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<include  file='public:footer'/>       

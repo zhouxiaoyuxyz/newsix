@@ -1,0 +1,30 @@
+<php>$arr = array();</php>
+<foreach name="lifecate" item="item">
+	<php>$arr[$item['cate_id']] = $item['channel_id'];</php>
+</foreach>
+<foreach name="list" item="var">
+	<php>$chl = $arr[$var['cate_id']];</php>
+
+	<!-- 招聘 -->
+	<if condition="$chl eq 7">
+	<li class="mod-2">
+	   <a href="<{:U('life/detailzhaopin',array('life_id'=>$var['life_id']))}>">
+			<div style="display: flex;flex-direction: row">
+				<div>
+					<img src="<{:config_img($var['photo'])}>" style="display:block;width:25vw;" />
+				</div>
+				<div style="display: flex;flex-direction:column;width: 60vw;">
+					<div>工作名称：<{$var.title}></div>
+					<div>工作时间：<{$var.worktime}></div>
+					<div>性质：<{$var.zwlb}></div>
+					<div>工作地址：<{$var.addr}></div>
+				</div>
+				<div style="display: flex;justify-content:center;align-items: center;width:15vw;">
+					<span style="color: red;font-size: 1rem;font-weight: bold">兼职</span>
+				</div>
+			</div>
+		</a>
+	</li>
+	</if>
+
+</foreach>

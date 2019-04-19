@@ -1,0 +1,51 @@
+<include  file='public:header'/>
+<link href="/Baocms/Tpl/statics/css/main.css" rel="stylesheet" type="text/css">
+<div class="main">
+<div class="mainBt">
+    <ul>
+        <li class="li1">业主</li>
+        <li class="li2">业主管理</li>
+        <li class="li2 li3">确认导入</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <div class="jsglNr">
+    <form  target="baocms_frm"  method="post">
+        <div class="tableBox">
+            <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; margin-top: 10px; vertical-align:middle; background-color:#FFF;"  >
+                <tr>
+                    
+                    <td>栋（楼）号</td>
+                    <td>单元号</td>
+                    <td>户号</td>
+                    <td>户主</td>
+                    <td>手机</td>
+                </tr>
+				<php>$i=0;</php>
+				 <foreach name="list" item="var">
+				<tr>      
+                        <td><{$var.dong}></td><input type="hidden" name="owners[<{$i}>][dong]" value="<{$var.dong}>" />
+						<td><{$var.danyuan}></td><input type="hidden" name="owners[<{$i}>][danyuan]" value="<{$var.danyuan}>" />
+						<td><{$var.number}></td><input type="hidden" name="owners[<{$i}>][number]" value="<{$var.number}>" />
+						<td><{$var.name}></td><input type="hidden" name="owners[<{$i}>][name]" value="<{$var.name}>" />
+						<td><{$var.phone}></td><input type="hidden" name="owners[<{$i}>][phone]" value="<{$var.phone}>" />
+						
+                    
+                </tr>
+				<php>$i++;</php>
+				</foreach>
+            </table>
+          
+        </div>
+        <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+            <div class="left">
+				<a href="/community/owner/importok.html" mini="list">确定导入</a>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+</div>
+<include  file='public:footer'/>  
+
+

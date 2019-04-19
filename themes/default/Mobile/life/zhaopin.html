@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>招聘</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <link href="/static/default/mobile/css/zhaopinstyle.css" rel="stylesheet" type="text/css" />
+    <include  file='public:header'/>
+    <style>
+        .foot-fixed {
+            height: 8vh;
+        }
+    </style>
+</head>
+<body style="background:#f4f4f4;padding:0">
+<section class="aui-flexView">
+    <section class="aui-scrollView">
+        <div class="aui-resume-head">
+
+        </div>
+        <div class="aui-flex aui-flex-mar-top">
+            <div class="aui-flex-box">
+                <div class="aui-resume-item">
+                    <div style="height: 8vh; width: 100%; display: flex; justify-content: space-between">
+                        <div style="width: 80%; height: 100%; display: flex">
+                            <div>
+                                <img style="height: 10vh; width: auto; margin: -30px 10px 0 10px; border-radius: 10px"
+                                     src="<{:config_img($MEMBER['face'])}>" alt="">
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: flex-start; margin-left: 5px   ">
+                                <span style="font-size: 1.2rem; font-weight: bold">现在的岗位</span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="height: 13vh; width: 100%; display: flex; justify-content: space-between">
+                        <div style="margin-left:10px; width: 60%; height: 100%; display: flex; flex-direction: column; align-items: flex-start;">
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: 1rem">我的工作:</span>
+                                <php>
+                                    if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
+                                </php>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$workinfolist[0]['job_title']}></span>
+                                <php>
+                                    }else{
+                                </php>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF">打卡上班</span>
+                                <php>
+                                    }
+                                </php>
+                            </div>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: 1rem">就业次数:</span>
+                                <php>
+                                    if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
+                                </php>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$workinfolist[0]['job_count']}></span>
+                                <php>
+                                    }else{
+                                </php>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF">打卡上班</span>
+                                <php>
+                                    }
+                                </php>
+                            </div>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: 1rem">正在挣:</span>
+                                <php>
+                                    if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
+                                </php>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$salarysum}></span>
+                                <span style="font-size:1rem"> 元</span>
+                                <php>
+                                    }else{
+                                </php>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF">打卡下班</span>
+                                <php>
+                                    }
+                                </php>
+                            </div>
+                        </div>
+                        <div style="width: 30%; height: 100%; display: flex; flex-direction: column; align-items: flex-end; margin-right: 25px;color: #F9872C;font-weight:bold ">
+                            <div  style="font-size: 1rem;margin: 10px 0 18px;">
+                                <a href="<{:U('life/gotowork')}>" style="color: #F9872C;">打卡上班</a>
+                            </div>
+                            <div style="font-size: 1rem">
+                                <a href="<{:U('life/endwork')}>" style="color: #F9872C;">打卡下班</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="aui-resume-item">
+                    <div class="aui-image-text">
+                        <a href="<{:U('life/fabuzhaopin',array('cat'=>151))}>" class="aui-flex ">
+                            <div class="aui-shrink-img" >
+                                <img src="/static/default/mobile/img/fabu.png" alt="">
+                            </div>
+                            <div class="aui-flex-box">
+                                <h2>我要发布</h2>
+                            </div>
+                        </a>
+                        <a href="<{:U('life/channeljianzhi',array('channel'=>7))}>" class="aui-flex ">
+                            <div class="aui-shrink-img">
+                                <img src="/static/default/mobile/img/baoming.png" alt="">
+                            </div>
+                            <div class="aui-flex-box">
+                                <h2>时间换钱</h2>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="aui-image-text">
+                        <a href="<{:U('life/myfabu')}>" class="aui-flex ">
+                            <div class="aui-shrink-img">
+                                <img src="/static/default/mobile/img/icon-head-fl1.png" alt="">
+                            </div>
+                            <div class="aui-flex-box">
+                                <h2>我的发布</h2>
+                            </div>
+                        </a>
+                        <a href="<{:U('life/mysignup')}>" class="aui-flex ">
+                            <div class="aui-shrink-img">
+                                <img src="/static/default/mobile/img/icon-head-fl2.png" alt="">
+                            </div>
+                            <div class="aui-flex-box">
+                                <h2>我的报名</h2>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="life-list" id="life-list"></div>
+                <script>
+                    $(document).ready(function () {
+                        loaddata('<{$nextpage}>', $("#life-list"), true);
+                    });
+                </script>
+            </div>
+        </div>
+        </div>
+    </section>
+
+
+</section>
+
+</body>
+<include  file='public:footer'/>
+
+</html>

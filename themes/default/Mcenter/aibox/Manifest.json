@@ -1,0 +1,15 @@
+{
+  "short_name": "管家盒子",
+  "name": "管家盒子",
+  "background_color": "#f1939c",
+  "theme_color": "black",
+  "display": "standalone",
+  "icon": [
+    {
+      "src": "shequ.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    }
+  ],
+  "start_url": "index.html"
+}

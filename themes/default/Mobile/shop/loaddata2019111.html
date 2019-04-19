@@ -1,0 +1,28 @@
+<volist name="list" id="item" key="index">
+	<a class="item" href="<{:U('mart/lists',array('id'=>$item['weidian_id']))}>">	
+    
+		<img class="pic" src="<{:config_img($item['photo'])}>" />	
+		<div class="des">	
+			<h5>
+                <span class="shop_title"><{:msubstr($item['shop_name'],0,6,'utf-8',false)}></span>
+				<if condition="$item['fanxian'] neq 0">
+                <img class="fanxian_icon" src="/static/default/wap/image/shop/fanxian.png" alt="" draggable="false">
+                <fc class="fanxian_text">返现<{$item.fanxian}>%</fc>
+				</if>
+				<if condition="$item['is_renzheng'] eq 1">
+                    <img class="shop_tuijian" src="/static/default/wap/image/shop/tuijian.png" alt="" draggable="false">
+                </if>
+			</h5>
+			<div class="info">
+                <span class="addrbackground addr">
+				<{:msubstr($item['addr'],0,26,'utf-8',false)}>
+			    </span>
+			</div>
+            <div>
+                <span class="shop_distance">距离 <{$item.d}></span>
+                <span class="ui-starbar shop_score"><span style="width:<{:round($item['score']*10,2)}>%"> </span></span>
+            </div>
+
+		</div>	
+	</a>
+</volist>

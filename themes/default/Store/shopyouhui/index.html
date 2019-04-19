@@ -1,0 +1,141 @@
+<include  file='public:header'/>   
+<header class="top-fixed bg-yellow bg-inverse">
+	<div class="top-back">
+		<a class="top-addr" href="<{:U('store/index/index')}>"><i class="icon-angle-left"></i></a>
+	</div>
+	<div class="top-title">
+		基本设置
+	</div>
+</header>
+
+<style>
+ul { padding-left: 0px;}
+.xiaoqu-search { margin-top:2rem;}
+</style>
+<!-- 筛选TAB -->
+<ul id="shangjia_tab">
+        <li style="width: 25%;"><a href="<{:U('store/branch/index')}>">分店管理</a></li>
+        <li style="width: 25%;"><a href="<{:U('store/worker/index')}>">员工管理</a></li>
+        <li style="width: 25%;"><a href="<{:U('store/shop/about')}>" >基本设置</a></li>
+        <li style="width: 25%;"><a href="<{:U('store/shopyouhui/index/')}>" class="on">买单返现</a></li>
+</ul>	
+
+
+<style>
+.fabu-form .form-content {border: none;resize: none;width: 100%;height: 80px;padding: 10px;font-size: 12px;}
+.fabu-form .form-content1 {border: none;resize: none;width: 100%;height: 150px;padding: 10px;font-size: 12px;}
+.shuxing{width: 20px; height: 20px;margin-bottom: 10px;}
+</style>
+<div class="blank-40"></div>
+<form class="fabu-form" method="post"  target="x-frame" action="<{:U('shopyouhui/index')}>">
+<!--<div class="row">
+	<div class="line">
+		<span class="x3">返现状态：</span>
+		<span class="x9">
+			 <if condition="$youhui.is_open eq 1"><span style="color: green;">开启中</span><else/><span style="color: red;">关闭</span></if>
+			  <if condition="$youhui.is_open eq 1"><a href="<{:U('shopyouhui/close')}>" mini="act" class="radius3 sjgl_an tuan_topbt">关闭</a><else/><a href="<{:U('shopyouhui/open')}>" mini="act" class="radius3 sjgl_an tuan_topbt">开启</a></if>
+		</span>
+	</div>
+</div>-->
+
+<div class="row">
+	<div class="line">
+		<span class="x3">审核状态：</span>
+		<span class="x9">
+			 <if condition="$youhui.audit eq 1"><span style="color: green;">已审核</span><else/><span style="color: red;">未审核</span></if>
+		</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="line">
+		<span class="x3">返现类型：</span>
+		<span class="x9">
+			 <label><input class="yh_type" type="radio" rel="0" name="data[type_id]" value="0" <eq name="youhui.type_id" value="0">checked="checked"</eq>  class="cjinput" />等比例返现</label>
+		</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="line">
+		<span class="x3">保留比例：</span>
+		<span class="x9">
+			<input type="hidden" name="data[yh_id]" value="<{$youhui.yh_id}>"/>
+			<input type="text" name="data[discount]" value="<{$youhui.discount|default=''}>" class="tuanfabu_int tuanfabu_intw2" />%
+		</span>
+	</div>
+</div>
+
+
+<div class="blank-10 bg"></div>
+<div class="container">
+		<div class="blank-10"></div>
+		<p><span class="text-dot">小提示：</span> 修改会造成付款买单付款功能失效，如需调整请先联系平台！电话：0633-8766711</p>
+    </div> 
+
+<!--<em class="text-small text-gray"><em>
+	<div class="container">
+		<div class="blank-10"></div>
+		<p><span class="text-dot">小提示：</span> 下面内容选填，如需打印机联系电话：<{$CONFIG.site.tel}>购买</p>
+    </div>   
+
+
+<div class="row">
+	<div class="line">
+		<span class="x5">打印标识(apiKey)：</span>
+		<span class="x7">
+			<input type="text" class="text-input" name="data[apiKey]" value="<{$SHOP.apiKey|default=''}>" />
+		</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="line">
+		<span class="x5">密钥(mKey)：</span>
+		<span class="x7">
+			<input type="text" class="text-input" name="data[mKey]" value="<{$SHOP.apiKey|default=''}>" />
+		</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="line">
+		<span class="x5">密钥(mKey)：</span>
+		<span class="x7">
+			<input type="text" class="text-input" name="data[mKey]" value="<{$SHOP.mKey|default=''}>" />
+		</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="line">
+		<span class="x5">用户id(partner)：</span>
+		<span class="x7">
+			<input type="text" class="text-input" name="data[partner]" value="<{$SHOP.partner|default=''}>" />
+		</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="line">
+		<span class="x5">打印机终端号：</span>
+		<span class="x7">
+			<input type="text" class="text-input" name="data[machine_code]" value="<{$SHOP.machine_code|default=''}>" />
+		</span>
+	</div>
+</div>-->
+
+
+
+
+  
+
+
+	<div class="container">
+		<div class="blank-30"></div>
+		<button  type="submit" class="button button-block button-big bg-dot">确认编辑</button>
+		<div class="blank-30"></div>
+	</div>
+</form>
+   
+<include  file='public:footer'/>

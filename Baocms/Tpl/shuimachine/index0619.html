@@ -1,0 +1,129 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">易水源</li>
+        <li class="li2">直饮机</li>
+        <li class="li2 li3">直饮机列表</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <p class="attention"><span>注意：</span>管理员请随时注意各直饮机水位，水位低于30%请及时到对应小区进行灌装补水！</p>
+    <div class="jsglNr">
+        <div class="selectNr" style="margin-top: 0px; border-top:none;">
+            <div class="left">
+                <{:BA('shuimachine/create','','添加直饮机')}>
+            </div>
+        </div>
+        <form  target="baocms_frm" method="post">
+            <div class="tableBox">
+                <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                    <tr>
+                        <td class="w50"><input type="checkbox" class="checkAll" rel="grade_id" /></td>
+                        <td class="w50">ID</td>
+                        <td>编号</td>
+                        <td>型号</td>
+                        <td>所在小区</td>
+                        <td>水单价</td>
+                        <td>返现金额</td>
+                        <td>描述</td> 
+                        <td>状态</td>
+                        <td>操作</td>
+                    </tr>
+                    <foreach name="list" item="var">
+                       
+                    </foreach>
+					 <tr>
+                            <td><input class="child_grade_id" type="checkbox" name="grade_id[]" value="1" /></td>
+                            <td>1</td>
+                            <td><a style="color:#F00; font-size:18px; font-weight:bold">Y001</a></td>
+                            <td>易水源一代</td>
+                            <td>水晶花园</td>
+                            <td> &yen; 4元</td>
+                            <td>&yen; 1.2元</td>
+                            <td>已正式投入使用</td>
+                            <td>水位正常</td>
+                            <td>
+                             <{:BA('shuimachine/edit',array("m_id"=>$var["m_id"]),'编辑','','remberBtn')}>
+                                <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'删除','act','remberBtn')}>
+                            </td>
+                        </tr>
+					<tr>
+                            <td><input class="child_grade_id" type="checkbox" name="grade_id[]" value="2" /></td>
+                            <td>2</td>
+                            <td><a style="color:#F00; font-size:18px; font-weight:bold">Y002</a></td>
+                            <td>易水源一代</td>
+                            <td>阳光花园</td>
+                            <td> &yen; 4元</td>
+                            <td>&yen; 1.2元</td>
+                            <td>已正式投入使用</td>
+                            <td>水位正常</td>
+                            <td>
+                             <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'编辑','','remberBtn')}>
+                             <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'管理员','','remberBtn')}>
+                                <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'删除','act','remberBtn')}>
+                            </td>
+                        </tr>
+					<tr>
+                            <td><input class="child_grade_id" type="checkbox" name="grade_id[]" value="3" /></td>
+                            <td>3</td>
+                            <td><a style="color:#F00; font-size:18px; font-weight:bold">Y003</a></td>
+                            <td>易水源一代</td>
+                            <td>金港美丽园</td>
+                            <td> &yen; 4元</td>
+                            <td>&yen; 1.2元</td>
+                            <td>已正式投入使用</td>
+                            <td>水位正常</td>
+                            <td>
+                             <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'编辑','','remberBtn')}>
+                             <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'管理员','','remberBtn')}>
+                                <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'删除','act','remberBtn')}>
+                            </td>
+                        </tr>
+					<tr>
+                            <td><input class="child_grade_id" type="checkbox" name="grade_id[]" value="4" /></td>
+                            <td>4</td>
+                            <td><a style="color:#F00; font-size:18px; font-weight:bold">Y004</a></td>
+                            <td>易水源一代</td>
+                            <td>花海帝景</td>
+                            <td> &yen; 4元</td>
+                            <td>&yen; 1.2元</td>
+                            <td>已正式投入使用</td>
+                            <td>水位正常</td>
+                            <td>
+                             <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'编辑','','remberBtn')}>
+                             <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'管理员','','remberBtn')}>
+                                <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'删除','act','remberBtn')}>
+                            </td>
+                        </tr>
+						
+					<tr>
+                            <td><input class="child_grade_id" type="checkbox" name="grade_id[]" value="5" /></td>
+                            <td>5</td>
+                            <td><a style="color:#F00; font-size:18px; font-weight:bold">Y005</a></td>
+                            <td>易水源一代</td>
+                            <td>未启用</td>
+                            <td> &yen; 4元</td>
+                            <td>&yen; 1.2元</td>
+                            <td>开发板调试中</td>
+                            <td>灌装</td>
+                            <td>
+                             <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'编辑','','remberBtn')}>
+                             <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'管理员','','remberBtn')}>
+                                <{:BA('shuimachine/index',array("grade_id"=>$var["grade_id"]),'删除','act','remberBtn')}>
+                            </td>
+                        </tr>
+                </table>
+                <{$page}>
+            </div>
+            <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+                <div class="left">
+                    <{:BA('shuimachine/index','','批量删除','list',' a2')}>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<include  file='public:footer'/>  
+
+
+

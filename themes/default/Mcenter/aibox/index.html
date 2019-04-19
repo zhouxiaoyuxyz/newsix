@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>管家盒子</title>
+    <link rel="manifest" href="Manifest.json">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+</head>
+<style>
+    body {
+        margin: 0;
+    }
+    .bottom_item {
+        display: flex; flex-direction: column; align-items: center;justify-content: center;
+        color: #595959;
+    }
+</style>
+<script src="https://cdn.bootcss.com/annyang/2.6.1/annyang.js"></script>
+<script src="https://cdn.bootcss.com/SpeechKITT/1.0.0/speechkitt.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $(".home").click(function () {
+            var six_content = '<iframe src="https://www.enjoysix.cn/mcenter/aibox/main.html" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>';
+            $(".content").html(six_content);
+            $(".voice_img").attr("src", "http://tu.027cgb.com/609575/aibox/voice_grey.png");
+            $(".voice_text").css("color", "#595959");
+            $(".community_img").attr("src", "http://tu.027cgb.com/609575/aibox/house_grey.png");
+            $(".community_text").css("color", "#595959");
+            $(".order_img").attr("src", "http://tu.027cgb.com/609575/aibox/order_grey.png");
+            $(".order_text").css("color", "#595959");
+            $(".home_img").attr("src", "http://tu.027cgb.com/609575/aibox/home.png");
+            $(".home_text").css("color", "#2593FB");
+        });
+
+        $(".community").click(function () {
+            var six_content = '<iframe src="https://www.enjoysix.cn/mobile/community/detail_aibox/community_id/6.html" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>';
+            $(".content").html(six_content)
+            $(".voice_img").attr("src", "http://tu.027cgb.com/609575/aibox/voice_grey.png");
+            $(".voice_text").css("color", "#595959");
+            $(".community_img").attr("src", "http://tu.027cgb.com/609575/aibox/house.png");
+            $(".community_text").css("color", "#2593FB");
+            $(".order_img").attr("src", "http://tu.027cgb.com/609575/aibox/order_grey.png");
+            $(".order_text").css("color", "#595959");
+            $(".home_img").attr("src", "http://tu.027cgb.com/609575/aibox/home_grey.png");
+            $(".home_text").css("color", "#595959");
+
+        });
+
+        $(".order").click(function () {
+            var six_content = '<iframe src="http://www.enjoysix.cn/mcenter/eleorder/index_aibox.html" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>';
+            $(".content").html(six_content);
+            $(".voice_img").attr("src", "http://tu.027cgb.com/609575/aibox/voice_grey.png");
+            $(".voice_text").css("color", "#595959");
+            $(".community_img").attr("src", "http://tu.027cgb.com/609575/aibox/house_grey.png");
+            $(".community_text").css("color", "#595959");
+            $(".order_img").attr("src", "http://tu.027cgb.com/609575/aibox/order.png");
+            $(".order_text").css("color", "#2593FB");
+            $(".home_img").attr("src", "http://tu.027cgb.com/609575/aibox/home_grey.png");
+            $(".home_text").css("color", "#595959");
+        });
+
+        $(".voice").click(function () {
+            var six_content = '<iframe src="https://www.enjoysix.cn/mcenter/aibox/voice.html" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>';
+            $(".content").html(six_content);
+            $(".voice_img").attr("src", "http://tu.027cgb.com/609575/aibox/voice.png");
+            $(".voice_text").css("color", "#2593FB");
+            $(".community_img").attr("src", "http://tu.027cgb.com/609575/aibox/house_grey.png");
+            $(".community_text").css("color", "#595959");
+            $(".order_img").attr("src", "http://tu.027cgb.com/609575/aibox/order_grey.png");
+            $(".order_text").css("color", "#595959");
+            $(".home_img").attr("src", "http://tu.027cgb.com/609575/aibox/home_grey.png");
+            $(".home_text").css("color", "#595959");
+        });
+
+        // if (annyang) {
+        //     annyang.setLanguage('zh-CN');
+        //     // Add our commands to annyang
+        //     annyang.addCommands({
+        //         // '我要洗衣服': function() { console.log('recognition: 我要洗衣服!'); }
+        //         '我要洗衣服': function() {
+        //             var six_content = '<iframe src="http://www.enjoysix.cn/mcenter/eleorder/index_aibox.html" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>';
+        //             $(".content").html(six_content);
+        //         }
+        //     });
+        //     annyang.debug('on');
+        //
+        //     // Tell KITT to use annyang
+        //     SpeechKITT.annyang();
+        //
+        //     // Define a stylesheet for KITT to use
+        //     SpeechKITT.setStylesheet('https://cdn.bootcss.com/SpeechKITT/1.0.0/themes/flat.css');
+        //
+        //     // Render KITT's interface
+        //     SpeechKITT.vroom();
+        // }else{
+        //     alert("no annyang")
+        // }
+
+    })
+</script>
+
+
+<body>
+
+
+<div class="content" style="width: 100vw; height: 90vh">
+    <iframe src="http://www.enjoysix.cn/mcenter/aibox/main.html" style="width: 100%; height: 100%" frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
+</div>
+
+<div style="width: 100vw; height: 10vh; display: flex">
+    <div class="voice bottom_item" style="width: 25%; height: 100%; background: white; text-align: center; vertical-align: center">
+        <div><img class="voice_img" style="height: 5vh; width: 5vh; margin-bottom: -5px" src="http://tu.027cgb.com/609575/aibox/voice_grey.png" alt=""></div>
+        <span class="voice_text">语音</span>
+    </div>
+    <div class="community bottom_item" style="width: 25%; height: 100%; background: white; text-align: center; vertical-align: center">
+        <div><img class="community_img" style="height: 5vh; width: 5vh; margin-bottom: -5px" src="http://tu.027cgb.com/609575/aibox/house_grey.png" alt=""></div>
+        <span class="community_text">小区服务</span>
+    </div>
+    <div class="order bottom_item" style="width: 25%; height: 100%; background: white; text-align: center; vertical-align: center">
+        <div><img class="order_img" style="height: 5vh; width: 5vh; margin-bottom: -5px" src="http://tu.027cgb.com/609575/aibox/order_grey.png" alt=""></div>
+        <span class="order_text">订单</span>
+    </div>
+    <div class="home bottom_item" style="width: 25%; height: 100%; background: white; text-align: center; vertical-align: center">
+        <div><img class="home_img" style="height: 5vh; width: 5vh; margin-bottom: -5px" src="http://tu.027cgb.com/609575/aibox/home.png" alt=""></div>
+        <span class="home_text" style="color: #2593FB">我的</span>
+    </div>
+</div>
+
+
+</body>
+</html>
