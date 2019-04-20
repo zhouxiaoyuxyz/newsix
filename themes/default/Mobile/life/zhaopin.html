@@ -13,6 +13,13 @@
         .foot-fixed {
             height: 8vh;
         }
+        .button-big{
+            padding:3px 5px;
+            font-size:1.2em;
+        }
+        .bg-dot{
+            background-color: #f4672e;
+        }
     </style>
 </head>
 <body style="background:#f4f4f4;padding:0">
@@ -77,19 +84,24 @@
                                 <php>
                                     }else{
                                 </php>
-                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF">打卡下班</span>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF">打卡上班</span>
                                 <php>
                                     }
                                 </php>
                             </div>
                         </div>
-                        <div style="width: 30%; height: 100%; display: flex; flex-direction: column; align-items: flex-end; margin-right: 25px;color: #F9872C;font-weight:bold ">
-                            <div  style="font-size: 1rem;margin: 10px 0 18px;">
-                                <a href="<{:U('life/gotowork')}>" style="color: #F9872C;">打卡上班</a>
-                            </div>
-                            <div style="font-size: 1rem">
-                                <a href="<{:U('life/endwork')}>" style="color: #F9872C;">打卡下班</a>
-                            </div>
+
+                        <div style="width: 30%; height: 100%; display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;font-weight:bold ">
+                            <form method="post"  target="x-frame" action="<{:U('life/gotowork')}>">
+                                <div  style="margin: 10px 0 5px;">
+                                    <button  type="submit" class="button button-block button-big bg-dot">打卡上班</button>
+                                </div>
+                            </form>
+                            <form method="post"  target="x-frame" action="<{:U('life/endwork')}>">
+                                <div  style="margin: 2px 0 5px;">
+                                    <button  type="submit" class="button button-block button-big bg-dot">打卡下班</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 

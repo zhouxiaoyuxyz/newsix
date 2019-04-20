@@ -10,7 +10,7 @@
     <p class="attention"><span>注意：</span>不需要启用的字段就不需要填写</p>
         <form  target="baocms_frm" method="post">
             <div class="tableBox">
-                <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style="color:#545454;line-height:30px;font-size:1.2em; text-align:center;border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
                     <tr>
                         <td class="w50"><input type="checkbox" class="checkAll" rel="life_id" /></td>
                         <td class="w50">ID</td>
@@ -40,10 +40,8 @@
                             <td><{$var.create_ip}></td>
 
                             <td>
-                                <{:BA('life/edit',array("life_id"=>$var["life_id"]),'编辑','','remberBtn')}>
-                                <{:BA('life/delete',array("life_id"=>$var["life_id"]),'删除','act','remberBtn')}>
-                                <eq name="var.audit" value="0"> <{:BA('life/audit',array("life_id"=>$var["life_id"]),'审核','act','remberBtn')}> </eq>
-
+                                <eq name="var.audit" value="1">已审核</eq>
+                                <eq name="var.audit" value="0"> <{:BA('life/auditrecruit',array("life_id"=>$var["life_id"]),'审核','act','remberBtn')}> </eq>
                             </td>
                         </tr>
                     </foreach>
@@ -52,8 +50,7 @@
             </div>
             <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
                 <div class="left">
-                    <{:BA('life/delete','','批量删除','list','a2')}>
-                    <{:BA('life/audit','','批量审核','list','remberBtn')}>
+                    <{:BA('life/auditrecruit','','批量审核','list','remberBtn')}>
                 </div>
             </div>
         </form>

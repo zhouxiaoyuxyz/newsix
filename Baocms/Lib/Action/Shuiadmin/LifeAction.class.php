@@ -52,37 +52,6 @@ class LifeAction extends CommonAction {
     $this->assign('channelmeans', D('Lifecate')->getChannelMeans());
     $this->display(); // 输出模板
 }
-    public function indexrecruit() {
-        $Life = D('Liferecruit');
-        import('ORG.Util.Page'); // 导入分页类
-        $map = array('city_id'=>$this->city_id,'closed' => 0);
-        if ($user_id = (int) $this->_param('user_id')) {
-            $users = D('Users')->find($user_id);
-            $this->assign('nickname', $users['nickname']);
-            $this->assign('user_id', $user_id);
-            $map['user_id'] = $user_id;
-        }
-
-        $count = $Life->where($map)->count(); // 查询满足要求的总记录数
-        $Page = new Page($count, 25); // 实例化分页类 传入总记录数和每页显示的记录数
-        $show = $Page->show(); // 分页显示输出
-        $list = $Life->where($map)->order(array('life_id' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
-        $ids = array();
-        foreach ($list as $k => $val) {
-            if ($val['user_id']) {
-                $ids[$val['user_id']] = $val['user_id'];
-            }
-        }
-        $this->assign('users', D('Users')->itemsByIds($ids));
-
-        $this->assign('list', $list); // 赋值数据集www.hatudou.com  二开开发qq  120585022
-        $this->assign('page', $show); // 赋值分页输出
-       // $this->assign('areas', D('Area')->fetchAll());
-       // $this->assign('business', D('Business')->fetchAll());
-        $this->assign('cates', D('Lifecate')->fetchAll());
-        $this->assign('channelmeans', D('Lifecate')->getChannelMeans());
-        $this->display(); // 输出模板
-    }
 
     public function create() {
         if ($this->isPost()) {

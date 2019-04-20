@@ -6,6 +6,8 @@ class LifeAction extends CommonAction {
 
     private $create_fields = array('title','city_id','cate_id', 'area_id', 'business_id', 'user_id', 'is_shop', 'text1', 'text2', 'text3', 'num1', 'num2', 'select1', 'select2', 'select3', 'select4', 'select5', 'urgent_date', 'top_date', 'photo', 'contact', 'mobile', 'qq', 'addr', 'views', 'lng', 'lat');
     private $edit_fields = array('title','city_id', 'cate_id', 'area_id', 'business_id', 'user_id', 'is_shop', 'text1', 'text2', 'text3', 'num1', 'num2', 'select1', 'select2', 'select3', 'select4', 'select5', 'urgent_date', 'top_date', 'photo', 'contact', 'mobile', 'qq', 'addr', 'views', 'lng', 'lat');
+   // private $create_fields = array('title','city_id','cate_id', 'area_id', 'business_id', 'user_id', 'is_shop', 'text1', 'text2', 'text3', 'num1', 'num2', 'select1', 'select2', 'select3', 'select4', 'select5', 'urgent_date', 'top_date', 'photo', 'contact', 'mobile', 'qq', 'addr', 'views', 'lng', 'lat');
+    private $edit_zpfields = array('title','city_id', 'cate_id', 'area_id', 'business_id','select1', 'select2', 'select3','photo', 'contact', 'mobile', 'weixin', 'addr', 'sfqz','full_salary','sfdr','depo_cash','sfjbx','half_salary','zwlb','worktime');
 
     public function index() {
         $Life = D('Life');
@@ -197,7 +199,40 @@ class LifeAction extends CommonAction {
             $this->baoError('请选择要编辑的生活信息');
         }
     }
-
+//    public function editrecruit($life_id = 0) {
+//        if ($life_id = (int) $life_id) {
+//            $obj = D('Liferecruit');
+//            if (!$detail = $obj->find($life_id)) {
+//                $this->baoError('请选择要编辑的招聘信息');
+//            }
+//            if ($this->isPost()) {
+//                $data = $this->editzpCheck();
+//                $data['life_id'] = $life_id;
+//                if (false !== $obj->save($data)) {
+//                    $photos = $this->_post('photos', false);
+//                    if (!empty($photos)) {
+//                        D('Lifephoto')->upload($life_id, $photos);
+//                    }
+//                    $this->baoSuccess('操作成功', U('life/indexrecruit'));
+//                }
+//                $this->baoError('操作失败');
+//            } else {
+//                $this->assign('detail', $detail);
+//                $this->assign('cates', D('Lifecate')->fetchAll());
+//                $this->assign('channelmeans', D('Lifecate')->getChannelMeans());
+//                $this->assign('cate', D('Lifecate')->find($detail['cate_id']));
+//                $this->assign('areas', D('Area')->fetchAll());
+//                $this->assign('business', D('Business')->fetchAll());
+//                $this->assign('ex', D('Lifedetails')->find($life_id));
+//                $this->assign('attrs', D('Lifecateattr')->order(array('orderby' => 'asc'))->where(array('cate_id' => $detail['cate_id']))->select());
+//                $this->assign('user', D('Users')->find($detail['user_id']));
+//                $this->assign('photos', D('Lifephoto')->getPics($life_id));
+//                $this->display();
+//            }
+//        } else {
+//            $this->baoError('请选择要编辑的生活信息');
+//        }
+//    }
     private function editCheck() {
         $data = $this->checkFields($this->_post('data', false), $this->edit_fields);
         $data['title'] = htmlspecialchars($data['title']);
@@ -263,6 +298,93 @@ class LifeAction extends CommonAction {
         $data['views'] = (int) $data['views'];
         return $data;
     }
+//    private function editzpCheck() {
+//        $data = $this->checkFields($this->_post('data', false), $this->edit_zpfields);
+//        $data['title'] = htmlspecialchars($data['title']);
+//        if (empty($data['title'])) {
+//            $this->baoError('标题不能为空');
+//        }
+//        $data['zwlb'] = htmlspecialchars($data['zwlb']);
+//        if (empty($data['zwlb'])) {
+//            $this->baoError('职位类别不能为空');
+//        }
+//        $data['worktime'] = htmlspecialchars($data['worktime']);
+//        if (empty($data['worktime'])) {
+//            $this->baoError('工作时间不能为空');
+//        }
+//        $data['cate_id'] = (int) $data['cate_id'];
+//        if (empty($data['cate_id'])) {
+//            $this->baoError('分类不能为空');
+//        }
+//        $data['user_id'] = htmlspecialchars($data['user_id']);
+//        if (empty($data['user_id'])) {
+//            $this->baoError('用户不能为空');
+//        }
+//        $data['urgent_date'] = htmlspecialchars($data['urgent_date']);
+//        $data['urgent_date'] = $data['urgent_date'] ? $data['urgent_date'] : TODAY;
+//        if (!empty($data['urgent_date']) && !isDate($data['urgent_date'])) {
+//            $this->baoError('火急日期格式不正确');
+//        }
+//        $data['top_date'] = htmlspecialchars($data['top_date']);
+//        $data['top_date'] = $data['top_date'] ? $data['top_date'] : TODAY;
+//        if (!empty($data['top_date']) && !isDate($data['top_date']) && $data['top_date'] != '0000-00-00') {
+//            $this->baoError('置顶日期格式不正确');
+//        }
+//        $data['photo'] = htmlspecialchars($data['photo']);
+//        if (!empty($data['photo']) && !isImage($data['photo'])) {
+//            $this->baoError('缩略图格式不正确');
+//        }
+//        $data['sfqz'] = htmlspecialchars($data['sfqz']);
+//        if (empty($data['sfqz'])) {
+//            $this->fengmiMsg('是否全职不能为空');
+//        }
+//        if($data['sfqz']=="yes"){
+//            $data['full_salary'] = (int)$data['full_salary'];
+//            if (empty($data['full_salary'])) {
+//                $this->fengmiMsg('全职工资不能为空');
+//            }
+//            $data['contact'] = htmlspecialchars($data['contact']);
+//            if (empty($data['contact'])) {
+//                $this->fengmiMsg('联系人不能为空');
+//            }
+//            $data['mobile'] = htmlspecialchars($data['mobile']);
+//            if (empty($data['mobile'])) {
+//                $this->fengmiMsg('电话不能为空');
+//            }
+//            if (!isMobile($data['mobile']) && !isPhone($data['mobile'])) {
+//                $this->fengmiMsg('电话格式不正确');
+//            }
+//            $data['weixin'] = htmlspecialchars($data['weixin']);
+//            if (empty($data['weixin'])) {
+//                $this->fengmiMsg('微信不能为空');
+//            }
+//            $data['addr'] = htmlspecialchars($data['addr']);
+//            if (empty($data['addr'])) {
+//                $this->fengmiMsg('地址不能为空');
+//            }
+//
+//        }
+//        else{
+//            $data['half_salary'] = (int)$data['half_salary'];
+//            if (empty($data['half_salary'])) {
+//                $this->fengmiMsg('兼职工资不能为空');
+//            }
+//            $data['sfdr'] = htmlspecialchars($data['sfdr']);
+//            if (empty($data['sfdr'])) {
+//                $this->fengmiMsg('是否多人不能为空');
+//            }
+//            $data['depo_cash'] = (int)$data['depo_cash'];
+//            if (empty($data['depo_cash'])) {
+//                $this->fengmiMsg('兼职保证金不能为空');
+//            }
+//            $data['sfjbx'] = htmlspecialchars($data['sfjbx']);
+//            if (empty($data['sfjbx'])) {
+//                $this->fengmiMsg('是否交保险不能为空');
+//            }
+//        }
+//        $data['views'] = (int) $data['views'];
+//        return $data;
+//    }
 
     public function delete($life_id = 0) {
         if (is_numeric($life_id) && ($life_id = (int) $life_id)) {
@@ -297,6 +419,47 @@ class LifeAction extends CommonAction {
                 $this->baoSuccess('审核成功！', U('life/index'));
             }
             $this->baoError('请选择要审核的生活信息');
+        }
+    }
+    public function indexrecruit() {
+        $Liferecruit = D('Liferecruit');
+        import('ORG.Util.Page'); // 导入分页类
+        $map = array('closed' => 0);
+        $count = $Liferecruit->where($map)->count(); // 查询满足要求的总记录数
+        $Page = new Page($count, 25); // 实例化分页类 传入总记录数和每页显示的记录数
+        $show = $Page->show(); // 分页显示输出
+        $list = $Liferecruit->where($map)->order(array('life_id' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        $ids = array();
+        foreach ($list as $k => $val) {
+            if ($val['user_id']) {
+                $ids[$val['user_id']] = $val['user_id'];
+            }
+        }
+        $this->assign('users', D('Users')->itemsByIds($ids));
+
+        $this->assign('list', $list); // 赋值数据集www.hatudou.com  二开开发qq  120585022
+        $this->assign('page', $show); // 赋值分页输出
+        // $this->assign('areas', D('Area')->fetchAll());
+        // $this->assign('business', D('Business')->fetchAll());
+        $this->assign('cates', D('Lifecate')->fetchAll());
+        $this->assign('channelmeans', D('Lifecate')->getChannelMeans());
+        $this->display(); // 输出模板
+    }
+    public function auditrecruit($life_id = 0) {
+        if (is_numeric($life_id) && ($life_id = (int) $life_id)) {
+            $obj = D('Liferecruit');
+            $obj->save(array('life_id' => $life_id, 'audit' => 1));
+            $this->baoSuccess('审核成功！', U('life/indexrecruit'));
+        } else {
+            $life_id = $this->_post('life_id', false);
+            if (is_array($life_id)) {
+                $obj = D('Liferecruit');
+                foreach ($life_id as $id) {
+                    $obj->save(array('life_id' => $id, 'audit' => 1));
+                }
+                $this->baoSuccess('审核成功！', U('life/indexrecruit'));
+            }
+            $this->baoError('请选择要审核的招聘信息');
         }
     }
 

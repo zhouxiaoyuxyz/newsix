@@ -319,7 +319,7 @@
 		<p><span>工作地址:<em><{$detail.addr}></em></span></p>
 	</div>
 </if>
-<form  method="post"  action="<{:U('life/signup',array('cat'=>$detail['life_id']))}>">
+<form  method="post"  action="<{:U('life/signup',array('life_id'=>$detail['life_id']))}>">
      <button type="submit" class="button button-block bg-dot">
 		 我要报名
 	 </button>

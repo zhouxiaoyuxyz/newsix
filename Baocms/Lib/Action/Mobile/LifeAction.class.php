@@ -1058,19 +1058,24 @@ class LifeAction extends CommonAction
         $cat=(int)$cat;
         $sign_detail = D('Lifesignup');
         $map = array('sign_id'=>$cat);
-        if($list= $sign_detail->where($map)->setField('audit',1)){
-            $this->fengmiMsg('通过', U('life/myfabu'));
+        $list= $sign_detail->where($map)->select();
+        if($sign_detail->where($map)->setField('audit',1)){
+            $this->success('审核成功，已通过!  ', U('life/signupdetail',array('cat'=>$list[0]['life_id'])));
+        }else{
+            $this->error('审核失败!  ', U('life/signupdetail',array('cat'=>$list[0]['life_id'])));
         }
-        $this->display();
     }
     public function signdecline($cat)
     {
         $cat=(int)$cat;
         $sign_detail = D('Lifesignup');
         $map = array('sign_id'=>$cat);
-        $list= $sign_detail->where($map)->setField('audit',2);
-        $this->fengmiMsg('不通过', U('life/myfabu'));
-        $this->display();
+        $list= $sign_detail->where($map)->select();
+        if($sign_detail->where($map)->setField('audit',2)){
+            $this->success('审核成功，未通过! ', U('life/signupdetail',array('cat'=>$list[0]['life_id'])));
+        }else{
+            $this->error('审核失败!  ', U('life/signupdetail',array('cat'=>$list[0]['life_id'])));
+        }
     }
     public function signup($cat)
     {
@@ -1100,28 +1105,35 @@ class LifeAction extends CommonAction
         if($this->isPost()) {
             if ($checkcount<=0) {
                 if ($sign_id = D('Lifesignup')->add($data)) {
-                    $this->fengmiMsg('报名成功，通过审核后将会显示！', U('life/zhaopin'));
+                    $this->success('报名成功，通过审核后将会显示！ ', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
                 } else {
-                    $this->fengmiMsg('报名失败！', U('life/zhaopin'));
+                    $this->error('报名失败！ ', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
                 }
             } else{
-                $this->fengmiMsg('你已经报名，请勿重复报名！', U('life/zhaopin'));
+                $this->success('你已经报名，请勿重复报名！', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
             }
         }
-        $this->display();
     }
     public function gotowork(){
         $startwork = D('Lifesignup');
         $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1);
         $liststart= $startwork->where($map)->setField('workstart',1);
         $listend= $startwork->where($map)->setField('workend',0);
-        $this->fengmiMsg('上班成功', U('life/zhaopin'));
+        if($liststart&&$listend){
+            $this->fengmiMsg('打卡上班成功',U('life/zhaopin'));
+        }else{
+            $this->fengmiMsg('打卡下班失败',U('life/zhaopin'));
+        }
     }
     public function endwork(){
         $startwork = D('Lifesignup');
         $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1);
         $listend= $startwork->where($map)->setField('workend',1);
         $liststart= $startwork->where($map)->setField('workstart',0);
-        $this->fengmiMsg('下班成功', U('life/zhaopin'));
+        if($liststart&&$listend){
+            $this->fengmiMsg('打卡下班成功',U('life/zhaopin'));
+        }else{
+            $this->fengmiMsg('打卡下班失败',U('life/zhaopin'));
+        }
     }
 }

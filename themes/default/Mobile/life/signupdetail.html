@@ -35,14 +35,17 @@
             <else/> <td>未通过</td>
             </if>
         </tr>
-        <tr>
-            <td colspan="4"> <div style="color: #de5145;text-align:right;">审核：</div></td>
-            <td>  <div>
-                <a href="<{:U('life/signaudit',array('cat'=>$var['sign_id']))}>">通过</a>
-                <a href="<{:U('life/signdecline',array('cat'=>$var['sign_id']))}>">不通过</a>
-            </div>
-            </td>
-        </tr>
+        <if condition="$var['audit']==0">
+            <tr>
+                <td colspan="4"> <div style="color: #de5145;text-align:right;">审核：</div></td>
+                <td>
+                    <div>
+                        <a href="<{:U('life/signaudit',array('cat'=>$var['sign_id']))}>">通过</a>
+                        <a href="<{:U('life/signdecline',array('cat'=>$var['sign_id']))}>">不通过</a>
+                    </div>
+                </td>
+            </tr>
+        </if>
     </foreach>
 </table>
 
