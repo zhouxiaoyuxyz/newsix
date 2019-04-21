@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head class="top-fixed bg-yellow bg-inverse">
+<include  file='public:header'/>
+<header class="top-fixed bg-yellow bg-inverse">
     <meta charset="UTF-8">
     <title>报名详情</title>
     <div class="top-back">
@@ -12,14 +13,15 @@
     <style>
         body{padding:0px;}
     </style>
-    <include  file='public:header'/>
-</head>
+
+</header>
 <body>
-<table style="margin:10vh auto;width:90vw;text-align:center;">
+<table style="margin:10vh auto;width:90vw;text-align:center;position:relative;">
     <tr>
         <th>序号</th>
         <th>工作名称</th>
         <th>报名用户</th>
+        <th>报名时间段</th>
         <th>就业次数</th>
         <th>审核状态</th>
     </tr>
@@ -28,17 +30,21 @@
             <td><{$key+1}></td>
             <td><{$var.job_title}></td>
             <td><{$var.sign_user_id}></td>
+            <if condition="!empty($var['select'])">
+                <td><{$var.select}></td>
+                <else/><td>全部</td>
+            </if>
             <td><{$var.job_count}></td>
             <if condition="$var['audit']==0">
                 <td>未审核</td>
-            <elseif condition="$var['audit']==1"/><td>已通过</td>
-            <else/> <td>未通过</td>
+                <elseif condition="$var['audit']==1"/><td>已通过</td>
+                <else/> <td>未通过</td>
             </if>
         </tr>
         <if condition="$var['audit']==0">
             <tr>
                 <td colspan="4"> <div style="color: #de5145;text-align:right;">审核：</div></td>
-                <td>
+                <td colspan="2">
                     <div>
                         <a href="<{:U('life/signaudit',array('cat'=>$var['sign_id']))}>">通过</a>
                         <a href="<{:U('life/signdecline',array('cat'=>$var['sign_id']))}>">不通过</a>

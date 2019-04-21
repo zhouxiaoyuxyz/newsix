@@ -3,8 +3,8 @@ class LifeAction extends CommonAction
 {
     protected $lifecate = array();
     private $create_fields = array('title', 'city_id', 'cate_id', 'area_id', 'business_id', 'text1', 'text2', 'text3', 'num1', 'num2', 'select1', 'select2', 'select3', 'select4', 'select5', 'photo', 'contact', 'mobile', 'qq', 'addr', 'lng', 'lat');
-    private $create_zpfields = array('title','city_id', 'cate_id', 'area_id', 'business_id','select1', 'select2', 'select3','photo', 'contact', 'mobile', 'weixin', 'addr', 'sfqz','full_salary','sfdr','depo_cash','sfjbx','half_salary','zwlb','worktime');
-    // private $create_zpfields = array('title','cate_id','city_id','user_id','urgent_date','top_date','photo','contact','mobile','weixin','addr','create_time','create_ip','last_time','audit','sfqz','full_salary','sfdr','depo_cash','sfjbx','half_salary');
+    private $create_zpfields = array('title','city_id', 'cate_id', 'photo', 'contact', 'mobile', 'weixin', 'addr', 'sfqz','full_salary','sfdr','depo_cash','sfjbx','half_salary','zwlb','worktime','start_time','end_time');
+    private $create_signfields = array('select');
 
     public function _initialize()
     {
@@ -471,22 +471,6 @@ class LifeAction extends CommonAction
         D('Lifereport')->add($arr);
         $this->fengmiMsg('举报成功', U('life/detail', array('life_id' => $life_id)));
     }
-    public function reportzhaopin($life_id)
-    {
-        if (empty($this->uid)) {
-            $this->fengmiMsg('请先登陆', U('passport/login'));
-        }
-        $life_id = (int)$life_id;
-        if (!($detail = D('Liferecruit')->find($life_id))) {
-            $this->fengmiMsg('该信息不存在');
-        }
-        if (D('Lifereport')->check($life_id, $this->uid)) {
-            $this->fengmiMsg('您已经举报过了！');
-        }
-        $arr = array('user_id' => $this->uid, 'life_id' => $life_id, 'create_time' => NOW_TIME, 'create_ip' => get_client_ip());
-        D('Lifereport')->add($arr);
-        $this->fengmiMsg('举报成功', U('life/detailzhaopin', array('life_id' => $life_id)));
-    }
 
     public function search()
     {
@@ -605,7 +589,7 @@ class LifeAction extends CommonAction
         $workinfolist= $workinfo->where($map)->select();
 
         //累计工资显示
-        $salarymap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1);
+        $salarymap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'workstart'=>1);
         $salarysum= $workinfo->where($salarymap)->sum('salary');
 
         $this->assign('linkArr', $linkArr);
@@ -647,9 +631,6 @@ class LifeAction extends CommonAction
         $list = $Life->where($map)->order(array('top_date' => 'desc', 'last_time' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
         $this->assign('list', $list);
         $this->assign('page', $show);
-        //$detail = D('Liferecruit')->find($life_id);
-       // $this->assign('pics', D('Lifephoto')->getPics($list['life_id']));
-        //调用图片
         $this->display();
     }
     public function fabuzhaopin($cat)
@@ -672,92 +653,91 @@ class LifeAction extends CommonAction
             $data['city_id'] = $this->city_id;
             $data['cate_id'] = $cat;
             // 订阅发送短信
-            $models = M('shop_dingyue_set');//这里按理应该用D函数好一点
-            $sms_open = $models->getField('sms_open');
-            echo $sms_open;
-            $sms_number = $models->getField('sms_number');
+//            $models = M('shop_dingyue_set');//这里按理应该用D函数好一点
+//            $sms_open = $models->getField('sms_open');
+//            echo $sms_open;
+//            $sms_number = $models->getField('sms_number');
             if ($life_id=D('Liferecruit')->add($data)) {
-                echo "hello after";
                 $photos = $this->_post('photo', false);
                 if (!empty($photos)) {
                     D('Lifephoto')->upload($life_id, $photos);
                 }
                 // 订阅发送短信 start  2016/04/13
-                if ($sms_open == 1) {//检索关键字cate_id  和 city_id
-                    $attr_id = $data['select1'];
-                    $business_id = $data['business_id']; //去检索，如果订阅的有
-                    $mapd['status'] = 1; //未删除
-                    $mapd['audit'] = 1; //审核通过的，发送
-                    $mapd['catlist'] = array('LIKE', '%,' . $attr_id);
-                    $mapd['sitelist'] = array('LIKE', '%,' . $business_id);
-                    $modeld = M('shop_dingyue');
-                    $dingyuelist = $modeld->where($mapd)->select();
-                    $count = $modeld->where($mapd)->count();
-                    if (empty($dingyuelist)) {
-                        $attr_id = $data['select2'];
-                        $business_id = $data['business_id'];//去检索，如果订阅的有
-                        $mapd['status'] = 1; //未删除
-                        $mapd['audit'] = 1; //审核通过的，发送
-                        $mapd['catlist'] = array('LIKE', '%,' . $attr_id);
-                        $mapd['sitelist'] = array('LIKE', '%,' . $business_id);
-                        $modeld = M('shop_dingyue');
-                        $dingyuelist = $modeld->where($mapd)->select();
-                        $count = $modeld->where($mapd)->count();
-                    }
-                    if (empty($dingyuelist)) {
-                        $attr_id = $data['select3'];
-                        $business_id = $data['business_id'];
-                        //去检索，如果订阅的有
-                        $mapd['status'] = 1;//未删除
-                        $mapd['audit'] = 1;//审核通过的，发送
-
-                        $mapd['catlist'] = array('LIKE', '%,' . $attr_id);
-                        $mapd['sitelist'] = array('LIKE', '%,' . $business_id);
-                        $modeld = M('shop_dingyue');
-                        $dingyuelist = $modeld->where($mapd)->select();
-                        $count = $modeld->where($mapd)->count();
-                    }
-                    if ($count) {
-                        foreach ($dingyuelist as $k => $v) {
-                            //判断数目是否超过，管理员设定的短信数目
-                            if ($v['sms_number'] < $sms_number) {
-                                //循环判断该类是否开通短信
-                                if ($v['sms'] == 1) {
-                                    $modelu = M('users');
-                                    $mapu['user_id'] = $v['uid'];
-                                    $mobile = $modelu->where($mapu)->getField('mobile');
-                                    if ($mobile) {
-                                        //大鱼发送分类信息短信
-                                        if ($this->_CONFIG['sms']['dxapi'] == 'dy') {
-                                            D('Sms')->DySms($this->_CONFIG['site']['sitename'], 'sms_life_dingyue_tongzhi_user', $mobile, array(
-                                                'sitename' => $this->_CONFIG['site']['sitename'],
-                                                'title' => $data['title'],
-                                                'user_name' => $data['contact'],
-                                                'user_mobile' => $data['mobile']
-                                            ));
-                                        } else {
-                                            D('Sms')->sendSms('sms_code', $mobile, array(
-                                                'sitename' => $this->_CONFIG['site']['sitename'],
-                                                'title' => $data['title'],
-                                                'user_name' => $data['contact'],
-                                                'user_mobile' => $data['mobile']
-                                            ));
-                                        }
-                                        //发送短信，同时数目+1
-                                        $model = M('shop_dingyue');
-                                        $data['sms_number'] = $dingyuelist[$k]['sms_number'] + 1;
-                                        $map['dingyue_id'] = $dingyuelist[$k]['dingyue_id'];
-                                        $result = $model->where($map)->save($data);
-                                        $this->fengmiMsg('手机发送成功！', U('members/life'));
-                                    }
-
-                                }
-
-                            }
-
-                        }
-                    }
-                }
+//                if ($sms_open == 1) {//检索关键字cate_id  和 city_id
+//                    $attr_id = $data['select1'];
+//                    $business_id = $data['business_id']; //去检索，如果订阅的有
+//                    $mapd['status'] = 1; //未删除
+//                    $mapd['audit'] = 1; //审核通过的，发送
+//                    $mapd['catlist'] = array('LIKE', '%,' . $attr_id);
+//                    $mapd['sitelist'] = array('LIKE', '%,' . $business_id);
+//                    $modeld = M('shop_dingyue');
+//                    $dingyuelist = $modeld->where($mapd)->select();
+//                    $count = $modeld->where($mapd)->count();
+//                    if (empty($dingyuelist)) {
+//                        $attr_id = $data['select2'];
+//                        $business_id = $data['business_id'];//去检索，如果订阅的有
+//                        $mapd['status'] = 1; //未删除
+//                        $mapd['audit'] = 1; //审核通过的，发送
+//                        $mapd['catlist'] = array('LIKE', '%,' . $attr_id);
+//                        $mapd['sitelist'] = array('LIKE', '%,' . $business_id);
+//                        $modeld = M('shop_dingyue');
+//                        $dingyuelist = $modeld->where($mapd)->select();
+//                        $count = $modeld->where($mapd)->count();
+//                    }
+//                    if (empty($dingyuelist)) {
+//                        $attr_id = $data['select3'];
+//                        $business_id = $data['business_id'];
+//                        //去检索，如果订阅的有
+//                        $mapd['status'] = 1;//未删除
+//                        $mapd['audit'] = 1;//审核通过的，发送
+//
+//                        $mapd['catlist'] = array('LIKE', '%,' . $attr_id);
+//                        $mapd['sitelist'] = array('LIKE', '%,' . $business_id);
+//                        $modeld = M('shop_dingyue');
+//                        $dingyuelist = $modeld->where($mapd)->select();
+//                        $count = $modeld->where($mapd)->count();
+//                    }
+//                    if ($count) {
+//                        foreach ($dingyuelist as $k => $v) {
+//                            //判断数目是否超过，管理员设定的短信数目
+//                            if ($v['sms_number'] < $sms_number) {
+//                                //循环判断该类是否开通短信
+//                                if ($v['sms'] == 1) {
+//                                    $modelu = M('users');
+//                                    $mapu['user_id'] = $v['uid'];
+//                                    $mobile = $modelu->where($mapu)->getField('mobile');
+//                                    if ($mobile) {
+//                                        //大鱼发送分类信息短信
+//                                        if ($this->_CONFIG['sms']['dxapi'] == 'dy') {
+//                                            D('Sms')->DySms($this->_CONFIG['site']['sitename'], 'sms_life_dingyue_tongzhi_user', $mobile, array(
+//                                                'sitename' => $this->_CONFIG['site']['sitename'],
+//                                                'title' => $data['title'],
+//                                                'user_name' => $data['contact'],
+//                                                'user_mobile' => $data['mobile']
+//                                            ));
+//                                        } else {
+//                                            D('Sms')->sendSms('sms_code', $mobile, array(
+//                                                'sitename' => $this->_CONFIG['site']['sitename'],
+//                                                'title' => $data['title'],
+//                                                'user_name' => $data['contact'],
+//                                                'user_mobile' => $data['mobile']
+//                                            ));
+//                                        }
+//                                        //发送短信，同时数目+1
+//                                        $model = M('shop_dingyue');
+//                                        $data['sms_number'] = $dingyuelist[$k]['sms_number'] + 1;
+//                                        $map['dingyue_id'] = $dingyuelist[$k]['dingyue_id'];
+//                                        $result = $model->where($map)->save($data);
+//                                        $this->fengmiMsg('手机发送成功！', U('members/life'));
+//                                    }
+//
+//                                }
+//
+//                            }
+//
+//                        }
+//                    }
+//                }
                 $this->fengmiMsg('发布信息成功，通过审核后将会显示！', U('life/zhaopin'));
             }
             $this->fengmiMsg('发布信息失败！');
@@ -797,18 +777,13 @@ class LifeAction extends CommonAction
         $data['create_time'] = NOW_TIME;
         $data['last_time'] = NOW_TIME + 86400 * 30;
         $data['create_ip'] = get_client_ip();
-        $data['select1'] = (int)$data['select1'];
-        $data['select2'] = (int)$data['select2'];
-        $data['select3'] = (int)$data['select3'];
-        $data['area_id'] = (int)$data['area_id'];
+
         $data['views'] = (int)$data['views'];
-//        if (empty($data['area_id'])) {
-//            $this->fengmiMsg('地区不能为空');
-//        }
-//        $data['business_id'] = (int)$data['business_id'];
-//        if (empty($data['business_id'])) {
-//            $this->fengmiMsg('商圈不能为空');
-//        }
+
+        $data['addr'] = htmlspecialchars($data['addr']);
+        if (empty($data['addr'])) {
+            $this->fengmiMsg('地址不能为空');
+        }
         $data['sfqz'] = htmlspecialchars($data['sfqz']);
         if (empty($data['sfqz'])) {
             $this->fengmiMsg('是否全职不能为空');
@@ -833,11 +808,6 @@ class LifeAction extends CommonAction
             if (empty($data['weixin'])) {
                 $this->fengmiMsg('微信不能为空');
             }
-            $data['addr'] = htmlspecialchars($data['addr']);
-            if (empty($data['addr'])) {
-                $this->fengmiMsg('地址不能为空');
-            }
-
         }
         else{
             $data['half_salary'] = (int)$data['half_salary'];
@@ -847,6 +817,14 @@ class LifeAction extends CommonAction
             $data['sfdr'] = htmlspecialchars($data['sfdr']);
             if (empty($data['sfdr'])) {
                 $this->fengmiMsg('是否多人不能为空');
+            }
+            $data['start_time'] = htmlspecialchars($data['start_time']);
+            if (empty($data['start_time'])) {
+                $this->fengmiMsg('开始时间不能为空');
+            }
+            $data['end_time'] = htmlspecialchars($data['end_time']);
+            if (empty($data['end_time'])) {
+                $this->fengmiMsg('结束时间不能为空');
             }
             $data['depo_cash'] = (int)$data['depo_cash'];
             if (empty($data['depo_cash'])) {
@@ -885,9 +863,9 @@ class LifeAction extends CommonAction
         $this->assign('areas', D('Area')->fetchAll());
         $this->assign('business', D('Business')->fetchAll());
         $this->assign('detail', $detail);
-       // $this->assign('ex', D('Lifedetails')->find($life_id));
-       // $this->assign('attrs', $attrs = D('Lifecateattr')->getAttrs($detail['cate_id']));
-      //  $ex = D('Lifedetails')->find($detail['life_id']);
+        // $this->assign('ex', D('Lifedetails')->find($life_id));
+        // $this->assign('attrs', $attrs = D('Lifecateattr')->getAttrs($detail['cate_id']));
+        //  $ex = D('Lifedetails')->find($detail['life_id']);
         $chl = D('Lifecate')->getChannelMeans();
         $this->seodatas['title'] = $detail['title'];
         $this->seodatas['channel'] = $chl[$this->cates[$detail['cate_id']]['channel_id']];
@@ -905,7 +883,7 @@ class LifeAction extends CommonAction
 //        if (!empty($ex[details])) {
 //            $this->seodatas['desc'] = bao_Msubstr($ex['details'], 0, 200, false);
 //        } else {
-            $this->seodatas['desc'] = $detail['title'];
+        $this->seodatas['desc'] = $detail['title'];
 //        }
         //二次开发结束
         $this->assign('pics', D('Lifephoto')->getPics($detail['life_id']));
@@ -932,29 +910,6 @@ class LifeAction extends CommonAction
         $this->assign('linkArr', $linkArr);
         $linkArr['p'] = '0000';
         $this->assign('nextpage', U('life/loaddatajianzhi', $linkArr));
-        $this->display();
-        // 输出模板
-    }
-    public function channelwhole()
-    {
-        $map = $linkArr = array();
-        if ($channel = (int)$this->_param('channel')) {
-            $cates_ids = array();
-            foreach ($this->lifecate as $val) {
-                if ($val['channel_id'] == $channel) {
-                    $cates_ids[] = $val['cate_id'];
-                }
-            }
-            if (!empty($cates_ids)) {
-                $map['cate_id'] = array('IN', $cates_ids);
-            }
-            $this->assign('cates_ids', $cates_ids);
-            $this->assign('channel_id', $channel);
-            $linkArr['channel'] = $channel;
-        }
-        $this->assign('linkArr', $linkArr);
-        $linkArr['p'] = '0000';
-        $this->assign('nextpage', U('life/loaddatawhole', $linkArr));
         $this->display();
         // 输出模板
     }
@@ -989,6 +944,45 @@ class LifeAction extends CommonAction
         $this->assign('list', $list);
         $this->assign('page', $show);
         $this->display();
+    }
+    public function reportzhaopin($life_id)
+    {
+        if (empty($this->uid)) {
+            $this->fengmiMsg('请先登陆', U('passport/login'));
+        }
+        $life_id = (int)$life_id;
+        if (!($detail = D('Liferecruit')->find($life_id))) {
+            $this->fengmiMsg('该信息不存在');
+        }
+        if (D('Lifereport')->check($life_id, $this->uid)) {
+            $this->fengmiMsg('您已经举报过了！');
+        }
+        $arr = array('user_id' => $this->uid, 'life_id' => $life_id, 'create_time' => NOW_TIME, 'create_ip' => get_client_ip());
+        D('Lifereport')->add($arr);
+        $this->fengmiMsg('举报成功', U('life/detailzhaopin', array('life_id' => $life_id)));
+    }
+    public function channelwhole()
+    {
+        $map = $linkArr = array();
+        if ($channel = (int)$this->_param('channel')) {
+            $cates_ids = array();
+            foreach ($this->lifecate as $val) {
+                if ($val['channel_id'] == $channel) {
+                    $cates_ids[] = $val['cate_id'];
+                }
+            }
+            if (!empty($cates_ids)) {
+                $map['cate_id'] = array('IN', $cates_ids);
+            }
+            $this->assign('cates_ids', $cates_ids);
+            $this->assign('channel_id', $channel);
+            $linkArr['channel'] = $channel;
+        }
+        $this->assign('linkArr', $linkArr);
+        $linkArr['p'] = '0000';
+        $this->assign('nextpage', U('life/loaddatawhole', $linkArr));
+        $this->display();
+        // 输出模板
     }
     public function loaddatawhole()
     {
@@ -1091,13 +1085,22 @@ class LifeAction extends CommonAction
         $fabu_info = D('Liferecruit');
         $map = array('life_id' => $cat);
         $list= $fabu_info->where($map)->select();
+        $data = $this->createsignCheck();
+
         $data['sign_user_id'] = $this->uid;
         $data['life_id']=$list[0]['life_id'];
         $data['job_title']=$list[0]['title'];
         if($list[0]['sfqz']=='yes'){
             $data['salary']=$list[0]['full_salary'];
         }else{
-            $data['salary']=$list[0]['half_salary'];
+            $time=(strtotime($list[0]['end_time'])-strtotime($list[0]['start_time']))/3600;
+            if($list[0]['sfdr']=='1'){
+                $data['salary']=$list[0]['half_salary']*$time;
+            }else if($list[0]['sfdr']=='2'){
+                $data['salary']=$list[0]['half_salary']*$time/2;
+            }else if($list[0]['sfdr']=='3'){
+                $data['salary']=$list[0]['half_salary']*round($time/3,1);
+            }
         }
         $data['sign_time']=date("Y-m-d H:i:s");
         $data['status']=1;
@@ -1117,23 +1120,70 @@ class LifeAction extends CommonAction
     public function gotowork(){
         $startwork = D('Lifesignup');
         $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1);
-        $liststart= $startwork->where($map)->setField('workstart',1);
-        $listend= $startwork->where($map)->setField('workend',0);
-        if($liststart&&$listend){
-            $this->fengmiMsg('打卡上班成功',U('life/zhaopin'));
+        $list=$startwork->where($map)->select();
+        $time=$list[0]['select'];
+        $timeseq=explode('--', $time);
+        $start_time=strtotime($timeseq[0]);
+        $end_time=strtotime($timeseq[1]);
+        $nowtime=time();
+        $now=date('Y-m-d h:i', time());
+//        echo "时间戳"."\n";
+//        echo $start_time ."\n";
+//        echo $end_time."\n";
+//        echo $nowtime."\n";
+//        echo "现在时间"."\n";
+//        echo $now;
+        if($list){
+            if($nowtime>=$start_time&&$nowtime<=$end_time){
+                $liststart= $startwork->where($map)->setField('workstart',1);
+                $signin_time= $startwork->where($map)->setField('signin_time',$now);
+                if($liststart&&$signin_time){
+                    $this->fengmiMsg('打卡成功,开始上班！',U('life/zhaopin'));
+                }else{
+                    $this->fengmiMsg('打卡失败,请重新打卡！',U('life/zhaopin'));
+                }
+            }else{
+                $this->fengmiMsg('打卡失败,请在规定时间内打卡上班！',U('life/zhaopin'));
+            }
         }else{
-            $this->fengmiMsg('打卡下班失败',U('life/zhaopin'));
+            $this->fengmiMsg('审核未通过，不能打卡！',U('life/zhaopin'));
         }
+
     }
     public function endwork(){
-        $startwork = D('Lifesignup');
-        $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1);
-        $listend= $startwork->where($map)->setField('workend',1);
-        $liststart= $startwork->where($map)->setField('workstart',0);
-        if($liststart&&$listend){
-            $this->fengmiMsg('打卡下班成功',U('life/zhaopin'));
+        $endwork = D('Lifesignup');
+        $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'workstart'=>1);
+        $list=$endwork->where($map)->select();
+        $time=$list[0]['select'];
+        $timeseq=explode('--', $time);
+        $start_time=strtotime($timeseq[0]);
+        $end_time=strtotime($timeseq[1]);
+        $nowtime=time();
+        $now=date('Y-m-d h:i', time());
+        if($list){
+            if($nowtime>$end_time){
+                $listend= $endwork->where($map)->setField('workend',1);
+                $signout_time= $endwork->where($map)->setField('signout_time',$now);
+                if($listend&&$signout_time){
+                    $this->fengmiMsg('打卡下班成功,已经下班！',U('life/zhaopin'));
+                }else{
+                    $this->fengmiMsg('打卡下班失败，请重新打卡！',U('life/zhaopin'));
+                }
+            }else{
+                $this->fengmiMsg('打卡下班失败,请在规定时间内打卡下班！',U('life/zhaopin'));
+            }
         }else{
-            $this->fengmiMsg('打卡下班失败',U('life/zhaopin'));
+            $this->fengmiMsg('打卡下班失败,你没有打卡上班',U('life/zhaopin'));
         }
+
+    }
+    private function createsignCheck()
+    {
+        $data = $this->checkFields($this->_post('data', false), $this->create_signfields);
+        $data['select'] = htmlspecialchars($data['select']);
+        //       if (empty($data['select'])) {
+//            $this->fengmiMsg('选择时间段不能为空');
+//        }
+        return $data;
     }
 }

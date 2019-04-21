@@ -100,6 +100,18 @@
 
 		});
 
+		$("#signup-btn").click(function(){
+			var sfdr='<{$detail[sfdr]}>';
+
+			if(sfdr=='2'){
+				$(".signup-btn").hide();
+				$(".two-sign").show();
+			}
+			if(sfdr=='3'){
+				$(".signup-btn").hide();
+				$(".three-sign").show();
+			}
+		});
 	});
 
 </script>
@@ -212,6 +224,7 @@
 	.footer-bar a:last-child{border-right:none}
 
 	.footer-copyright{text-align:center;color:#999;font-size:9px;margin:11px 0 11px}
+	.two-sign,.three-sign{display: none;}
 
 </style>
 
@@ -304,11 +317,11 @@
 		<p><span>工作时间:<em><{$detail.worktime}></em></span></p>
 		<p><span>兼职工资:<em><{$detail.half_salary}></em></span></p>
 		<p><span>兼职保证金:<em><{$detail.depo_cash}></em></span></p>
-		<if condition="$detail[sfdr]=='yes'">
-			<p><span>是否多人:<em>是</em></span></p>
-		</if>
-		<if condition="$detail[sfdr]=='no'">
+		<if condition="$detail[sfdr]=='1'">
 			<p><span>是否多人:<em>否</em></span></p>
+		</if>
+		<if condition="$detail[sfdr]=='2'||$detail[sfdr]=='3'">
+			<p><span>是否多人:<em>是</em></span></p>
 		</if>
 		<if condition="$detail[sfjbx]=='yes'">
 			<p><span>是否交保险:<em>是</em></span></p>
@@ -319,10 +332,67 @@
 		<p><span>工作地址:<em><{$detail.addr}></em></span></p>
 	</div>
 </if>
-<form  method="post"  action="<{:U('life/signup',array('life_id'=>$detail['life_id']))}>">
-     <button type="submit" class="button button-block bg-dot">
-		 我要报名
-	 </button>
+<form  method="post"  action="<{:U('life/signup',array('cat'=>$detail['life_id']))}>">
+	<php>
+		if($detail['sfdr']=='1'||$detail['sfqz']=='yes'){
+	</php>
+	<button type="submit" class="button button-block bg-dot" >
+		我要报名
+	</button>
+	<php>
+		}else{
+	</php>
+	<div class="signup-btn" style="display: block;">
+		<button type="button" class="button button-block bg-dot" id="signup-btn">
+			我要报名
+		</button>
+	</div>
+	<php>
+		}
+	</php>
+	<div class="two-sign">
+		<php>
+			if($detail['sfdr']=='2'){
+			$time=(strtotime($detail[end_time])-strtotime($detail[start_time]))/(3600*2);
+			$time=$time*60;
+			$first_start_time=date("Y-m-d H:i",$detail[start_time]);
+			$first_end_time=date("Y-m-d H:i",strtotime("$first_start_time +$time minute"));
+			$second_start_time=date("Y-m-d H:i",strtotime("$first_end_time +1 minute"));
+			$second_end_time=date("Y-m-d H:i",$detail[end_time]);
+		</php>
+		<div style="color: #FF6F00;font-size: 1.2em;font-weight: bold;margin-left: 2vw;">请选择报名的时间段(必选)</div>
+		<select style="width:85%;margin-left: 2vw;margin-bottom:2vh" name="data[select]">
+			<option value ="<{$first_start_time}>--<{$first_end_time}>" ><{$first_start_time}>--<{$first_end_time}></option>
+			<option value ="<{$second_start_time}>--<{$second_end_time}>" ><{$second_start_time}>--<{$second_end_time}></option>
+		</select>
+		<button type="submit" class="button button-block bg-dot">
+			我要报名
+		</button>
+		<php>}</php>
+	</div>
+	<div class="three-sign">
+		<php>
+			if($detail['sfdr']=='3'){
+			$time=(strtotime($detail[end_time])-strtotime($detail[start_time]))/(3600*3);
+			$time=round($time,1)*60;
+			$first_start_time=date("Y-m-d H:i",strtotime($detail[start_time]));
+			$first_end_time=date("Y-m-d H:i",strtotime("$first_start_time +$time minute"));
+			$second_start_time=date("Y-m-d H:i",strtotime("$first_end_time +1 minute"));
+			$second_end_time=date("Y-m-d H:i",strtotime("$first_end_time +$time minute"));
+			$third_start_time=date("Y-m-d H:i",strtotime("$second_end_time +1 minute"));
+			$third_end_time=date("Y-m-d H:i",strtotime($detail[end_time]));
+		</php>
+		<div style="color: #FF6F00;font-size: 1.2em;font-weight: bold;margin-left: 2vw;">请选择报名的时间段(必选)</div>
+		<select style="width:85%;margin-left: 2vw;margin-bottom:2vh" name="data[select]">
+			<option value ="<{$first_start_time}>--<{$first_end_time}>" ><{$first_start_time}>--<{$first_end_time}></option>
+			<option value ="<{$second_start_time}>--<{$second_end_time}>" ><{$second_start_time}>--<{$second_end_time}></option>
+			<option value ="<{$third_start_time}>--<{$third_end_time}>" ><{$third_start_time}>--<{$third_end_time}></option>
+		</select>
+		<button type="submit" class="button button-block bg-dot">
+			我要报名
+		</button>
+		<php>}</php>
+	</div>
 </form>
 
 <div class="blank-10 bg border-bottom"></div>
@@ -402,3 +472,8 @@
 </div>
 
 <iframe id="x-frame" name="x-frame" style="display:none;">
+
+
+
+
+

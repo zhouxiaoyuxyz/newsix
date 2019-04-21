@@ -6,15 +6,6 @@
     <div class="top-title">
         发布<{$cate.cate_name}>
         <script type="text/javascript">
-            // function sfqz() {
-            //     if($("input[name='data[sfqz]']:checked").val()=="yes"){
-            //         document.getElementById("quanzhi").style.display="block"
-            //         document.getElementById("jianzhi").style.display="none"
-            //     }else{
-            //         document.getElementById("quanzhi").style.display="none"
-            //         document.getElementById("jianzhi").style.display="block"
-            //     }
-            // }
             $(document).ready(function () {
                 $("#sfquanzhi").click(function () {
                     if($("input[name='data[sfqz]']:checked").val()=="yes"){
@@ -24,8 +15,11 @@
                         document.getElementById("depo_cash").value = "";
                         document.getElementById("sfdr1").checked =false;
                         document.getElementById("sfdr2").checked =false;
+                        document.getElementById("sfdr3").checked =false;
                         document.getElementById("sfjbx1").checked =false;
                         document.getElementById("sfjbx2").checked =false;
+                        document.getElementById("start_time").value ="";
+                        document.getElementById("end_time").value ="";
 
                     }else{
                         document.getElementById("quanzhi").style.display="none";
@@ -104,156 +98,7 @@
         </div>
 
     </div>
-    <if condition="!empty($cate['select1'])">
 
-        <div class="row">
-
-            <div class="line">
-
-                <span class="x3"><{$cate.select1}></span>
-
-                <span class="x9">
-
-                  <select name="data[select1]" class="text-select">
-
-                      <foreach name="attrs.select1" item="item">
-
-                      <option value="<{$item.attr_id}>" <eq name="detail.select1" value="$item.attr_id">selected="selected"</eq> ><{$item.attr_name}></option>
-
-                      </foreach>
-
-                  </select>
-
-              </span>
-
-            </div>
-
-        </div>
-
-    </if>
-
-    <if condition="!empty($cate['select2'])">
-
-        <div class="row">
-
-            <div class="line">
-
-                <span class="x3"><{$cate.select2}></span>
-
-                <span class="x9">
-
-                  <select name="data[select2]" class="text-select">
-
-                      <foreach name="attrs.select2" item="item">
-
-                      <option value="<{$item.attr_id}>" <eq name="detail.select2" value="$item.attr_id">selected="selected"</eq> ><{$item.attr_name}></option>
-
-                      </foreach>
-
-                  </select>
-
-              </span>
-
-            </div>
-
-        </div>
-
-    </if>
-
-    <if condition="!empty($cate['select3'])">
-
-        <div class="row">
-
-            <div class="line">
-
-                <span class="x3"><{$cate.select3}></span>
-
-                <span class="x9">
-
-                  <select name="data[select3]" class="text-select">
-
-                      <foreach name="attrs.select3" item="item">
-
-                      <option value="<{$item.attr_id}>" <eq name="detail.select3" value="$item.attr_id">selected="selected"</eq> ><{$item.attr_name}></option>
-
-                      </foreach>
-
-                  </select>
-
-              </span>
-
-            </div>
-
-        </div>
-
-    </if>
-<!--    <script>-->
-
-<!--        $(document).ready(function (e) {-->
-
-<!--            $("#area_id").change(function () {-->
-
-<!--                var url = '<{:U("life/business",array("area_id"=>"0000"))}>';-->
-
-<!--                if ($(this).val() > 0) {-->
-
-<!--                    var url2 = url.replace('0000', $(this).val());-->
-
-<!--                    $.get(url2, function (data) {-->
-
-<!--                        $("#business_id").html(data);-->
-
-<!--                    }, 'html');-->
-
-<!--                }-->
-
-
-
-<!--            });-->
-
-<!--        });-->
-
-<!--    </script>-->
-
-<!--    <div class="row">-->
-
-<!--        <div class="line">-->
-
-<!--            <span class="x3">地域</span>-->
-
-<!--            <span class="x4">-->
-
-<!--			<select name="data[area_id]" id="area_id" class="text-select">-->
-
-<!--				<option value="0" selected="selected">选择地区</option>-->
-
-<!--				<foreach name="areas" item="var">-->
-
-<!--                <php>if($var['city_id'] == $city_id){</php>-->
-
-<!--				<option value="<{$var.area_id}>" <eq name="var.area_id" value="$detail.area_id">selected="selected"</eq>><{$var.area_name}></option>-->
-
-<!--                    <php>}</php>-->
-
-<!--                </foreach>-->
-
-<!--			</select>-->
-
-<!--		</span>-->
-
-<!--            <span class="x5">-->
-
-<!--			<select name="data[business_id]" id="business_id" class="text-select">-->
-
-<!--				<option value="0" selected="selected">← 选择地区</option>-->
-
-<!--			</select>-->
-
-<!--		</span>-->
-
-<!--        </div>-->
-
-<!--    </div>-->
     <div class="row">
 
         <div class="line">
@@ -273,7 +118,7 @@
 
         <div class="line">
 
-            <span class="x3">工作时间</span>
+            <span class="x3">工作时间(小时)</span>
 
             <span class="x9">
 
@@ -389,9 +234,38 @@
 
         </div>
         <div class="row">
-            <span>是否多人：</span>
-            <input id="sfdr1" type="radio" name="data[sfdr]" value="yes" />是
-            <input id="sfdr2" type="radio" name="data[sfdr]" value="no" />否
+            <span>兼职人数：</span>
+            <input id="sfdr1" type="radio" name="data[sfdr]" value="1" />单人
+            <input id="sfdr2" type="radio" name="data[sfdr]" value="2" />双人
+            <input id="sfdr3" type="radio" name="data[sfdr]" value="3" />三人
+        </div>
+        <div class="row">
+
+            <div class="line">
+
+                <span class="x3">开始时间</span>
+
+                <span class="x9">
+
+                 <input id="start_time" type="datetime-local" class="text-input" name="data[start_time]" value="" />
+
+                </span>
+
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="line">
+
+                <span class="x3">结束时间</span>
+
+                <span class="x9">
+
+                 <input id="end_time" type="datetime-local" class="text-input" name="data[end_time]" value="" />
+
+                </span>
+
+            </div>
         </div>
         <div class="row">
 
@@ -406,7 +280,6 @@
              </span>
 
             </div>
-
         </div>
 
         <div class="row">
