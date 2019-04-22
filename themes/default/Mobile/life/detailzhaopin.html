@@ -100,6 +100,7 @@
 
 		});
 
+
 		$("#signup-btn").click(function(){
 			var sfdr='<{$detail[sfdr]}>';
 
@@ -112,6 +113,7 @@
 				$(".three-sign").show();
 			}
 		});
+
 	});
 
 </script>
@@ -225,6 +227,7 @@
 
 	.footer-copyright{text-align:center;color:#999;font-size:9px;margin:11px 0 11px}
 	.two-sign,.three-sign{display: none;}
+	body{padding-bottom:10px;}
 
 </style>
 
@@ -336,14 +339,16 @@
 	<php>
 		if($detail['sfdr']=='1'||$detail['sfqz']=='yes'){
 	</php>
-	<button type="submit" class="button button-block bg-dot" >
-		我要报名
-	</button>
+	<div style="display: block;width: 90vw; text-align: center; margin: 0px auto 2vh;">
+		<button type="submit" class="button button-block bg-dot">
+			我要报名
+		</button>
+	</div>
 	<php>
 		}else{
 	</php>
-	<div class="signup-btn" style="display: block;">
-		<button type="button" class="button button-block bg-dot" id="signup-btn">
+	<div class="signup-btn" style="display: block;width: 90vw; text-align: center; margin: 0px auto 2vh;">
+		<button type="button" class="button button-block bg-dot" id="signup-btn" >
 			我要报名
 		</button>
 	</div>
@@ -355,19 +360,23 @@
 			if($detail['sfdr']=='2'){
 			$time=(strtotime($detail[end_time])-strtotime($detail[start_time]))/(3600*2);
 			$time=$time*60;
-			$first_start_time=date("Y-m-d H:i",$detail[start_time]);
+			$first_start_time=date("Y-m-d H:i",strtotime($detail[start_time]));
 			$first_end_time=date("Y-m-d H:i",strtotime("$first_start_time +$time minute"));
 			$second_start_time=date("Y-m-d H:i",strtotime("$first_end_time +1 minute"));
-			$second_end_time=date("Y-m-d H:i",$detail[end_time]);
+			$second_end_time=date("Y-m-d H:i",strtotime($detail[end_time]));
 		</php>
-		<div style="color: #FF6F00;font-size: 1.2em;font-weight: bold;margin-left: 2vw;">请选择报名的时间段(必选)</div>
-		<select style="width:85%;margin-left: 2vw;margin-bottom:2vh" name="data[select]">
-			<option value ="<{$first_start_time}>--<{$first_end_time}>" ><{$first_start_time}>--<{$first_end_time}></option>
-			<option value ="<{$second_start_time}>--<{$second_end_time}>" ><{$second_start_time}>--<{$second_end_time}></option>
-		</select>
-		<button type="submit" class="button button-block bg-dot">
-			我要报名
-		</button>
+		<div style="color: #FF6F00;font-size: 1.2em;font-weight: bold;margin: 0px auto;text-align:center;">请选择报名的时间段(必选)</div>
+		<div style="width:85%;margin: 0px auto;text-align:center;margin-bottom:2vh">
+			<select name="data[select]">
+				<option value ="<{$first_start_time}>--<{$first_end_time}>" ><{$first_start_time}>--<{$first_end_time}></option>
+				<option value ="<{$second_start_time}>--<{$second_end_time}>"><{$second_start_time}>--<{$second_end_time}></option>
+			</select>
+		</div>
+		<div style="display: block;width: 90vw; text-align: center; margin: 0px auto 2vh;">
+			<button type="submit" class="button button-block bg-dot" style="width:80vw;">
+				我要报名
+			</button>
+		</div>
 		<php>}</php>
 	</div>
 	<div class="three-sign">
@@ -382,15 +391,19 @@
 			$third_start_time=date("Y-m-d H:i",strtotime("$second_end_time +1 minute"));
 			$third_end_time=date("Y-m-d H:i",strtotime($detail[end_time]));
 		</php>
-		<div style="color: #FF6F00;font-size: 1.2em;font-weight: bold;margin-left: 2vw;">请选择报名的时间段(必选)</div>
-		<select style="width:85%;margin-left: 2vw;margin-bottom:2vh" name="data[select]">
-			<option value ="<{$first_start_time}>--<{$first_end_time}>" ><{$first_start_time}>--<{$first_end_time}></option>
-			<option value ="<{$second_start_time}>--<{$second_end_time}>" ><{$second_start_time}>--<{$second_end_time}></option>
-			<option value ="<{$third_start_time}>--<{$third_end_time}>" ><{$third_start_time}>--<{$third_end_time}></option>
-		</select>
-		<button type="submit" class="button button-block bg-dot">
-			我要报名
-		</button>
+		<div style="color: #FF6F00;font-size: 1.2em;font-weight: bold;margin: 0px auto;text-align:center;">请选择报名的时间段(必选)</div>
+		<div style="width:85%;margin: 0px auto;text-align:center;margin-bottom:2vh">
+			<select  name="data[select]">
+				<option value ="<{$first_start_time}>--<{$first_end_time}>" ><{$first_start_time}>--<{$first_end_time}></option>
+				<option value ="<{$second_start_time}>--<{$second_end_time}>" ><{$second_start_time}>--<{$second_end_time}></option>
+				<option value ="<{$third_start_time}>--<{$third_end_time}>" ><{$third_start_time}>--<{$third_end_time}></option>
+			</select>
+		</div>
+		<div style="display: block;width: 90vw; text-align: center; margin: 0px auto 2vh;">
+			<button type="submit" class="button button-block bg-dot">
+				我要报名
+			</button>
+		</div>
 		<php>}</php>
 	</div>
 </form>
@@ -401,7 +414,7 @@
 
 	<ul class="life-list">
 
-		<calldata mdl="Liferecruit" where="cate_id = {$detail['cate_id']} and audit =1 " order="top_date desc,last_time desc" limit="0,2" cache="600">
+		<calldata mdl="Liferecruit" where="cate_id = {$detail['cate_id']} and audit =1 " order="top_date desc,last_time desc" limit="0,3" cache="600">
 
 			<li class="mod-2">
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<header class="top-fixed bg-yellow bg-inverse">
     <meta charset="UTF-8">
     <title>我的报名</title>
     <div class="top-back">
@@ -11,15 +11,21 @@
     </div>
     <style>
         body{padding:0px;}
+        table,table tr th, table tr td { border:1px solid #e1e6eb; }
+        table {width:90vw;min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse; padding:2px;color:#545454;vertical-align:middle;margin:3vh auto;}
+        .footer{display:none;}
+        th,td{display: table-cell;vertical-align: middle;}
     </style>
     <include  file='public:header'/>
-</head>
+</header>
 <body>
-<table style="margin:3vh auto;width:80vw;text-align:center;">
+<table>
     <tr>
         <th>序号</th>
         <th>工作名称</th>
         <th>工资</th>
+        <th>开始时间</th>
+        <th>结束时间</th>
         <th>审核状态</th>
     </tr>
     <foreach name="list" item="var">
@@ -27,6 +33,12 @@
             <td><{$key+1}></td>
             <td><{$var.job_title}></td>
             <td><{$var.salary}></td>
+            <if condition="$var['sfqz']==1">
+                <td>全职</td>
+                <td>全职</td>
+                <else/><td><{$var.start_time}></td>
+                <td><{$var.end_time}></td>
+            </if>
             <if condition="$var['audit']==1">
                 <td>已通过</td>
                 <elseif condition="$var['audit']==2"/><td>未通过</td>
@@ -35,6 +47,9 @@
         </tr>
     </foreach>
 </table>
+<div style="margin:0 auto;width:80%;text-align:center;color:blue;">
+    <{$page}>
+</div>
 
 <include  file='public:footer'/>
 </body>

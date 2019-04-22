@@ -31,20 +31,20 @@
         <div class="aui-flex aui-flex-mar-top">
             <div class="aui-flex-box">
                 <div class="aui-resume-item">
-                    <div style="height: 8vh; width: 100%; display: flex; justify-content: space-between">
+                    <div style="height: 6vh; width: 100%; display: flex; justify-content: space-between">
                         <div style="width: 80%; height: 100%; display: flex">
                             <div>
-                                <img style="height: 10vh; width: auto; margin: -30px 10px 0 10px; border-radius: 10px"
+                                <img style="height: 10vh; width: auto; margin: -40px 10px 0 10px; border-radius: 10px"
                                      src="<{:config_img($MEMBER['face'])}>" alt="">
                             </div>
-                            <div style="display: flex; flex-direction: column; align-items: flex-start; margin-left: 5px   ">
+                            <div style="display: flex; margin-top:-10px;flex-direction: column; align-items: flex-start; margin-left: 5px   ">
                                 <span style="font-size: 1.2rem; font-weight: bold">现在的岗位</span>
 
                             </div>
                         </div>
                     </div>
 
-                    <div style="height: 13vh; width: 100%; display: flex; justify-content: space-between">
+                    <div style="height: 18vh; width: 100%; display: flex; justify-content: space-between">
                         <div style="margin-left:10px; width: 60%; height: 100%; display: flex; flex-direction: column; align-items: flex-start;">
                             <div style="display: flex; flex-direction: row;">
                                 <span style="font-size: 1rem">我的工作:</span>
@@ -65,7 +65,7 @@
                                 <php>
                                     if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
                                 </php>
-                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$workinfolist[0]['job_count']}></span>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$job_count}></span>
                                 <php>
                                     }else{
                                 </php>
@@ -75,7 +75,22 @@
                                 </php>
                             </div>
                             <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: 1rem">正在挣:</span>
+                            <span style="font-size: 1rem">正在挣:</span>
+                            <php>
+                                if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
+                            </php>
+                            <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$salarynow}></span>
+                            <span style="font-size:1rem"> 元</span>
+                            <php>
+                                }else{
+                            </php>
+                            <span style="font-weight: bold; font-size: 1rem; color: #1D74AF">打卡上班</span>
+                            <php>
+                                }
+                            </php>
+                            </div>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: 1rem">累计挣:</span>
                                 <php>
                                     if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
                                 </php>
@@ -91,14 +106,14 @@
                             </div>
                         </div>
 
-                        <div style="width: 30%; height: 100%; display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;font-weight:bold ">
+                        <div style="width: 30%; height: 100%; display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;font-weight:bold;justify-content: center;  ">
                             <form method="post"  target="x-frame" action="<{:U('life/gotowork')}>">
-                                <div  style="margin: 10px 0 5px;">
+                                <div  style="margin: 10px 0 10px;">
                                     <button  type="submit" class="button button-block button-big bg-dot">打卡上班</button>
                                 </div>
                             </form>
                             <form method="post"  target="x-frame" action="<{:U('life/endwork')}>">
-                                <div  style="margin: 2px 0 5px;">
+                                <div  style="margin: 5px 0 5px;">
                                     <button  type="submit" class="button button-block button-big bg-dot">打卡下班</button>
                                 </div>
                             </form>

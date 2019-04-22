@@ -12,11 +12,15 @@
     </div>
     <style>
         body{padding:0px;}
+        table,table tr th, table tr td { border:1px solid #e1e6eb; }
+        table {width:90vw;min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse; padding:2px;color:#545454;vertical-align:middle;margin:10vh auto 3vh;}
+        th,td{display: table-cell;vertical-align: middle;}
+        .footer{display:none;}
     </style>
 
 </header>
 <body>
-<table style="margin:10vh auto;width:90vw;text-align:center;position:relative;">
+<table>
     <tr>
         <th>序号</th>
         <th>工作名称</th>
@@ -34,7 +38,7 @@
                 <td><{$var.select}></td>
                 <else/><td>全部</td>
             </if>
-            <td><{$var.job_count}></td>
+            <td><{$job_count}></td>
             <if condition="$var['audit']==0">
                 <td>未审核</td>
                 <elseif condition="$var['audit']==1"/><td>已通过</td>
@@ -54,7 +58,9 @@
         </if>
     </foreach>
 </table>
-
+<div style="margin:0 auto;width:80%;text-align:center;color:blue;">
+    <{$page}>
+</div>
 <include  file='public:footer'/>
 </body>
 </html>
