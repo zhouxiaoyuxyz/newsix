@@ -2,13 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>招聘</title>
+    <title>智享零工</title>
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
     <meta content="yes" name="apple-mobile-web-app-capable" />
     <meta content="black" name="apple-mobile-web-app-status-bar-style" />
     <meta content="telephone=no" name="format-detection" />
     <link href="/static/default/mobile/css/zhaopinstyle.css" rel="stylesheet" type="text/css" />
     <include  file='public:header'/>
+    <script type="text/javascript">
+        $(function(){
+            $("#daka-btn").click(function(){
+                $(".daka-btn").hide();
+                $(".dakashow").show();
+            });
+        });
+    </script>
     <style>
         .foot-fixed {
             height: 8vh;
@@ -20,6 +28,7 @@
         .bg-dot{
             background-color: #f4672e;
         }
+        .dakashow{display: none;}
     </style>
 </head>
 <body style="background:#f4f4f4;padding:0">
@@ -38,49 +47,18 @@
                                      src="<{:config_img($MEMBER['face'])}>" alt="">
                             </div>
                             <div style="display: flex; margin-top:-10px;flex-direction: column; align-items: flex-start; margin-left: 5px   ">
-                                <span style="font-size: 1.2rem; font-weight: bold">现在的岗位</span>
+                                <span style="font-size: 1.1rem; font-weight: bold">现在的岗位</span>
 
                             </div>
                         </div>
                     </div>
-
-                    <div style="height: 18vh; width: 100%; display: flex; justify-content: space-between">
-                        <div style="margin-left:10px; width: 60%; height: 100%; display: flex; flex-direction: column; align-items: flex-start;">
-                            <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: 1rem">我的工作:</span>
-                                <php>
-                                    if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
-                                </php>
-                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$workinfolist[0]['job_title']}></span>
-                                <php>
-                                    }else{
-                                </php>
-                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF">打卡上班</span>
-                                <php>
-                                    }
-                                </php>
-                            </div>
-                            <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: 1rem">就业次数:</span>
-                                <php>
-                                    if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
-                                </php>
-                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$job_count}></span>
-                                <php>
-                                    }else{
-                                </php>
-                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF">打卡上班</span>
-                                <php>
-                                    }
-                                </php>
-                            </div>
-                            <div style="display: flex; flex-direction: row;">
-                            <span style="font-size: 1rem">正在挣:</span>
+                    <div  style="height: 5vh; width: 100%; display: flex; justify-content: space-between">
+                        <div style="display: flex; flex-direction: row;margin-left:10px; ">
+                            <span style="font-size: 1rem">我的工作:</span>
                             <php>
                                 if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
                             </php>
-                            <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$salarynow}></span>
-                            <span style="font-size:1rem"> 元</span>
+                            <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$workinfolist[0]['job_title']}></span>
                             <php>
                                 }else{
                             </php>
@@ -88,13 +66,21 @@
                             <php>
                                 }
                             </php>
+                        </div>
+                    </div>
+
+                    <div style="height: 16vh; width: 100%; display: flex; justify-content: space-between">
+                        <div style="margin-left:10px; width: 60%; height: 100%; display: flex; flex-direction: column; align-items: flex-start;">
+                            <div style="display: flex; flex-direction: row;margin-top:5px;">
+                                <span style="font-size: 1rem">就业次数:</span>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$job_count}></span>
                             </div>
                             <div style="display: flex; flex-direction: row;">
-                                <span style="font-size: 1rem">累计挣:</span>
+                                <span style="font-size: 1rem">正在挣:</span>
                                 <php>
                                     if($workinfolist[0]['workstart']==1&&$workinfolist[0]['workend']==0){
                                 </php>
-                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$salarysum}></span>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$salarynow}></span>
                                 <span style="font-size:1rem"> 元</span>
                                 <php>
                                     }else{
@@ -104,15 +90,22 @@
                                     }
                                 </php>
                             </div>
+                            <div style="display: flex; flex-direction: row;">
+                                <span style="font-size: 1rem">累计挣:</span>
+                                <span style="font-weight: bold; font-size: 1rem; color: #1D74AF"><{$salarysum}></span>
+                                <span style="font-size:1rem"> 元</span>
+                            </div>
                         </div>
 
-                        <div style="width: 30%; height: 100%; display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;font-weight:bold;justify-content: center;  ">
-                            <form method="post"  target="x-frame" action="<{:U('life/gotowork')}>">
+                        <div style="width: 40%; height: 100%; display: flex; flex-direction: column; align-items: flex-end; margin-right: 10px;font-weight:bold;justify-content: center;  ">
+                            <form method="post"  target="x-frame" action="<{:U('life/gotowork')}>" style="width:90%">
+
                                 <div  style="margin: 10px 0 10px;">
                                     <button  type="submit" class="button button-block button-big bg-dot">打卡上班</button>
                                 </div>
+
                             </form>
-                            <form method="post"  target="x-frame" action="<{:U('life/endwork')}>">
+                            <form method="post"  target="x-frame" action="<{:U('life/endwork')}>" style="width:90%">
                                 <div  style="margin: 5px 0 5px;">
                                     <button  type="submit" class="button button-block button-big bg-dot">打卡下班</button>
                                 </div>

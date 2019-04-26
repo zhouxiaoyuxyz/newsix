@@ -25,11 +25,6 @@
                         document.getElementById("quanzhi").style.display="none";
                         document.getElementById("jianzhi").style.display="block";
                         document.getElementById("full_salary").value = "";
-                        document.getElementById("contact").value = "";
-                        document.getElementById("mobile").value = "";
-                        document.getElementById("weixin").value = "";
-                        document.getElementById("addr").value = "";
-
                     }
                 });
             });
@@ -99,6 +94,7 @@
 
     </div>
 
+
     <div class="row">
 
         <div class="line">
@@ -129,6 +125,68 @@
         </div>
 
     </div>
+    <div class="row">
+
+        <div class="line">
+
+            <span class="x3">工作地址</span>
+
+            <span class="x9">
+
+                      <input id="addr" type="text" class="text-input" name="data[addr]" value="" />
+
+                  </span>
+
+        </div>
+
+    </div>
+    <div class="row">
+
+        <div class="line">
+
+            <span class="x3">联系人</span>
+
+            <span class="x9">
+
+                      <input id="contact" type="text" class="text-input" name="data[contact]" value="" />
+
+                  </span>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="line">
+
+            <span class="x3">电话</span>
+
+            <span class="x9">
+
+                      <input id="mobile" type="text" class="text-input" name="data[mobile]" value="" />
+
+                  </span>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="line">
+
+            <span class="x3">微信</span>
+
+            <span class="x9">
+
+                      <input id="weixin" type="text" class="text-input" name="data[weixin]" value="" />
+
+                  </span>
+
+        </div>
+
+    </div>
 
     <div class="row" id="sfquanzhi">
         <span>是否全职：</span>
@@ -152,69 +210,7 @@
             </div>
 
         </div>
-        <div class="row">
 
-            <div class="line">
-
-                <span class="x3">联系人</span>
-
-                <span class="x9">
-
-                      <input id="contact" type="text" class="text-input" name="data[contact]" value="" />
-
-                  </span>
-
-            </div>
-
-        </div>
-
-        <div class="row">
-
-            <div class="line">
-
-                <span class="x3">电话</span>
-
-                <span class="x9">
-
-                      <input id="mobile" type="text" class="text-input" name="data[mobile]" value="" />
-
-                  </span>
-
-            </div>
-
-        </div>
-
-        <div class="row">
-
-            <div class="line">
-
-                <span class="x3">微信</span>
-
-                <span class="x9">
-
-                      <input id="weixin" type="text" class="text-input" name="data[weixin]" value="" />
-
-                  </span>
-
-            </div>
-
-        </div>
-
-        <div class="row">
-
-            <div class="line">
-
-                <span class="x3">地址</span>
-
-                <span class="x9">
-
-                      <input id="addr" type="text" class="text-input" name="data[addr]" value="" />
-
-                  </span>
-
-            </div>
-
-        </div>
     </div>
 
     <div id='jianzhi' style="display: none;">
@@ -222,7 +218,7 @@
 
             <div class="line">
 
-                <span class="x3">兼职工资</span>
+                <span class="x3">兼职工资(小时)</span>
 
                 <span class="x9">
 
@@ -280,6 +276,7 @@
              </span>
 
             </div>
+
         </div>
 
         <div class="row">

@@ -38,7 +38,10 @@
                 <td><{$var.select}></td>
                 <else/><td>全部</td>
             </if>
-            <td><{$job_count}></td>
+            <if condition="!empty($job_count)">
+                <td><{$job_count}></td>
+                <else/><td>0</td>
+            </if>
             <if condition="$var['audit']==0">
                 <td>未审核</td>
                 <elseif condition="$var['audit']==1"/><td>已通过</td>
@@ -47,11 +50,11 @@
         </tr>
         <if condition="$var['audit']==0">
             <tr>
-                <td colspan="4"> <div style="color: #de5145;text-align:right;">审核：</div></td>
+                <td colspan="4"> <div style="color: #de5145;text-align:right;font-weight:bold;">审核：</div></td>
                 <td colspan="2">
-                    <div>
-                        <a href="<{:U('life/signaudit',array('cat'=>$var['sign_id']))}>">通过</a>
-                        <a href="<{:U('life/signdecline',array('cat'=>$var['sign_id']))}>">不通过</a>
+                    <div style="font-weight:bold;display:flex;flex-direction: column;">
+                        <a href="<{:U('life/signaudit',array('cat'=>$var['sign_id']))}>" style="font-weight:bold;color: #42b8f1">通过</a>
+                        <a href="<{:U('life/signdecline',array('cat'=>$var['sign_id']))}>" style="font-weight:bold;color: #42b8f1">不通过</a>
                     </div>
                 </td>
             </tr>

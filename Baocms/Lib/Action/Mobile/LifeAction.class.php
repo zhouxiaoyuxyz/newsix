@@ -5,6 +5,7 @@ class LifeAction extends CommonAction
     private $create_fields = array('title', 'city_id', 'cate_id', 'area_id', 'business_id', 'text1', 'text2', 'text3', 'num1', 'num2', 'select1', 'select2', 'select3', 'select4', 'select5', 'photo', 'contact', 'mobile', 'qq', 'addr', 'lng', 'lat');
     private $create_zpfields = array('title','city_id', 'cate_id', 'photo', 'contact', 'mobile', 'weixin', 'addr', 'sfqz','full_salary','sfdr','depo_cash','sfjbx','half_salary','zwlb','worktime','start_time','end_time');
     private $create_signfields = array('select');
+    private $create_jobfields = array('sign_id');
 
     public function _initialize()
     {
@@ -599,6 +600,37 @@ class LifeAction extends CommonAction
         $salarynowmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'workstart'=>1,'workend'=>0);
         $salarynow= $workinfo->where($salarynowmap)->sum('salary');
 
+        $lat = addslashes(cookie('lat'));
+        echo"lat";
+        echo $lat;
+        $lng = addslashes(cookie('lng'));
+        echo $lng;
+
+
+//        //向前台传递选择什么工作打卡
+//        $startwork = D('Lifesignup');
+//        $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0);
+//        $list=$startwork->where($map)->select();
+//        //如果一个人不同时段有多个工作，取最近的那个
+//        $min=$list[0]['start_time'];
+//        $newkey=0;
+//        foreach ($list as $key=>$val){
+//            if($min>$val['start_time']){
+//                $min=$val['start_time'];
+//                $newkey=$key;
+//            }
+//        }
+//        //同一个时间段有多个工作
+//        $selectmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'start_time'=>$min);
+//        $count=$startwork->where($selectmap)->count();
+//        // echo "同一时间段工作的数目";
+//        // echo $count."\n";
+//        if($count>1){
+//            $selectlist=$startwork->where($selectmap)->select();
+//            $this->assign('selectlist', $selectlist);
+//            // echo "<pre>";print_r($selectlist);echo "<pre>";
+//        }
+
         $this->assign('linkArr', $linkArr);
         $linkArr['p'] = '0000';
         $this->assign('nextpage', U('life/loadzhaopin', $linkArr));
@@ -607,6 +639,7 @@ class LifeAction extends CommonAction
         $this->assign('salarysum', $salarysum);
         $this->assign('job_count', $job_count);
         $this->assign('salarynow', $salarynow);
+//        $this->assign('count', $count);
         $this->display();
         // 输出模板
     }
@@ -793,6 +826,21 @@ class LifeAction extends CommonAction
         if (empty($data['addr'])) {
             $this->fengmiMsg('地址不能为空');
         }
+        $data['contact'] = htmlspecialchars($data['contact']);
+        if (empty($data['contact'])) {
+            $this->fengmiMsg('联系人不能为空');
+        }
+        $data['mobile'] = htmlspecialchars($data['mobile']);
+        if (empty($data['mobile'])) {
+            $this->fengmiMsg('电话不能为空');
+        }
+        if (!isMobile($data['mobile']) && !isPhone($data['mobile'])) {
+            $this->fengmiMsg('电话格式不正确');
+        }
+        $data['weixin'] = htmlspecialchars($data['weixin']);
+        if (empty($data['weixin'])) {
+            $this->fengmiMsg('微信不能为空');
+        }
         $data['sfqz'] = htmlspecialchars($data['sfqz']);
         if (empty($data['sfqz'])) {
             $this->fengmiMsg('是否全职不能为空');
@@ -801,21 +849,6 @@ class LifeAction extends CommonAction
             $data['full_salary'] = (int)$data['full_salary'];
             if (empty($data['full_salary'])) {
                 $this->fengmiMsg('全职工资不能为空');
-            }
-            $data['contact'] = htmlspecialchars($data['contact']);
-            if (empty($data['contact'])) {
-                $this->fengmiMsg('联系人不能为空');
-            }
-            $data['mobile'] = htmlspecialchars($data['mobile']);
-            if (empty($data['mobile'])) {
-                $this->fengmiMsg('电话不能为空');
-            }
-            if (!isMobile($data['mobile']) && !isPhone($data['mobile'])) {
-                $this->fengmiMsg('电话格式不正确');
-            }
-            $data['weixin'] = htmlspecialchars($data['weixin']);
-            if (empty($data['weixin'])) {
-                $this->fengmiMsg('微信不能为空');
             }
         }
         else{
@@ -1034,9 +1067,8 @@ class LifeAction extends CommonAction
         import('ORG.Util.Page');
         // 导入分页类
         $map = array('city_id' => $this->city_id,'user_id'=>$this->uid, 'closed' => 0);
-
         $count = $fabu_info->where($map)->count();
-        $Page = new Page($count, 25);
+        $Page = new Page($count,25);
         $show = $Page->show();
         $var = C('VAR_PAGE') ? C('VAR_PAGE') : 'p';
         $p = $_GET[$var];
@@ -1044,9 +1076,9 @@ class LifeAction extends CommonAction
             die('0');
         }
         $list = $fabu_info->where($map)->order(array('top_date' => 'desc', 'last_time' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
+
         $this->assign('list', $list);
         $this->assign('page', $show);
-
         $this->display();
     }
     public function mysignup()
@@ -1057,8 +1089,7 @@ class LifeAction extends CommonAction
         $sign_info = D('Lifesignup');
         import('ORG.Util.Page');
         // 导入分页类
-        $map = array('user_id'=>$this->uid);
-
+        $map = array('sign_user_id'=>$this->uid);
         $count = $sign_info->where($map)->count();
         $Page = new Page($count, 25);
         $show = $Page->show();
@@ -1071,7 +1102,6 @@ class LifeAction extends CommonAction
 
         $this->assign('list', $list);
         $this->assign('page', $show);
-
         $this->display();
     }
     public function signupdetail($cat)
@@ -1096,12 +1126,12 @@ class LifeAction extends CommonAction
         //就业次数
         $workinfo = D('Lifesignup');
         $countmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'workstart'=>1);
+
         $job_count= $workinfo->where($countmap)->sum('job_count');
 
         $this->assign('list', $list);
         $this->assign('page', $show);
         $this->assign('job_count', $job_count);
-
         $this->display();
     }
     public function signaudit($cat)
@@ -1135,14 +1165,21 @@ class LifeAction extends CommonAction
         }
         $cat = (int)$cat;
         $sign_info = D('Lifesignup');
+        //是否重复报名
         $checkmap=array('sign_user_id' => $this->uid,'life_id'=>$cat);
         $checkcount=$sign_info->where($checkmap)->count();
+        //保证一个时间阶段只能报名一个工作，不能交叉
+        $onlymap=array('sign_user_id' => $this->uid);
+        $onlylist=$sign_info->where($onlymap)->select();
+
+        //获得发布信息
         $fabu_info = D('Liferecruit');
         $map = array('life_id' => $cat);
         $list= $fabu_info->where($map)->select();
 
         //获取报名段的select的值
         $data = $this->createsignCheck();
+
         //获取工作开始时间和结束时间
         $timeseq=explode('--', $data['select']);
         $data['start_time']=$timeseq[0];
@@ -1171,6 +1208,12 @@ class LifeAction extends CommonAction
         $data['status']=1;
         $data['job_count']=1;
         if($this->isPost()) {
+            foreach ($onlylist as $key=>$val){
+                if((strtotime($data['start_time'])>=strtotime($val['start_time']))&&(strtotime($data['start_time'])<=strtotime($val['end_time']))){
+                    $this->success('你在这个时间段已有报名，不能继续报名！', U('life/zhaopin'));
+                    break;
+                }
+            }
             if ($checkcount<=0) {
                 if ($sign_id = D('Lifesignup')->add($data)) {
                     $this->success('报名成功，通过审核后将会显示！ ', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
@@ -1180,42 +1223,89 @@ class LifeAction extends CommonAction
             } else{
                 $this->success('你已经报名，请勿重复报名！', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
             }
+
         }
     }
     public function gotowork(){
         $startwork = D('Lifesignup');
-        $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0);
+        $nowtime=time();
+        echo "现在的时间戳";
+        echo "$nowtime";
+        $now=date('Y-m-d H:i', time());
+        $nnow=date('Y-m-d H:i:s', time());
+        $nowtime=strtotime($now);
+        $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'start_time'=>array('egt',$nnow));
+        // $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0);
         $list=$startwork->where($map)->select();
+        echo "测试list";
+        echo "<pre>";echo print_r($list);echo "<pre>";
         //如果一个人不同时段有多个工作，取最近的那个
         $min=$list[0]['start_time'];
+        echo $min;
         $newkey=0;
         foreach ($list as $key=>$val){
             if($min>$val['start_time']){
                 $min=$val['start_time'];
+                echo "循环内的min";
+                echo $min;
                 $newkey=$key;
             }
         }
-        $start_time=strtotime($list[$newkey]['start_time']);
-        $nowtime=time();
-        $now=date('Y-m-d h:i', time());
+        //同一个时间段有多个工作  选择哪个工作打卡
+//        $data = $this->createjobCheck();
+//        echo "选择的报名号";
+//        echo $data['sign_id'];
+//        $selectmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'start_time'=>$min);
+//        $count=$startwork->where($selectmap)->count();
+//        $selectlist=$startwork->where($selectmap)->select();
 
-        //打卡上班的那条记录
+        $start_time=date('Y-m-d H:i',strtotime($list[$newkey]['start_time']));
+        $start_time=strtotime($start_time);
+        echo "start_time的时间戳";
+        echo $start_time."/n";
+
+
+//        if($count<=1){
         $setmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'sign_id'=>$list[$newkey]['sign_id']);
+//        }else{
+//            $setmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'sign_id'=>$data['sign_id']);
+//
+//            //将没有被选择的工作的屏蔽
+//            if($nowtime>=$start_time){
+//                foreach ($selectlist as $key=>$val){
+//                    if($val['sign_id']!=$data['sign_id']){
+//                        $replacemap=array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'sign_id'=>$val['sign_id']);
+//                        $startwork->where($replacemap)->setField('workend',1);
+//                    }
+//                }
+//            }
+//        }
+
+        //是否重复打卡
+        $repeatlist=$startwork->where($setmap)->select();
+        echo "<pre>";echo print_r($repeatlist);echo "<pre>";
 
         if($list){
-            if($nowtime<=$start_time){
+            if($nowtime<=$start_time&&$repeatlist[0]['workstart']==0){
                 $liststart= $startwork->where($setmap)->setField('workstart',1);
+//                echo "liststart";
+//                echo $liststart;
                 $signin_time= $startwork->where($setmap)->setField('signin_time',$now);
+//                echo "signin_time";
+//                echo $signin_time;
+
                 if($liststart&&$signin_time){
-                    $this->fengmiMsg('打卡成功,开始上班！',U('life/zhaopin'));
+                    $this->fengmiMsg('打卡成功,开始上班！');
                 }else{
                     $this->fengmiMsg('打卡失败,请重新打卡！',U('life/zhaopin'));
                 }
+            }else  if($repeatlist[0]['workstart']==1){
+                $this->fengmiMsg('你已经打卡，请勿重复打卡！',U('life/zhaopin'));
             }else{
-                $this->fengmiMsg('打卡失败,超过规定时间，请在规定时间内打卡上班！',U('life/zhaopin'));
+                $this->fengmiMsg('打卡失败,请在规定时间内打卡上班！');
             }
         }else{
-            $this->fengmiMsg('审核未通过或全职，不能打卡！',U('life/zhaopin'));
+            $this->fengmiMsg('没报名或审核未通过或全职，不能打卡！',U('life/zhaopin'));
         }
     }
     public function endwork(){
@@ -1224,27 +1314,38 @@ class LifeAction extends CommonAction
         $list=$endwork->where($map)->select();
         $end_time=strtotime($list[0]['end_time']);
         $nowtime=time();
-        $now=date('Y-m-d h:i', time());
+        $now=date('Y-m-d H:i:s', time());
+
         if($list){
             if($nowtime>=$end_time){
-                $listend= $endwork->where($map)->setField('workend',1);
                 $signout_time= $endwork->where($map)->setField('signout_time',$now);
-                if($listend&&$signout_time){
-                    $this->fengmiMsg('打卡下班成功,已经下班！',U('life/zhaopin'));
+                $listend= $endwork->where($map)->setField('workend',1);
+
+                if($signout_time&&$listend){
+                    $this->fengmiMsg('打卡成功,已经下班！',U('life/zhaopin'));
                 }else{
-                    $this->fengmiMsg('打卡下班失败，请重新打卡！',U('life/zhaopin'));
+                    $this->fengmiMsg('打卡失败,请重新打卡！',U('life/zhaopin'));
                 }
             }else{
-                $this->fengmiMsg('打卡下班失败,还未到下班时间，请在规定时间内打卡下班！',U('life/zhaopin'));
+                $this->fengmiMsg('打卡失败,未到规定时间，请在规定时间内打卡下班！',U('life/zhaopin'));
             }
         }else{
-            $this->fengmiMsg('打卡下班失败,你没有打卡上班',U('life/zhaopin'));
+            $this->fengmiMsg('打卡失败,你没有上班！',U('life/zhaopin'));
         }
     }
     private function createsignCheck()
     {
         $data = $this->checkFields($this->_post('data', false), $this->create_signfields);
         $data['select'] = htmlspecialchars($data['select']);
+        //       if (empty($data['select'])) {
+//            $this->fengmiMsg('选择时间段不能为空');
+//        }
+        return $data;
+    }
+    private function createjobCheck()
+    {
+        $data = $this->checkFields($this->_post('data', false), $this->create_jobfields);
+        $data['sign_id'] = (int)$data['sign_id'];
         //       if (empty($data['select'])) {
 //            $this->fengmiMsg('选择时间段不能为空');
 //        }
