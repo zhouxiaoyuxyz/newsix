@@ -11,42 +11,49 @@
     </div>
     <style>
         body{padding:0px;}
-        table,table tr th, table tr td { border:1px solid #e1e6eb; }
-        table {width:90vw;min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse; padding:2px;color:#545454;vertical-align:middle;margin:3vh auto;}
+        table,table tr th, table tr td { border:1px solid #e1e6eb;}
+        table {width:95vw; min-height: 25px; line-height: 25px; text-align: center; border-collapse:collapse; padding:2px;color:#545454;}
         .footer{display:none;}
         th,td{display: table-cell;vertical-align: middle;}
+        th{background:rgb(185,201,254);}
     </style>
     <include  file='public:header'/>
 </header>
 <body>
-<table>
-    <tr>
-        <th>序号</th>
-        <th>工作名称</th>
-        <th>工资</th>
-        <th>开始时间</th>
-        <th>结束时间</th>
-        <th>审核状态</th>
-    </tr>
-    <foreach name="list" item="var">
+<div style="border:1px solid rgb(185,201,254);border-radius:10px;overflow:hidden;margin:2vh auto 2vh;width:95vw;">
+    <table>
         <tr>
-            <td><{$key+1}></td>
-            <td><{$var.job_title}></td>
-            <td><{$var.salary}></td>
-            <if condition="$var['sfqz']==1">
-                <td>全职</td>
-                <td>全职</td>
-                <else/><td><{$var.start_time}></td>
-                <td><{$var.end_time}></td>
-            </if>
-            <if condition="$var['audit']==1">
-                <td>已通过</td>
-                <elseif condition="$var['audit']==2"/><td>未通过</td>
-                <else/> <td>未审核</td>
-            </if>
+            <th>序号</th>
+            <th>工作名称</th>
+            <th>工资</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>审核状态</th>
         </tr>
-    </foreach>
-</table>
+        <foreach name="list" item="var" key="k">
+            <php>if($k%2==0){</php>
+            <tr style="background:#fff;">
+                <php>}else{</php>
+            <tr style="background:rgb(232,237,255);">
+                <php>}</php>
+                <td><{$k+1}></td>
+                <td><{$var.job_title}></td>
+                <td><{$var.salary}></td>
+                <if condition="$var['sfqz']==1">
+                    <td>全职</td>
+                    <td>全职</td>
+                    <else/><td><{$var.start_time}></td>
+                    <td><{$var.end_time}></td>
+                </if>
+                <if condition="$var['audit']==1">
+                    <td style="color:red;">已通过</td>
+                    <elseif condition="$var['audit']==2"/><td style="color:red;">未通过</td>
+                    <else/> <td style="color:red;">未审核</td>
+                </if>
+            </tr>
+        </foreach>
+    </table>
+</div>
 <div style="margin:0 auto;width:80%;text-align:center;color:blue;">
     <{$page}>
 </div>

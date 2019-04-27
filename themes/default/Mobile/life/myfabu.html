@@ -10,13 +10,14 @@
     </div>
     <style>
         body{padding:0px;}
-        table,table tr th, table tr td { border:1px solid #e1e6eb; }
-        table {margin:10vh auto 2vh;width:90vw; min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse; padding:2px;color:#545454;}
+        table,table tr th, table tr td { border:1px solid #e1e6eb;}
+        table {width:95vw; min-height: 25px; line-height: 25px; text-align: center; border-collapse:collapse; padding:2px;color:#545454;}
         .footer{display:none;}
         th,td{display: table-cell;vertical-align: middle;}
+        th{background:rgb(185,201,254);}
     </style>
 </header>
-<div>
+<div style="border:1px solid rgb(185,201,254);border-radius:10px;overflow:hidden;margin:10vh auto 2vh;width:95vw;">
     <table>
         <tr>
             <th>序号</th>
@@ -25,9 +26,13 @@
             <th>审核状态</th>
             <th>报名详情</th>
         </tr>
-        <foreach name="list" item="var">
-            <tr>
-                <td><{$key+1}></td>
+        <foreach name="list" item="var" key="k">
+            <php>if($k%2==0){</php>
+            <tr style="background:#fff;">
+                <php>}else{</php>
+            <tr style="background:rgb(232,237,255);">
+                <php>}</php>
+                <td><{$k+1}></td>
                 <td><{$var.title}></td>
                 <td><{$var.zwlb}></td>
                 <if condition="$var['audit']==1">
@@ -38,8 +43,9 @@
             </tr>
         </foreach>
     </table>
-    <div style="margin:0 auto;width:80%;text-align:center;color:blue;">
-        <{$page}>
-    </div>
-    <div>
-        <include  file='public:footer'/>
+</div>
+<div style="margin:0 auto;width:80%;text-align:center;color:blue;">
+    <{$page}>
+</div>
+
+<include  file='public:footer'/>

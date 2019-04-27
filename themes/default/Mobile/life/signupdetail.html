@@ -12,55 +12,62 @@
     </div>
     <style>
         body{padding:0px;}
-        table,table tr th, table tr td { border:1px solid #e1e6eb; }
-        table {width:90vw;min-height: 25px; line-height: 25px; text-align: center; border-collapse: collapse; padding:2px;color:#545454;vertical-align:middle;margin:10vh auto 3vh;}
-        th,td{display: table-cell;vertical-align: middle;}
+        table,table tr th, table tr td { border:1px solid #e1e6eb;}
+        table {width:95vw; min-height: 25px; line-height: 25px; text-align: center; border-collapse:collapse; padding:2px;color:#545454;}
         .footer{display:none;}
+        th,td{display: table-cell;vertical-align: middle;}
+        th{background:rgb(185,201,254);color:palevioletred }
     </style>
 
 </header>
 <body>
-<table>
-    <tr>
-        <th>序号</th>
-        <th>工作名称</th>
-        <th>报名用户</th>
-        <th>报名时间段</th>
-        <th>就业次数</th>
-        <th>审核状态</th>
-    </tr>
-    <foreach name="list" item="var">
+<div style="border:1px solid rgb(185,201,254);border-radius:10px;overflow:hidden;margin:10vh auto 2vh;width:95vw;">
+    <table>
         <tr>
-            <td><{$key+1}></td>
-            <td><{$var.job_title}></td>
-            <td><{$var.sign_user_id}></td>
-            <if condition="!empty($var['select'])">
-                <td><{$var.select}></td>
-                <else/><td>全部</td>
-            </if>
-            <if condition="!empty($job_count)">
-                <td><{$job_count}></td>
-                <else/><td>0</td>
-            </if>
-            <if condition="$var['audit']==0">
-                <td>未审核</td>
-                <elseif condition="$var['audit']==1"/><td>已通过</td>
-                <else/> <td>未通过</td>
-            </if>
+            <th>序号</th>
+            <th>工作名称</th>
+            <th>报名用户</th>
+            <th>报名时间段</th>
+            <th>就业次数</th>
+            <th>审核状态</th>
         </tr>
-        <if condition="$var['audit']==0">
-            <tr>
-                <td colspan="4"> <div style="color: #de5145;text-align:right;font-weight:bold;">审核：</div></td>
-                <td colspan="2">
-                    <div style="font-weight:bold;display:flex;flex-direction: column;">
-                        <a href="<{:U('life/signaudit',array('cat'=>$var['sign_id']))}>" style="font-weight:bold;color: #42b8f1">通过</a>
-                        <a href="<{:U('life/signdecline',array('cat'=>$var['sign_id']))}>" style="font-weight:bold;color: #42b8f1">不通过</a>
-                    </div>
-                </td>
+        <foreach name="list" item="var" key="k">
+            <php>if($k%2==0){</php>
+            <tr style="background:#fff;">
+                <php>}else{</php>
+            <tr style="background:rgb(232,237,255);">
+                <php>}</php>
+                <td><{$k+1}></td>
+                <td><{$var.job_title}></td>
+                <td><{$var.sign_user_id}></td>
+                <if condition="!empty($var['select'])">
+                    <td><{$var.select}></td>
+                    <else/><td>全部</td>
+                </if>
+                <if condition="!empty($job_count)">
+                    <td><{$job_count}></td>
+                    <else/><td>0</td>
+                </if>
+                <if condition="$var['audit']==0">
+                    <td style="color:red;">未审核</td>
+                    <elseif condition="$var['audit']==1"/><td style="color:red;">已通过</td>
+                    <else/> <td style="color:red;">未通过</td>
+                </if>
             </tr>
-        </if>
-    </foreach>
-</table>
+            <if condition="$var['audit']==0">
+                <tr>
+                    <td colspan="4"> <div style="color: #de5145;text-align:right;font-weight:bold;">审核：</div></td>
+                    <td colspan="2">
+                        <div style="font-weight:bold;display:flex;flex-direction: column;">
+                            <a href="<{:U('life/signaudit',array('cat'=>$var['sign_id']))}>" style="font-weight:bold;color: #42b8f1">通过</a>
+                            <a href="<{:U('life/signdecline',array('cat'=>$var['sign_id']))}>" style="font-weight:bold;color: #42b8f1">不通过</a>
+                        </div>
+                    </td>
+                </tr>
+            </if>
+        </foreach>
+    </table>
+</div>
 <div style="margin:0 auto;width:80%;text-align:center;color:blue;">
     <{$page}>
 </div>

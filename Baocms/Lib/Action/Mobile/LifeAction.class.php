@@ -1164,6 +1164,7 @@ class LifeAction extends CommonAction
             $this->error('您还未登录', U('passport/login'));
         }
         $cat = (int)$cat;
+        $now=time();
         $sign_info = D('Lifesignup');
         //是否重复报名
         $checkmap=array('sign_user_id' => $this->uid,'life_id'=>$cat);
@@ -1208,22 +1209,25 @@ class LifeAction extends CommonAction
         $data['status']=1;
         $data['job_count']=1;
         if($this->isPost()) {
-            foreach ($onlylist as $key=>$val){
-                if((strtotime($data['start_time'])>=strtotime($val['start_time']))&&(strtotime($data['start_time'])<=strtotime($val['end_time']))){
-                    $this->success('你在这个时间段已有报名，不能继续报名！', U('life/zhaopin'));
-                    break;
+            if($now>strtotime($list[0]['end_time'])){
+                $this->error('报名信息已失效，不能继续报名！ ', U('life/zhaopin'));
+            }else{
+                foreach ($onlylist as $key=>$val){
+                    if((strtotime($data['start_time'])>=strtotime($val['start_time']))&&(strtotime($data['start_time'])<=strtotime($val['end_time']))){
+                        $this->error('你在这个时间段已有报名，不能继续报名！', U('life/zhaopin'));
+                        break;
+                    }
+                }
+                if ($checkcount<=0) {
+                    if ($sign_id = D('Lifesignup')->add($data)) {
+                        $this->success('报名成功，通过审核后将会显示！ ', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
+                    } else {
+                        $this->error('报名失败！ ', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
+                    }
+                } else{
+                    $this->error('你已经报名，请勿重复报名！', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
                 }
             }
-            if ($checkcount<=0) {
-                if ($sign_id = D('Lifesignup')->add($data)) {
-                    $this->success('报名成功，通过审核后将会显示！ ', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
-                } else {
-                    $this->error('报名失败！ ', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
-                }
-            } else{
-                $this->success('你已经报名，请勿重复报名！', U('life/detailzhaopin',array('life_id'=>$list[0]['life_id'])));
-            }
-
         }
     }
     public function gotowork(){

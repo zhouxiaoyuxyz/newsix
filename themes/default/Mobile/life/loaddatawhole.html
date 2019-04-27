@@ -7,11 +7,11 @@
 
 	<!-- 招聘 -->
 	<if condition="$chl eq 7">
-		<li class="mod-2">
+		<li class="aui-resume-item">
 			<a href="<{:U('life/detailzhaopin',array('life_id'=>$var['life_id']))}>">
 				<div style="display: flex;flex-direction: row;">
-					<div>
-						<img src="<{:config_img($var['photo'])}>" style="display:block;width:20vw;" />
+					<div style="width:70px;">
+						<img src="<{:config_img($var['photo'])}>" style="display:block;width:100%;height:auto;margin-top:5px;" />
 					</div>
 					<div style="display: flex;flex-direction:column;width: 60vw;margin-left:1vw;">
 						<div>工作名称：<{$var.title}></div>

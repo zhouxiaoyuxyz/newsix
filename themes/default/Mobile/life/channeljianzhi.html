@@ -6,9 +6,21 @@
 	<div class="top-title">
 		兼职<{$channel[$channel_id]}>信息
 	</div>
+	<style>
+		.aui-resume-item{
+			background:#fff;
+			height:auto;
+			border-radius:0.4rem;
+			padding:1rem;
+			margin-bottom:15px;
+		}
+		body{
+			background:rgb(244, 244, 244);
+		}
+	</style>
 </header>
 
-<div class="life-list" id="life-list"></div>
+<div class="life-list" id="life-list" style="padding:15px;"></div>
 <script>
 	$(document).ready(function () {
 		loaddata('<{$nextpage}>', $("#life-list"), true);
