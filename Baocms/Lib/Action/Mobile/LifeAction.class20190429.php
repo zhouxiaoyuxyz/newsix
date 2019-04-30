@@ -6,7 +6,6 @@ class LifeAction extends CommonAction
     private $create_zpfields = array('title','city_id', 'cate_id', 'photo', 'contact', 'mobile', 'weixin', 'addr', 'sfqz','full_salary','sfdr','depo_cash','sfjbx','half_salary','zwlb','worktime','start_time','end_time');
     private $create_signfields = array('select');
     private $create_jobfields = array('sign_id');
-    private $create_addrfields = array('lat','lng');
 
     public function _initialize()
     {
@@ -601,15 +600,40 @@ class LifeAction extends CommonAction
         $salarynowmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'workstart'=>1,'workend'=>0);
         $salarynow= $workinfo->where($salarynowmap)->sum('salary');
 
-        //获取地理位置
-        //include("Baocms/Lib/Action/Weixin/CommonAction.class.php");
+       //获取地理位置
+
         $config = D('Setting')->fetchAll();
         $app_id=$config['weixin']['appid'];
         $app_secret=$config['weixin']['appsecret'];
-        // include_once 'Baocms/Lib/Action/Weixin/CommonAction.class.php';
+    //    include_once 'Baocms/Lib/Action/Weixin/CommonAction.class.php';
         $jsSdk = $this->weixin_jssdk($app_id, $app_secret);
         $jsSdk1 = $jsSdk->getSignPackage();
         $this->assign('wxjscfg',$jsSdk1);
+
+
+//        //向前台传递选择什么工作打卡
+//        $startwork = D('Lifesignup');
+//        $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0);
+//        $list=$startwork->where($map)->select();
+//        //如果一个人不同时段有多个工作，取最近的那个
+//        $min=$list[0]['start_time'];
+//        $newkey=0;
+//        foreach ($list as $key=>$val){
+//            if($min>$val['start_time']){
+//                $min=$val['start_time'];
+//                $newkey=$key;
+//            }
+//        }
+//        //同一个时间段有多个工作
+//        $selectmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'start_time'=>$min);
+//        $count=$startwork->where($selectmap)->count();
+//        // echo "同一时间段工作的数目";
+//        // echo $count."\n";
+//        if($count>1){
+//            $selectlist=$startwork->where($selectmap)->select();
+//            $this->assign('selectlist', $selectlist);
+//            // echo "<pre>";print_r($selectlist);echo "<pre>";
+//        }
 
         $this->assign('linkArr', $linkArr);
         $linkArr['p'] = '0000';
@@ -619,7 +643,7 @@ class LifeAction extends CommonAction
         $this->assign('salarysum', $salarysum);
         $this->assign('job_count', $job_count);
         $this->assign('salarynow', $salarynow);
-
+//        $this->assign('count', $count);
         $this->display();
         // 输出模板
     }
@@ -1213,38 +1237,57 @@ class LifeAction extends CommonAction
     public function gotowork(){
         $startwork = D('Lifesignup');
         $nowtime=time();
-        // $x=119.4815;
-        // $y=35.44106;
-        //获取经纬度的值
-        $data = $this->createaddrCheck();
-        $x=$data['lng'];
-        $y=$data['lat'];;
-        echo "x:".$x;
-        echo "y:".$y;
-        $ak=qfbt1AS4SZZvfZvSXE0A1Mx2;
-        $addr=$this->getAddress($x,$y,$ak);
-        echo $addr;
-        echo $addr['result']['formatted_address'];
-        echo "<pre>";echo print_r($addr);echo "<pre>";
+        echo "现在的时间戳";
+        echo "$nowtime";
         $now=date('Y-m-d H:i', time());
         $nnow=date('Y-m-d H:i:s', time());
         $nowtime=strtotime($now);
-        //  $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0);
         $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'start_time'=>array('egt',$nnow));
+        // $map = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0);
         $list=$startwork->where($map)->select();
+        echo "测试list";
+        echo "<pre>";echo print_r($list);echo "<pre>";
         //如果一个人不同时段有多个工作，取最近的那个
         $min=$list[0]['start_time'];
+        echo $min;
         $newkey=0;
         foreach ($list as $key=>$val){
             if($min>$val['start_time']){
                 $min=$val['start_time'];
+                echo "循环内的min";
+                echo $min;
                 $newkey=$key;
             }
         }
+        //同一个时间段有多个工作  选择哪个工作打卡
+//        $data = $this->createjobCheck();
+//        echo "选择的报名号";
+//        echo $data['sign_id'];
+//        $selectmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'start_time'=>$min);
+//        $count=$startwork->where($selectmap)->count();
+//        $selectlist=$startwork->where($selectmap)->select();
+
         $start_time=date('Y-m-d H:i',strtotime($list[$newkey]['start_time']));
         $start_time=strtotime($start_time);
+        echo "start_time的时间戳";
+        echo $start_time."/n";
 
+
+//        if($count<=1){
         $setmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'sign_id'=>$list[$newkey]['sign_id']);
+//        }else{
+//            $setmap = array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'sign_id'=>$data['sign_id']);
+//
+//            //将没有被选择的工作的屏蔽
+//            if($nowtime>=$start_time){
+//                foreach ($selectlist as $key=>$val){
+//                    if($val['sign_id']!=$data['sign_id']){
+//                        $replacemap=array('sign_user_id'=>$this->uid,'status'=>1,'audit'=>1,'sfqz'=>0,'workend'=>0,'sign_id'=>$val['sign_id']);
+//                        $startwork->where($replacemap)->setField('workend',1);
+//                    }
+//                }
+//            }
+//        }
 
         //是否重复打卡
         $repeatlist=$startwork->where($setmap)->select();
@@ -1253,18 +1296,21 @@ class LifeAction extends CommonAction
         if($list){
             if($nowtime<=$start_time&&$repeatlist[0]['workstart']==0){
                 $liststart= $startwork->where($setmap)->setField('workstart',1);
+//                echo "liststart";
+//                echo $liststart;
                 $signin_time= $startwork->where($setmap)->setField('signin_time',$now);
-                $addr= $startwork->where($setmap)->setField('addr',$addr['result']['formatted_address']);
+//                echo "signin_time";
+//                echo $signin_time;
 
-                if($liststart&&$signin_time&&$addr){
-                    $this->fengmiMsg('打卡成功,开始上班！',U('life/zhaopin'));
+                if($liststart&&$signin_time){
+                    $this->fengmiMsg('打卡成功,开始上班！');
                 }else{
                     $this->fengmiMsg('打卡失败,请重新打卡！',U('life/zhaopin'));
                 }
             }else  if($repeatlist[0]['workstart']==1){
                 $this->fengmiMsg('你已经打卡，请勿重复打卡！',U('life/zhaopin'));
             }else{
-                $this->fengmiMsg('打卡失败,请在规定时间内打卡上班！',U('life/zhaopin'));
+                $this->fengmiMsg('打卡失败,请在规定时间内打卡上班！');
             }
         }else{
             $this->fengmiMsg('没报名或审核未通过或全职，不能打卡！',U('life/zhaopin'));
@@ -1304,17 +1350,15 @@ class LifeAction extends CommonAction
 //        }
         return $data;
     }
-    private function createaddrCheck()
+    private function createjobCheck()
     {
-        $data = $this->checkFields($this->_post('data', false), $this->create_addrfields);
-        $data['lat'] = htmlspecialchars($data['lat']);
-        $data['lng'] = htmlspecialchars($data['lng']);
+        $data = $this->checkFields($this->_post('data', false), $this->create_jobfields);
+        $data['sign_id'] = (int)$data['sign_id'];
         //       if (empty($data['select'])) {
 //            $this->fengmiMsg('选择时间段不能为空');
 //        }
         return $data;
     }
-    public function test(){ $this->display();}
     protected function weixin_jssdk($appid, $secret){
         static $jssdk = null;
         if ($jssdk === null) {
@@ -1323,60 +1367,4 @@ class LifeAction extends CommonAction
         }
         return $jssdk;
     }
-    /**
-     * 经纬度转换
-     * @param
-     * int type 需要转换的目标类型
-     * int to   百度类型
-     * String $x,$y 经纬度
-     */
-    function getXy($x,$y,$ak,$type,$to)
-    {
-        //调用百度地图接口
-        $apiUrl = "http://api.map.baidu.com/geoconv/v1/?coords={$x},{$y}&from={$type}&to={$to}&ak={$ak}";
-        $jsonData =  $this->curlHttp($apiUrl);
-        $data = json_decode($jsonData,true);
-        return $data;
-    }
-    /**
-     * @param
-     * $x $y 微信获取的经纬度
-     * $ak 百度地图key   通过注册成为开放者得到
-     */
-    function getAddress($x,$y,$ak){
-        //转换成百度认可的经纬度
-        $res = $this->getXy($x,$y,$ak,1,5);
-        $y1 = $res['result'][0]['y'];
-        $x1 = $res['result'][0]['x'];
-        //调用百度地图接口
-        $apiUrl = "http://api.map.baidu.com/geocoder/v2/?location={$y1},{$x1}&output=json&ak={$ak}";   //百度地图接口地址
-        $jsonData = $this-> curlHttp($apiUrl);                                                                                                                   //curl 获取百度地理位置接口
-        $data = json_decode($jsonData,true);                                                                                                    // 将返回的结果进行json处理
-        return $data;
-    }
-
-    /*curl*/
-    function curlHttp($url,$https = false,$post = false,$post_data = array())
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,$url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-        curl_setopt($ch,CURLOPT_HEADER,0);
-        /*是否post提交数据*/
-        if($post){
-            curl_setopt($ch,CURLOPT_POST,1);
-            if(!empty($post_data)){
-                curl_setopt($ch,CURLOPT_POSTFIELDS,$post_data);
-            }
-        }
-        /*是否需要安全证书*/
-        if($https){
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);    // https请求 不验证证书和hosts
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-        }
-        $output = curl_exec($ch);
-        curl_close($ch);
-        return $output;
-    }
-
 }
