@@ -490,9 +490,16 @@ class TuanAction extends CommonAction
             die;
         }
         $detail = D('Tuan')->_format($detail);
-        $detail['city_id']=session('city_id');
-        $detail['area_id']=session('area_id');
-        $detail['business_id']=session('business_id');
+        $lastorder=D('Tuanorder');
+        $ordermap=array('user_id' =>$this->uid, 'tuan_id' => $tuan_id );
+        $orderlist=$lastorder->where($ordermap)->order('order_id desc')->limit(1)->select();
+        // echo "<pre>";echo print_r($orderlist);echo "<pre>";
+        // $detail['city_id']=session('city_id');
+        // $detail['area_id']=session('area_id');
+        // $detail['business_id']=session('business_id');
+        $detail['city_id']=$orderlist[0]['city_id'];
+        $detail['area_id']=$orderlist[0]['area_id'];
+        $detail['business_id']=$orderlist[0]['business_id'];
         $this->assign('detail', $detail);
         $this->mobile_title = '支付订单';
         $this->display();
