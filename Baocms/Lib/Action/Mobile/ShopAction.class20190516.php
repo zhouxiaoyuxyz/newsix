@@ -38,8 +38,8 @@ class ShopAction extends CommonAction{
         $this->assign('nextpage', LinkTo('shop/loaddata', array('cat' => $cat, 'area' => $area, 'business' => $business, 'order' => $order, 't' => NOW_TIME, 'keyword' => $keyword, 'p' => '0000')));
         $this->display();
     }
-
-    // 互助金显示页面
+  
+  	// 互助金显示页面
     public function help(){
         // 计算互助金总额
         $money = D('Shopmoney')->where(array('shop_id' => 72))->sum('money');
@@ -53,7 +53,7 @@ class ShopAction extends CommonAction{
 
         $this->display();
     }
-
+  
     //二维码名片开始
     public function qrcode($shop_id){
         $shop_id = (int) $shop_id;
@@ -156,12 +156,12 @@ class ShopAction extends CommonAction{
         $list = $Shop->where($map)->order($orderby)->limit($Page->firstRow . ',' . $Page->listRows)->select();
         foreach ($list as $k => $val) {
             $list[$k]['d'] = getDistance($lat, $lng, $val['lat'], $val['lng']);
-            $list[$k]['weidian'] = D('Weidiandetails')->where(array('shop_id' => $val['shop_id']))->find();
+			$list[$k]['weidian'] = D('Weidiandetails')->where(array('shop_id' => $val['shop_id']))->find();
             $list[$k]['weidian_id'] = $list[$k]['weidian']['id'];
-            $shopyouhui = D('Shopyouhui')->where(array('shop_id' => $val['shop_id'], 'is_open' => 1, 'audit' => 1))->find();
-            if(!empty($shopyouhui)){
-                $list[$k]['fanxian']=100-$shopyouhui['discount']-$shopyouhui['deduction'];
-            }
+			$shopyouhui = D('Shopyouhui')->where(array('shop_id' => $val['shop_id'], 'is_open' => 1, 'audit' => 1))->find();
+			if(!empty($shopyouhui)){
+				$list[$k]['fanxian']=100-$shopyouhui['discount']-$shopyouhui['deduction'];
+			}
         }
         $shop_ids = array();
         foreach ($list as $key => $v) {
@@ -759,8 +759,8 @@ class ShopAction extends CommonAction{
             $this->display();
         }
     }
-    //点餐页面
-    public function ele(){
+	//点餐页面
+	public function ele(){
         $shop_id = (int) $this->_param('shop_id');
         if (!($detail = D('Ele')->find($shop_id))) {
             $this->error('该餐厅不存在');
@@ -780,22 +780,22 @@ class ShopAction extends CommonAction{
         $this->assign('shop', $shop);
         $this->display();
     }
-
+	
     public function breaks($shop_id){
         //优惠买单
         if (!$this->uid) {
-            $state = md5(uniqid(rand(), TRUE));
-            session('state', $state);
-            if (!empty($_SERVER['REQUEST_URI'])) {
-                $backurl = $_SERVER['REQUEST_URI'];
-            } else {
-                $backurl = U('index/index');
-            }
-            session('backurl', $backurl);
-            $login_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . $this->_CONFIG['weixin']['appid'] . '&redirect_uri=' . urlencode(__HOST__ . U('passport/wxstart')) . '&response_type=code&scope=snsapi_userinfo&state=' . $state . '#wechat_redirect';
-            header("location:{$login_url}");
-            echo $login_url;
-            die;
+           $state = md5(uniqid(rand(), TRUE));
+						session('state', $state);
+						if (!empty($_SERVER['REQUEST_URI'])) {
+							$backurl = $_SERVER['REQUEST_URI'];
+						} else {
+							$backurl = U('index/index');
+						}
+						session('backurl', $backurl);
+						$login_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . $this->_CONFIG['weixin']['appid'] . '&redirect_uri=' . urlencode(__HOST__ . U('passport/wxstart')) . '&response_type=code&scope=snsapi_userinfo&state=' . $state . '#wechat_redirect';
+						header("location:{$login_url}");
+						echo $login_url;
+						die;			
         }
         $shop_id = (int) $shop_id;
         if (!$shop_id) {
@@ -806,21 +806,21 @@ class ShopAction extends CommonAction{
         if ($detail['audit'] == 0) {
             $this->error('商家优惠未通过审核');
         }
-        //print_r($detail);
-        $fxrate=100-$detail['discount']-$detail['deduction'];
-        $member = D('Users')->find($this->uid);
+		//print_r($detail);
+		$fxrate=100-$detail['discount']-$detail['deduction'];
+		$member = D('Users')->find($this->uid);
         $breaksorder = D('Breaksorder')->where(array('user_id' => $this->uid))->order(array('create_time' => 'desc'))->find();
         $breaksorder_time = NOW_TIME;
         $cha = $breaksorder_time - $breaksorder['create_time'];
         if ($cha < 30) {
             $this->success('提交太频繁！', U('shop/detail', array('shop_id' => $shop_id)));
         }
-
+		
         if ($this->isPost()) {
-            static $CONFIG;
-            if (empty($CONFIG)) {
-                $CONFIG = D('Setting')->fetchAll();
-            }
+			static $CONFIG;
+			if (empty($CONFIG)) {
+				$CONFIG = D('Setting')->fetchAll();
+			}
             $amount = floatval($_POST['amount']);
             if (empty($amount)) {
                 $this->fengmiMsg('消费金额不能为空');
@@ -829,16 +829,16 @@ class ShopAction extends CommonAction{
             $use_money = floatval($_POST['use_money']);
             //$need_pay = D('Shopyouhui')->get_amount($shop_id, $amount, $exception);
             $money = D('Shopyouhui')->get_amount($shop_id, $amount, $exception);
-            $deduction = D('Breaksorder')->get_deduction($shop_id, $amount, $exception);
-            if($CONFIG['profit']['profit_bonus']){
-                $fx_money = round(($amount-$money- $deduction) , 2)*(1-$CONFIG['profit']['bonus_profit_rate']);
-            }else{
-                $fx_money = round(($amount-$money- $deduction) , 2);
-            }
-
+			$deduction = D('Breaksorder')->get_deduction($shop_id, $amount, $exception);
+			if($CONFIG['profit']['profit_bonus']){
+				$fx_money = round(($amount-$money- $deduction) , 2)*(1-$CONFIG['profit']['bonus_profit_rate']);
+			}else{
+				$fx_money = round(($amount-$money- $deduction) , 2);
+			}
+			 
             $need_pay =$amount-$use_money;
-
-            $shop = D('Shop')->find($shop_id);
+			
+			$shop = D('Shop')->find($shop_id);
             $data = array('shop_id' => $shop_id, 'city_id' => $shop['city_id'],  'user_id' => $this->uid, 'amount' => $amount, 'exception' => $exception, 'use_money' => $use_money, 'fx_money' => $fx_money, 'need_pay' => $need_pay, 'create_time' => NOW_TIME, 'create_ip' => get_client_ip());
             if ($order_id = D('Breaksorder')->add($data)) {
                 $this->fengmiMsg('创建订单成功！', U('shop/breakspay', array('order_id' => $order_id)), U('shop/breakspay', array('order_id' => $order_id)));
@@ -858,85 +858,39 @@ class ShopAction extends CommonAction{
             $this->error('请登录', U('passport/login'));
         }
         $order_id = (int) $this->_get('order_id');
+        echo "order_id:".$order_id;
         $order = D('Breaksorder')->find($order_id);
-        if (empty($order) || $order['status'] != 0 || $order['user_id'] != $this->uid) {
-            $this->fengmiMsg('该订单不存在');
-        }
-        $shop = D('Shop')->find($order['shop_id']);
-        $this->assign('payment', D('Payment')->getPayments(true));
-        $this->assign('shop', $shop);
-        $this->assign('order', $order);
-        $this->display();
-    }
-    public function breakspaytest(){
-        if (empty($this->uid)) {
-            $this->error('请登录', U('passport/login'));
-        }
-        if((int) $this->_get('order_id')){
-            $order_id = (int) $this->_get('order_id');
-        }else if((int) $this->_post('order_id')){
-            $order_id = (int) $this->_post('order_id');
-        }
-        // $order_id = (int) $this->_get('order_id');
-        //  echo "order_id:".$order_id;
-        $order = D('Breaksorder')->find($order_id);
-        // echo "order:".$order;
         if (empty($order) || $order['status'] != 0 || $order['user_id'] != $this->uid) {
             $this->fengmiMsg('该订单不存在');
         }
         //添加新的
-        //if (!($code = $this->_post('code'))) {
-        //    $this->fengmiMsg('请选择支付方式！');
-        // }
-        //  echo "code:";
-        //  echo $code;
+        if (!($code = $this->_post('code'))) {
+            $this->fengmiMsg('请选择支付方式！');
+        }
+        echo "code:".$code;
         $logs = D('Paymentlogs')->getLogsByOrderId('breaks', $order_id);
-        //   echo  "logs:".$logs;
-        //  echo"<pre>";print_r($logs); echo"<pre>";
-        $code = $this->_post('code')==NULL?$logs['code']:$this->_post('code');
-        echo "this->post:".$this->_post('code');
-        echo "logs[code]:".$logs['code'];
         if (empty($logs)) {
             $logs = array('type' => 'breaks', 'user_id' => $this->uid, 'order_id' => $order_id, 'code' => $code, 'need_pay' => $order['need_pay'] * 100, 'create_time' => NOW_TIME, 'create_ip' => get_client_ip(), 'is_paid' => 0);
             $logs['log_id'] = D('Paymentlogs')->add($logs);
         } else {
             $logs['need_pay'] = $order['need_pay'] * 100;
             $logs['code'] = $code;
-            //    echo "logs['code']".$logs['code'];
             D('Paymentlogs')->save($logs);
         }
         $log_id=$logs['log_id'];
         $paylogs = D('Paymentlogs') -> find($log_id);
-        //  echo "paylogs:";
-        // echo"<pre>";print_r($paylogs); echo"<pre>";
         if (empty($paylogs) || $paylogs['user_id'] != $this -> uid || $paylogs['is_paid'] == 1) {
             $this -> error('没有有效的支付记录！');
             die ;
         }
-        //  echo"paylogs['code']";
-        // echo $paylogs['code'];
 
         if($paylogs['code'] == "ccb"){
             $button_str = '<button class="button button-block bg-dot button-big" type="submit" id="submit" onclick="callccb()">立即支付</button>';
             $this -> assign('button', $button_str);
-        }
-        else if(!empty($paylogs['code'])){
-
-            echo "callweixin";
-
-            $button_str = '<button class="button button-block bg-dot button-big" type="submit" id="submit" onclick="callpay()">微信支付</button>';
-            //  $param=D('Payment')->getBreakCode($paylogs);
-            // echo $param;
-            $this -> assign('button', D('Payment')->getBreakCode($paylogs));
-            // echo D('Payment')->getCode($paylogs);
-            //  $xinxi=D('Payment')->getCode($paylogs);
-            //   echo "xinxi";
-            //   echo $xinxi;
+        }else{
+            $this -> assign('button', D('Payment') -> getBreakCode($paylogs));
         }
         //到此为止
-        $payment=D('Payment')->getPayments(true);
-        //echo"payment";
-        //echo"<pre>";print_r($payment); echo"<pre>";
         $shop = D('Shop')->find($order['shop_id']);
         $this->assign('payment', D('Payment')->getPayments(true));
         $this->assign('shop', $shop);
@@ -964,7 +918,21 @@ class ShopAction extends CommonAction{
             $logs['code'] = $code;
             D('Paymentlogs')->save($logs);
         }
-        $this->fengmiMsg('买单订单设置完毕，即将进入付款。', U('payment/payment', array('log_id' => $logs['log_id'])),500);
-        //header("Location:".U('payment/payment', array('log_id' => $logs['log_id'])));
+        $log_id=$logs['log_id'];
+        $paylogs = D('Paymentlogs') -> find($log_id);
+        if (empty($paylogs) || $paylogs['user_id'] != $this -> uid || $paylogs['is_paid'] == 1) {
+            $this -> error('没有有效的支付记录！');
+            die ;
+        }
+
+        if($paylogs['code'] == "ccb"){
+            $button_str = '<button class="button button-block bg-dot button-big" type="button" onclick="callccb()">立即支付</button>';
+            $this -> assign('button', $button_str);
+        }else{
+            $this -> assign('button', D('Payment') -> getCode($paylogs));
+        }
+        $this->display();
+     //   $this->fengmiMsg('买单订单设置完毕，即将进入付款。', U('payment/payment', array('log_id' => $logs['log_id'])),500);
+      //header("Location:".U('payment/payment', array('log_id' => $logs['log_id']))); 
     }
 }

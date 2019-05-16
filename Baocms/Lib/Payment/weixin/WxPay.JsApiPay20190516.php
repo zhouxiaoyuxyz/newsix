@@ -53,23 +53,6 @@ class JsApiPay
             return $openid;
         }
     }
-    public function GetBreakOpenid($logs = '')
-    {
-        //通过code获得openid
-        //$log_id = $_GET['log_id'] == NULL ? $logs['logs_id'] : $_GET['log_id'];
-        $order_id = $_GET['order_id'] == NULL ? $logs['order_id'] : $_GET['order_id'];
-        if (!isset($_GET['code'])) {
-            $baseUrl = urlencode('https://' . $_SERVER['HTTP_HOST'] . '/index.php?g=mobile&m=shop&a=breakspaytest&order_id=' . $order_id);
-            $url = $this->__CreateOauthUrlForCode($baseUrl);
-            Header("Location: {$url}");
-            die;
-        } else {
-            //获取code码，以获取openid
-            $code = $_GET['code'];
-            $openid = $this->getOpenidFromMp($code);
-            return $openid;
-        }
-    }
     /**
      * 
      * 获取jsapi支付的参数

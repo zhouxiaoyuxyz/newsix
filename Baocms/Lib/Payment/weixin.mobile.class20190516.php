@@ -117,8 +117,7 @@ class weixin {
         //①、获取用户openid
         $tools = new JsApiPay();
 
-        $openId = $tools->GetBreakOpenid($logs);
-        // $openId='oJhVK1NNHEOcodOWtjKVMvjyHTM8';
+        $openId = $tools->GetOpenid($logs);
         //echo $openId;die;
         $input = new WxPayUnifiedOrder();
         $input->SetBody($logs['subject']);
@@ -176,7 +175,6 @@ class weixin {
 
         return $str;
     }
-
     public function respond() {
         
        // file_put_contents('aaa.txt', var_export($_POST,true));

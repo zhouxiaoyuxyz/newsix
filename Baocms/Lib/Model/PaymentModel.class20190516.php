@@ -167,8 +167,6 @@ class PaymentModel extends CommonModel{
             require_cache(APP_PATH . 'Lib/Payment/' . $logs['code'] . '.class.php');
         }
         $obj = new $logs['code']();
-        //m="shop";
-        //a="breakspay";
         return $obj->getBreakCode($datas, $payment);
     }
     public function checkMoney($logs_id, $money){
