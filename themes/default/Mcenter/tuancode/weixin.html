@@ -20,6 +20,12 @@
           
             <img width="100%" src="__ROOT__/attachs/<{$file}>" />
             <p>
+                团购产品名称: <span class="text-dot"><{$tuan_title}></span>
+            </p>
+            <p>
+                数量: <span class="text-dot"><{$num}></span>
+            </p>
+            <p>
                  <neq name="detail.price" value="0"> 该取货券价值为: <span class="text-dot"><{:round($detail['price']/100,2)}> 元</span><else />该取货券为到付券只作为服务预定！需要额外到店支付相关费用才可以进行消费！</neq>
             </p>
 	</div>

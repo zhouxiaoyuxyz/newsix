@@ -1,0 +1,213 @@
+<include  file='public:header'/>
+<style>
+  body{padding:0;}
+  table.table1{
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    font-style: normal;
+    border-collapse:separate;
+    width:96vw;
+    margin:1em auto;
+    word-break:break-all; word-wrap:break-all;
+}
+.table1 thead th{
+    padding:5px;
+    color:#fff;
+    text-shadow:1px 1px 1px #568F23;
+    border:1px solid #93CE37;
+    border-bottom:3px solid #9ED929;
+    background-color:#9DD929;
+    background:-webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.02, rgb(123,192,67)),
+        color-stop(0.51, rgb(139,198,66)),
+        color-stop(0.87, rgb(158,217,41))
+        );
+    background: -moz-linear-gradient(
+        center bottom,
+        rgb(123,192,67) 2%,
+        rgb(139,198,66) 51%,
+        rgb(158,217,41) 87%
+        );
+    -webkit-border-top-left-radius:5px;
+    -webkit-border-top-right-radius:5px;
+    -moz-border-radius:5px 5px 0px 0px;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+}
+
+.table1 tbody td{
+    padding:10px;
+    text-align:center;
+    background-color:#DEF3CA;
+    border: 2px solid #E7EFE0;
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius:2px;
+    color:#666;
+    text-shadow:1px 1px 1px #fff;
+}
+ body {
+            /* These styles have nothing to do with the ribbon */
+             background:url(/Baocms/Fenzhan/statics/images/b.gif) 0 0 repeat;
+            padding:10px 0 0;
+            margin:auto;
+            text-align:center;
+        }
+        .ribbon {
+            display:inline-block;
+        }
+
+        .ribbon:after, .ribbon:before {
+            content: "";
+            float:left;
+            border:1.25em solid rgb(136,232,196);
+            margin-top:0.3em;
+        }
+
+        .ribbon:after {
+            border-right-color:transparent;
+        }
+
+        .ribbon:before {
+            border-left-color:transparent;
+        }
+
+        .ribbon a:link, .ribbon a:visited {
+            color:#000;
+            text-decoration:none;
+            float:left;
+            height:2.8em;
+            overflow:hidden;
+        }
+
+        .ribbon span {
+            background:rgb(136,232,196);
+            display:inline-block;
+            line-height:2.5em;
+            padding:0 0.5em;
+            position:relative;
+            margin-top:0.3em;
+            -webkit-transition: background-color 0.2s, margin-top 0.2s;  /* Saf3.2+, Chrome */
+            -moz-transition: background-color 0.2s, margin-top 0.2s;  /* FF4+ */
+            -ms-transition: background-color 0.2s, margin-top 0.2s;  /* IE10 */
+            -o-transition: background-color 0.2s, margin-top 0.2s;  /* Opera 10.5+ */
+            transition: background-color 0.2s, margin-top 0.2s;
+        }
+
+        .ribbon a:hover span {
+            background:#FFD204;
+            margin-top:0;
+        }
+
+        .ribbon span:before {
+            content: "";
+            position:absolute;
+            top:2.7em;
+            left:0;
+            border-right:0.5em solid #9B8651;
+            border-bottom:0.5em solid #fff;
+        }
+
+        .ribbon span:after {
+            content: "";
+            position:absolute;
+            top:2.7em;
+            right:0;
+            border-left:0.5em solid #9B8651;
+            border-bottom:0.5em solid #fff;
+        }
+</style>
+<div style="display:flex;flex-direction:row;">
+    <div style="margin:0 auto;">
+        <div class='ribbon'style="height:4rem;font-size: 1rem;">
+            <a href="<{:U('shuimachine/index')}>" style="font-size:1em;" ><span>易水源</span></a>
+            <a href="<{:U('tongji/income')}>"  style="font-size:1em;"  ><span>收入统计</span></a>
+            <a href="<{:U('logs/tixian')}>" style="font-size:1em;"  ><span>分站提现</span></a>
+        </div>
+    </div>
+    <div style="margin-right:10px;padding-top:2px;font-size:0.8em;">
+        <a href="<{:U('login/logout')}>"><img src="__TMPL__statics/images/logout.png" style="display:block;width:30px;"/>
+            退出</a>
+    </div>
+</div>
+<link href="__TMPL__statics/css/newstyle.css" rel="stylesheet" type="text/css" />
+<div class="main-jsgl main-sc">
+    <div class="jsglNr" style="border:none;">
+        <form method="post"  action="<{:U('logs/tixian')}>" target="baocms_frm" >
+            <div class="password_nr" style="width:96vw;margin:0 auto;">
+                <div class="password_input" style="line-height: 30px;padding-top:10px;">
+                    <div class="left">账户余额：</div>
+                    
+                    <php>
+                    $cha = $cash_money - $money;  
+                    </php>
+                    <div class="lef" id="price-color">￥<{$money}> 元
+                    <if condition="$money lt $cash_money ">
+                    您的余额不足已提现哦,还差<a style="color:red;"><{$cha}></a>元就可以提现了！
+                    </if>
+                    
+                    </div>
+                </div>
+                <div class="password_input">
+                    <div class="left">提现金额：</div>
+                    <div class="lef"> 
+                        <input type="text" name="money" class="manageInput" />
+                        <div style="margin-top:1em;font-size:0.9em;">
+                          <span>
+
+                          <if condition="!empty($cash_money)">
+                          满<a style="color:red;"><{$cash_money}></a>元才可以提现哦
+                           </if>
+
+                          <if condition="!empty($cash_money_big)">
+                          ，单笔不超过<a style="color:red;"><{$cash_money_big}></a>元！
+                           </if>
+                          </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="password_input">
+                    <div class="left">开户银行：</div>
+                    <div class="lef"> 
+                        <input type="text" name="bank_name" value="<{$info.bank_name}>" class="manageInput" />
+                    </div>
+                </div>
+                     <div class="password_input">
+                    <div class="left">开户账号：</div>
+                    <div class="lef"> 
+                        <input type="text" name="bank_num" value="<{$info.bank_num}>"  class="manageInput" />
+                    </div>
+                </div>
+                     <div class="password_input">
+                    <div class="left">具体支行：</div>
+                    <div class="lef"> 
+                        <input type="text" name="bank_branch" value="<{$info.bank_branch}>"  class="manageInput" />
+                    </div>
+                </div>
+                     <div class="password_input">
+                    <div class="left">开户名：</div>
+                    <div class="lef"> 
+                        <input type="text" name="bank_realname" value="<{$info.bank_realname}>"  class="manageInput" />
+                    </div>
+                </div>
+                <div class="password_subm">
+                    <?php
+                    if ($money == 0)
+                    {
+                    ?>
+                    <input type="submit" class="submit" value="余额不足" disabled="disabled" />
+                    <?php }else{?>
+                    <input type="submit" class="submit" value="确认申请" style="margin-bottom:20px;"/>
+                    <?php }?>
+                </div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+<include file="public:footer"/>

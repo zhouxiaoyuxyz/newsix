@@ -1,36 +1,38 @@
 <foreach name='list' item='item'>
-	<li class="line">	
-        <a href="<{:U('huodong/detail',array('activity_id'=>$item['activity_id']))}>">		
-        <div class="x12 dealcard">
-        <style>
-		.dealcard .dealcard-nobooking:after {content: "<{:bao_msubstr($cates[$item['cate_id']]['cate_name'],0,4,false)}>";}
-		</style>
-        <span class="dealcard-nobooking"></span>
-        <img src="<{:config_img($item['photo'])}>">
-        <div class="title">
-				<h1><{:bao_msubstr($item['title'],0,26,false)}></h1>
-			</div>
-        </div>
-            <div class="x12" style="padding:0 10px;">
-             <div class="blank-10"></div>
-                <p class="desc"><{$item['intro']}></p>	
-                <p class="desc">具体活动时间：<{$item.time}>&nbsp;截止：<{$item.sign_end}></p>
-                <p class="info">
-                	<span class="text-dot">活动价：&yen;<{$item['price']}></span>
-                    <if condition="$item['sign'] eq 1">
-                        <em class="button button-small bg-gray">已报名 <i class="icon-angle-right"></i></em>
-                    <else/>
-                        <em class="button button-small bg-yellow">立即报名 <i class="icon-angle-right"></i></em>
-                    </if>
-                </p>
-                <div class="blank-10"></div>	
-            </div>	
-       </a>	
-     </li>  
-     <div class="blank-10 bg"></div>	
+    <li class="line" style="margin:10px 10px;background:#fff;border-radius: 8px;">
+        <a href="<{:U('huodong/detail',array('activity_id'=>$item['activity_id']))}>">
+            <div style="display:flex;flex-direction: row;">
+                <div class="x12 dealcard" style="width: 45vw;display:flex;flex-direction: column;">
+                    <div style="width:42vw;margin-top:10px;margin-left:8px;">
+                        <img src="<{:config_img($item['photo'])}>" style="display:block;height:85px;">
+                    </div>
+                    <div style="width:42vw;margin-top:10px;margin-left:8px;text-align:center;font-size:1.1em;">
+                        <span class="masked">活动价：&yen;<{$item['price']}></span>
+                    </div>
+                </div>
+                <div style="width: 50vw;display:flex;flex-direction: column;">
+                    <div class="x12" style="padding:5px;min-height:100px;">
+                        <p class="desc" style="color: transparent;background-color :#f7912e;text-shadow :rgba(255,255,255,0.5) 0 5px 6px, rgba(255,255,255,0.2) 1px 3px 3px;
+-webkit-background-clip : text;"><{:bao_msubstr($item['title'],0,26,false)}></p>
+                        <p class="desc" >活动时间：<{$item.time}></p>
+                        <p class="desc" >报名截止：<{$item.sign_end}></p>
+                    </div>
+                    <div>
+                        <p class="info" style="margin-bottom:10px;margin-right:10px;">
+                            <if condition="$item['sign'] eq 1">
+                                <em class="button button-small bg-gray" >已报名 <i class="icon-angle-right"></i></em>
+                                <else/>
+                                <em class="button button-small bg-yellow" style="background:linear-gradient(to right, #ff799e , #fe4d67);border-color:#ff799e;">立即报名 <i class="icon-angle-right"></i></em>
+                            </if>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </li>
 </foreach>
 
 
 
-  
-            
+
+

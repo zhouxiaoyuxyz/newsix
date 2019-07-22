@@ -18,6 +18,7 @@
 			cloud => '云购',
 			zhe => '五折卡',
 			edu => '课程订单',
+            activity=>'活动',
         );
         protected $is_paid = array(
             0 => '未支付',

@@ -5,7 +5,7 @@
 class EleproductAction extends CommonAction {
 
     private $create_fields = array('product_name' ,'shop_id', 'cate_id', 'photo', 'price', 'is_new', 'is_hot', 'is_tuijian', 'sold_num', 'month_num', 'create_time', 'create_ip');
-    private $edit_fields = array('product_name', 'shop_id', 'cate_id', 'photo', 'price', 'is_new', 'is_hot', 'is_tuijian', 'sold_num', 'month_num');
+    private $edit_fields = array('product_name', 'shop_id', 'cate_id', 'photo', 'price','wuye_fanxian','shui_fanxian','third_profit', 'is_new', 'is_hot', 'is_tuijian', 'sold_num', 'month_num');
 
     public function index() {
         $Eleproduct = D('Eleproduct');
@@ -143,7 +143,9 @@ class EleproductAction extends CommonAction {
         if (empty($data['price'])) {
             $this->baoError('价格不能为空');
         }
-        
+        $data['wuye_fanxian'] = (int) ($data['wuye_fanxian']*100);
+        $data['shui_fanxian'] = (int) ($data['shui_fanxian']*100);
+        $data['third_profit'] = (int) ($data['third_profit']*100);
 
         $data['is_new'] = (int) $data['is_new'];
         $data['is_hot'] = (int) $data['is_hot'];

@@ -6,23 +6,70 @@
 
 
 <style>
+    body{padding:0;}
     .line li {padding: 0px !important;}
-    .cate-wrap{font-size:0;background-color:#FDF1DE;border-bottom:0;width:100%;overflow:hidden;}
+    .cate-wrap{font-size:0;border-bottom:0;width:100%;overflow:hidden;}
     .cate-wrap li{box-sizing:border-box;width:20%;float:left}
     .icon2{color:#555;font-size:16px;text-align:center;display:block;padding:.6rem 0}
-    .cate-img{background-size:6rem auto;display:inline-block}
-    .cate-img img{width:2.6rem;height:2.6rem}
+    .cate-img{background-size:6rem auto;display:inline-block;width:50px;height:50px;}
+    .cate-img img{width:100%;}
     .cate-desc{display:block}
-    .cate-desc{padding-top:.4rem}
+    .cate-desc{padding-top:.4rem;font-size:0.8em;}
     .focus .hd {top: 40px;}
     .focus .bd li img {max-height: 60px;}
+    .top-back{line-height:30px;position:absolute;left:0;top:35px;padding-left:10px;}
+    .top-back a{display:block;float:left;width:30px;height:30px;text-align:center;color:#24bcc1;}
+    .top-back i{font-size:28px;}
+    .catebackground{background-color:#fff;margin:0px 10px;display:flex;height:6.3em;flex-direction:row;border-radius:8px;justify-content:space-between;}
+    .catebackground li{margin:0px 5px;}
+    .img_wrap_mask{width:101%}
+    .img_mask_svgPath{fill:#ebf8e3;width:100%}
+    #list {
+        overflow-x: auto;
+        list-style: none;
+        white-space: nowrap;
+        width: auto;
+        /*height: 23vh;*/
+        /*margin-top: -15px;*/
+    }
+
+    .item {
+        margin-left: 10px;
+        height: 23vh;
+        width: 26vw;
+        /*background: #D3E1ED;*/
+        display: inline-block;
+        margin-top:10px;
+    }
+
+    .news_name {
+        font-size: 1em;
+        color: #1890ff;
+        width: 24vw;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .news_content {
+        font-size: 1em;
+        color: #fd4990;
+        width: 25vw;
+        height: 3vh;
+        word-break: normal;
+        display: block;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
 </style>
-<header class="top-fixed bg-yellow bg-inverse">
-    <div class="top-back">
+<header>
+    <div class="top-back" >
         <a class="top-addr" href="<{:U('index/index')}>"><i class="icon-angle-left"></i></a>
     </div>
-    <if condition="empty($keyword)">
-        <div class="top-title">六享直营</div>
+    <!--<if condition="empty($keyword)">
+        <div class="top-title">六享e仓</div>
     </if>
     <div class="top-search" style="<if condition="empty($keyword)">display:none;</if>">
     <form method="post" action="<{:U('tuan/index')}>">
@@ -34,7 +81,7 @@
         <div class="top-signed">
             <a id="search-btn" href="javascript:void(0);"><i class="icon-search"></i></a>
         </div>
-    </if>
+    </if>-->
 </header>
 <!--39到61张义念加上的广告指引图片--><style type="text/css">
     * {
@@ -52,80 +99,89 @@
     }
 </style>
 
-<body>
+<body style="background-color:#ebf8e3;">
 <div class="demo">
-   <a href="http://www.enjoysix.cn/mobile/huodong/index/cat/10.html "><img src="http://img.027cgb.com/609575/%E7%94%B3%E8%AF%B7%E6%88%90%E4%B8%BA%E5%9B%A2%E9%95%BF.jpg
-"/>
+    <a href="http://www.enjoysix.cn/mobile/huodong/index/cat/10.html ">
+        <img src="http://kan.027cgb.com/609575/six/zhiying_banner.jpeg"/>
+    </a>
 </div>
-</body>
+<div style="margin-top:-23px;">
+    <svg viewBox="0 0 750 50" class="img_wrap_mask">
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <path class="img_mask_svgPath" d="M750,1.70530257e-13 L750,50 L0,50 L0,1.70530257e-13 C107.666667,33.3333333 232.666667,50 375,50 C517.333333,50 642.333333,33.3333333 750,1.70530257e-13 Z">
+            </path>
+        </g>
+    </svg>
+</div>
 
-<!----><if condition="empty($cat) && empty($business_id) && empty($order) && empty($keyword)">
-    <ul class="cate-wrap bbOnepx" style="margin-bottom: 0">
+<ul>
+    <div class="catebackground">
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>1))}>" tongji_tag="m_home_job_new">
-                <span class="cate-img" id="job"><img src="/static/default/wap/image/tuan/tuan_cate_1.png" /></span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>1))}>" >
+                <span class="cate-img" id="job"><img src="/static/default/wap/image/tuan/tuancate_1.png" /></span>
                 <span class="cate-desc">水果</span>
             </a>
         </li>
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>6))}>" tongji_tag="m_home_house_new">
-                <span class="cate-img" id="house"><img src="/static/default/wap/image/tuan/tuan_cate_2.png" /></span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>6))}>" >
+                <span class="cate-img" id="house"><img src="/static/default/wap/image/tuan/tuancate_2.png" /></span>
                 <span class="cate-desc">奶类</span>
             </a>
         </li>
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>35))}>" tongji_tag="m_home_car_new">
-                <span class="cate-img" id="car"><img src="/static/default/wap/image/tuan/tuan_cate_3.png" /></span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>35))}>" >
+                <span class="cate-img" id="car"><img src="/static/default/wap/image/tuan/tuancate_3.png" /></span>
                 <span class="cate-desc">米面粮油</span>
             </a>
         </li>
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>33))}>" tongji_tag="m_home_sale_new">
-                <span class="cate-img" id="sale"><img src="/static/default/wap/image/tuan/tuan_cate_4.png" /></span>
-                <span class="cate-desc">乡情</span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>57))}>" >
+                <span class="cate-img" id="sale"><img src="/static/default/wap/image/tuan/tuancate_4.png" /></span>
+                <span class="cate-desc">蔬菜</span>
             </a>
         </li>
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>42))}>" tongji_tag="m_home_jianzhi_new">
-                <span class="cate-img" id="jianzhi"><img src="/static/default/wap/image/tuan/tuan_cate_5.png" /></span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>42))}>" >
+                <span class="cate-img" id="jianzhi"><img src="/static/default/wap/image/tuan/tuancate_5.png" /></span>
                 <span class="cate-desc">零食</span>
             </a>
         </li>
+    </div>
+    <div class="catebackground" style="margin-top:6px;">
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>14))}>" tongji_tag="m_home_pets_new">
-                <span class="cate-img" id="pets"><img src="/static/default/wap/image/tuan/tuan_cate_6.png" /></span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>14))}>">
+                <span class="cate-img" id="pets"><img src="/static/default/wap/image/tuan/tuancate_6.png" /></span>
                 <span class="cate-desc">海产</span>
             </a>
         </li>
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>12))}>" tongji_tag="m_home_shenghuo_new">
-                <span class="cate-img" id="jiazheng"><img src="/static/default/wap/image/tuan/tuan_cate_7.png" /></span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>18))}>" >
+                <span class="cate-img" id="jiazheng"><img src="/static/default/wap/image/tuan/tuancate_7.png" /></span>
                 <span class="cate-desc">日用</span>
             </a>
         </li>
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>3))}>" tongji_tag="m_home_bendishenghuo_new">
-                <span class="cate-img" id="shenghuo"><img src="/static/default/wap/image/tuan/tuan_cate_8.png" /></span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>3))}>" >
+                <span class="cate-img" id="shenghuo"><img src="/static/default/wap/image/tuan/tuancate_8.png" /></span>
                 <span class="cate-desc">酒水饮料</span>
             </a>
         </li>
 
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>16))}>" tongji_tag="m_home_bendishenghuo_new">
-                <span class="cate-img" id="shenghuo"><img src="/static/default/wap/image/tuan/tuan_cate_9.png" /></span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>16))}>" >
+                <span class="cate-img" id="shenghuo"><img src="/static/default/wap/image/tuan/tuancate_9.png" /></span>
                 <span class="cate-desc">肉禽</span>
             </a>
         </li>
 
         <li>
-            <a class="icon2" href="<{:U('tuan/index',array('cat'=>2))}>" tongji_tag="m_home_bendishenghuo_new">
-                <span class="cate-img" id="shenghuo"><img src="/static/default/wap/image/tuan/tuan_cate_10.png" /></span>
-                <span class="cate-desc">年货</span>
+            <a class="icon2" href="<{:U('tuan/index',array('cat'=>26))}>" >
+                <span class="cate-img" id="shenghuo"><img src="/static/default/wap/image/tuan/tuancate_10.png" /></span>
+                <span class="cate-desc">调味品</span>
             </a>
         </li>
-    </ul>
-</if>
-
+    </div>
+</ul>
 
 
 <!--<div id="filter2" class="filter2">
@@ -199,7 +255,7 @@
 
     </ul><!--1级end-->
 
-</div>
+<!--</div>-->
 
 <div class="inner" style=" display:none">
     <ul id="inner2">
@@ -296,10 +352,159 @@
         });
     });
 </script>
-
-
-
-
+<div style="background:#fff;">
+    <img style="width: 100%;display:block;padding:5px 5px 0; " src="/static/default/wap/image/tuan/shuiguo.png" >
+    <ul id="list" style="margin-bottom:5px;">
+        <foreach name="fruitlist" item="item">
+            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                <li class="item">
+                    <div  style="width: 100%; height: 100%; display: flex; flex-direction: column">
+                        <img style="width: 100%;" src="__ROOT__/attachs/<{$item.photo}>" alt="">
+                        <span class="news_name"><{$item.title}></span>
+                        <span class="news_content">￥<{:round($item['tuan_price']/100,2)}></span>
+                        <span class="news_content" style="font-size:0.8em;color:#595959"><del>￥<{:round($item['price']/100,2)}></del></span>
+                    </div>
+                </li>
+            </a>
+        </foreach>
+    </ul>
+</div>
+<div style="background:#fff;">
+    <img style="width: 100%;display:block;padding:5px 5px 0; " src="/static/default/wap/image/tuan/shucai.png" >
+    <ul id="list" style="margin-bottom:5px;">
+        <foreach name="shucailist" item="item">
+            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                <li class="item">
+                    <div  style="width: 100%; height: 100%; display: flex; flex-direction: column">
+                        <img style="width: 100%;" src="__ROOT__/attachs/<{$item.photo}>" alt="">
+                        <span class="news_name"><{$item.title}></span>
+                        <span class="news_content">￥<{:round($item['tuan_price']/100,2)}></span>
+                        <span class="news_content" style="font-size:0.8em;color:#595959"><del>￥<{:round($item['price']/100,2)}></del></span>
+                    </div>
+                </li>
+            </a>
+        </foreach>
+    </ul>
+</div>
+<div style="background:#fff;">
+    <img style="width: 100%;display:block;padding:5px 5px 0; " src="/static/default/wap/image/tuan/nailei.png" >
+    <ul id="list" style="margin-bottom:5px;">
+        <foreach name="nailist" item="item">
+            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                <li class="item">
+                    <div  style="width: 100%; height: 100%; display: flex; flex-direction: column">
+                        <img style="width: 100%;" src="__ROOT__/attachs/<{$item.photo}>" alt="">
+                        <span class="news_name"><{$item.title}></span>
+                        <span class="news_content">￥<{:round($item['tuan_price']/100,2)}></span>
+                        <span class="news_content" style="font-size:0.8em;color:#595959"><del>￥<{:round($item['price']/100,2)}></del></span>
+                    </div>
+                </li>
+            </a>
+        </foreach>
+    </ul>
+</div>
+<div style="background:#fff;">
+    <img style="width: 100%;display:block;padding:5px 5px 0; " src="/static/default/wap/image/tuan/mimian.png" >
+    <ul id="list" style="margin-bottom:5px;">
+        <foreach name="mimianlist" item="item">
+            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                <li class="item">
+                    <div  style="width: 100%; height: 100%; display: flex; flex-direction: column">
+                        <img style="width: 100%;" src="__ROOT__/attachs/<{$item.photo}>" alt="">
+                        <span class="news_name"><{$item.title}></span>
+                        <span class="news_content">￥<{:round($item['tuan_price']/100,2)}></span>
+                        <span class="news_content" style="font-size:0.8em;color:#595959"><del>￥<{:round($item['price']/100,2)}></del></span>
+                    </div>
+                </li>
+            </a>
+        </foreach>
+    </ul>
+</div>
+<div style="background:#fff;">
+    <img style="width: 100%;display:block;padding:5px 5px 0; " src="/static/default/wap/image/tuan/lingshi.png" >
+    <ul id="list" style="margin-bottom:5px;">
+        <foreach name="lingshilist" item="item">
+            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                <li class="item">
+                    <div  style="width: 100%; height: 100%; display: flex; flex-direction: column">
+                        <img style="width: 100%;" src="__ROOT__/attachs/<{$item.photo}>" alt="">
+                        <span class="news_name"><{$item.title}></span>
+                        <span class="news_content">￥<{:round($item['tuan_price']/100,2)}></span>
+                        <span class="news_content" style="font-size:0.8em;color:#595959"><del>￥<{:round($item['price']/100,2)}></del></span>
+                    </div>
+                </li>
+            </a>
+        </foreach>
+    </ul>
+</div>
+<div style="background:#fff;">
+    <img style="width: 100%;display:block;padding:5px 5px 0; " src="/static/default/wap/image/tuan/haichan.png" >
+    <ul id="list" style="margin-bottom:5px;">
+        <foreach name="haichanlist" item="item">
+            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                <li class="item">
+                    <div  style="width: 100%; height: 100%; display: flex; flex-direction: column">
+                        <img style="width: 100%;" src="__ROOT__/attachs/<{$item.photo}>" alt="">
+                        <span class="news_name"><{$item.title}></span>
+                        <span class="news_content">￥<{:round($item['tuan_price']/100,2)}></span>
+                        <span class="news_content" style="font-size:0.8em;color:#595959"><del>￥<{:round($item['price']/100,2)}></del></span>
+                    </div>
+                </li>
+            </a>
+        </foreach>
+    </ul>
+</div>
+<div style="background:#fff;">
+    <img style="width: 100%;display:block;padding:5px 5px 0; " src="/static/default/wap/image/tuan/riyong.png" >
+    <ul id="list" style="margin-bottom:5px;">
+        <foreach name="riyonglist" item="item">
+            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                <li class="item">
+                    <div  style="width: 100%; height: 100%; display: flex; flex-direction: column">
+                        <img style="width: 100%;" src="__ROOT__/attachs/<{$item.photo}>" alt="">
+                        <span class="news_name"><{$item.title}></span>
+                        <span class="news_content">￥<{:round($item['tuan_price']/100,2)}></span>
+                        <span class="news_content" style="font-size:0.8em;color:#595959"><del>￥<{:round($item['price']/100,2)}></del></span>
+                    </div>
+                </li>
+            </a>
+        </foreach>
+    </ul>
+</div>
+<div style="background:#fff;">
+    <img style="width: 100%;display:block;padding:5px 5px 0; " src="/static/default/wap/image/tuan/jiushui.png" >
+    <ul id="list" style="margin-bottom:5px;">
+        <foreach name="jiushuilist" item="item">
+            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                <li class="item">
+                    <div  style="width: 100%; height: 100%; display: flex; flex-direction: column">
+                        <img style="width: 100%;" src="__ROOT__/attachs/<{$item.photo}>" alt="">
+                        <span class="news_name"><{$item.title}></span>
+                        <span class="news_content">￥<{:round($item['tuan_price']/100,2)}></span>
+                        <span class="news_content" style="font-size:0.8em;color:#595959"><del>￥<{:round($item['price']/100,2)}></del></span>
+                    </div>
+                </li>
+            </a>
+        </foreach>
+    </ul>
+</div>
+<div style="background:#fff;">
+    <img style="width: 100%;display:block;padding:5px 5px 0; " src="/static/default/wap/image/tuan/rouqin.png" >
+    <ul id="list" style="margin-bottom:5px;">
+        <foreach name="rouqinlist" item="item">
+            <a href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+                <li class="item">
+                    <div  style="width: 100%; height: 100%; display: flex; flex-direction: column">
+                        <img style="width: 100%;" src="__ROOT__/attachs/<{$item.photo}>" alt="">
+                        <span class="news_name"><{$item.title}></span>
+                        <span class="news_content">￥<{:round($item['tuan_price']/100,2)}></span>
+                        <span class="news_content" style="font-size:0.8em;color:#595959"><del>￥<{:round($item['price']/100,2)}></del></span>
+                    </div>
+                </li>
+            </a>
+        </foreach>
+    </ul>
+</div>
 <div class="tuan-list" id="tuan-list"></div>
 <script>
     $(document).ready(function () {
@@ -318,7 +523,7 @@
 <!--<![endif]-->
 
 <div class="blank-20"></div>
-<include file='public:footer'/>  
+<include file='public:footer'/>
 
 <style type="text/css">
     header.homeHeader {background-color: #06c1ae}

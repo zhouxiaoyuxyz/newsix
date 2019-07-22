@@ -71,7 +71,18 @@
                 <input type="text" name="data[price]" value="<{:round($detail['price']/100,2)}>" class="tuanfabu_int tuanfabu_intw2" />
                 </div></td>
             </tr>
-            
+            <tr>
+                <td width="120"><p class="tuanfabu_t">物业费：</p></td>
+                <td><div class="tuanfabu_nr">
+                    <input type="text" name="data[wuye_fanxian]" value="<{$detail.wuye_fanxian|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
+            <tr>
+                <td width="120"><p class="tuanfabu_t">水费：</p></td>
+                <td><div class="tuanfabu_nr">
+                    <input type="text" name="data[shui_fanxian]" value="<{$detail.shui_fanxian|default=''}>" class="tuanfabu_int tuanfabu_intw2" />
+                </div></td>
+            </tr>
             <tr>
                 <td width="120"><p class="tuanfabu_t">是否新品：</p></td>
                 <td><div class="tuanfabu_nr">

@@ -216,7 +216,7 @@ class EleAction extends CommonAction
     }
 
 
-    //重写购物车
+    //重写购物车vd
     public function cart(){
         $cart = null;
         $type = (int) $this->_param('type');
@@ -258,7 +258,7 @@ class EleAction extends CommonAction
         $shop_id = 0;
         $shops = array();
         $products = array();
-        $total = array('money' => 0, 'num' => 0);
+        $total = array('money' => 0, 'num' => 0,'shui_fanxian'=>0,'wuye_fanxian'=>0,'third_profit'=>0);
         $product_name = array();
         foreach ($num as $key => $val) {
             $key = (int) $key;
@@ -276,6 +276,9 @@ class EleAction extends CommonAction
             $products[$key] = $product;
             $shops[$shop_id] = $shop_id;
             $total['money'] += $product['price'] * $val;
+            $total['shui_fanxian'] += $product['shui_fanxian'] * $val;
+            $total['wuye_fanxian'] += $product['wuye_fanxian'] * $val;
+            $total['third_profit'] += ($product['price']-$product['settlement_price']) * $val*$product['third_profit']/10000;
             $total['num'] += $val;
         }
         if (count($shops) > 1) {
@@ -291,7 +294,9 @@ class EleAction extends CommonAction
         if (!$shop['is_open']) {
             $this->fengmiMsg('商家已经打烊，实在对不住客官');
         }
-        $settlement_price = (int) ($total['money'] - ($total['money']* $shop['rate'] / 1000));//先算出结算价
+        //$settlement_price = (int) ($total['money'] - ($total['money']* $shop['rate'] / 1000));//先算出结算价
+        $settlement_price = (int) (($total['money'] -$total['shui_fanxian']-$total['wuye_fanxian'])* (1- $shop['rate'] / 1000));//先算出结算价
+        $third_profit = (int) $total['third_profit'];
         $total['money'] += $shop['logistics'];
         $total['need_pay'] = $total['money'];
         //后面要用到计算
@@ -318,7 +323,10 @@ class EleAction extends CommonAction
             'num' => $total['num'],
             'new_money' => (int) $total['new_money'],
             'logistics' => $shop['logistics'],
+            'shui_fanxian'=>$total['shui_fanxian'],
+            'wuye_fanxian'=>$total['wuye_fanxian'],
             'settlement_price' => $settlement_price,
+            'third_profit' => $third_profit,
             'status' => 0,
             'create_time' => NOW_TIME,
             'create_ip' => get_client_ip(),

@@ -1,0 +1,167 @@
+<include file="public:header"/>
+<header class="top-fixed bg-yellow bg-inverse">
+	<div class="top-back">
+       <if condition="$type eq 1">
+	   		<a class="top-addr" href="<{:U('mobile/ele/pay',array('order_id'=>$order_id))}>"><i class="icon-angle-left"></i></a>
+       <elseif condition="$type eq 2"/> 
+       		<a class="top-addr" href="<{:U('mobile/mall/pay',array('order_id'=>$order_id))}>"><i class="icon-angle-left"></i></a>
+       <elseif condition="$type eq 3"/> 
+       		<a class="top-addr" href="<{:U('mobile/mall/paycode',array('log_id'=>$log_id))}>"><i class="icon-angle-left"></i></a>
+       <else/>
+       		<a class="top-addr" href="<{:U('information/index')}>"><i class="icon-angle-left"></i></a>
+       </if>
+	</div>
+		<div class="top-title">
+			服务小区设置
+		</div>
+	<div class="top-signed">
+		<include file="public:message"/>
+	</div>
+</header>
+    
+    <script src="<{:U('app/datas/cab',array('name'=>'cityareas'))}>"></script>  <!-- 获取下拉 -->
+     
+    
+    <script type="text/javascript" language="javascript">
+    	$(document).ready(function(){
+			
+			//添加
+			$('.add_addr').click(function(){
+			
+				layer.open({
+					type: 1,
+					title:'新增地址',
+					skin: 'layer-ext-default', //加上边框
+					area: ['90%', '180px'], //宽高
+					content: '<div class="form-x form-auto"><div class="line margin-top"><div class="x2 label"><label>小区</label></div><div class="x10 field form-inline"><select name="community_id" id="community_id"><option value="0">请选择.....</option> <volist name="community" id="vo" key="k"> <option value="<{$vo.community_id}>"><{$vo.name}></option> </volist> </select> <input type="hidden" name="community_name" value="" id="community_name" /></div></div><div class="line margin-top"><div class="x10 float-right"><input class="button bg-blue addr_post" type="submit" value="添加地址" /></div></div></div>'
+				});
+				$('.layui-layer-title').css('color','#ffffff').css('background','#2fbdaa');
+
+				//get_option();
+                $("#community_id").change(function(){
+                    $("#community_name").val($(this).find("option:selected").text());
+                });
+				
+				$('.addr_post').click(function(){
+                    var community_id = $('#community_id').val();
+                    var community_name = $('#community_name').val();
+					
+					$.post('<{:U("mobile/delivery/add_commu")}>',{community_id:community_id,community_name:community_name},function(result){
+						if(result.status == 'success'){
+							layer.msg(result.msg);
+							setTimeout(function(){
+								location.reload(true);
+							},3000);
+						}else{
+							layer.msg(result.msg,{icon:2});
+						}														
+					},'json');
+				
+				})
+				
+			
+			})
+			
+			
+			
+			//修改
+			$('.edit_addr').click(function(){
+			
+				var val = $(this).attr('val');
+                var c = $(this).attr('c');
+                var n = $(this).attr('n');
+				
+				layer.open({
+					type: 1,
+					title:'修改地址',
+					skin: 'layer-ext-demo', //加上边框
+					area: ['90%', '180px'], //宽高
+					content: '<div class="form-x form-auto"><div class="line margin-top"><div class="x2 label"><label>小区</label></div><div class="x10 field form-inline"><select name="community_id" id="community_id"><if condition="'+c gt 0+'"><option value="'+c+'">'+n+'</option><else/> <option value="0">请选择.....</option> </if> <volist name="community" id="vo" key="k"> <option value="<{$vo.community_id}>"><{$vo.name}></option></volist> </select><input type="hidden" name="community_name" value="'+n+'" id="community_name" /></div></div><div class="line margin-top"><div class="x10 float-right"><input class="button bg-blue edit_post" type="submit" value="立即修改"  val="'+val+'" /></div></div></div>'
+				});
+				
+				$('.layui-layer-title').css('color','#ffffff').css('background','#2fbdaa');
+				
+				//get_option();
+				
+				//changeCAB(c,a,b);
+                $("#community_id").change(function(){
+                    $("#community_name").val($(this).find("option:selected").text());
+                });
+				$('.edit_post').click(function(){
+                    var id =  $(this).attr('val');
+                    var community_id = $('#community_id').val();
+                    var community_name = $('#community_name').val();
+					$.post('<{:U("mobile/delivery/edit_commu")}>',{name:name,city_id:city_id,area_id:area_id,business_id:business_id,mobile:mobile,addr:addr,addr_id:addr_id},function(result){
+						if(result.status == 'success'){
+							layer.msg(result.msg);
+							setTimeout(function(){
+								location.reload(true);
+							},3000);
+						}else{
+							layer.msg(result.msg,{icon:2});
+						}														
+					},'json');
+				})
+			})
+		})
+
+    </script>
+
+ <style>
+ .list-media-x{ margin-top:0rem;}
+ </style>   
+    
+    <div class="list-media-x" id="list-media">
+	<ul>
+    
+    <volist name="addr" id="item">
+    <div class="line padding border-bottom">
+		<div class="x12">
+        <p class="text-gray"><{$item.name}>,<{$item.mobile}></p>
+			<p class="text-gray"><{$citys[$item['city_id']]['name']}> <{$areas[$item['area_id']]['area_name']}> <{$business[$item['business_id']]['business_name']}> <{$item.addr}></p>
+		</div>
+	</div>
+	<div class="line padding">
+		<span class="text-right  x12">
+        <a href="#" val="<{$item.addr_id}>" a="<{$item.area_id}>" b="<{$item.business_id}>" c="<{$item.city_id}>" n="<{$item.name}>" m="<{$item.mobile}>" addr="<{$item.addr}>" class="button button-small bg-blue edit_addr">修改地址</a>
+        <a href="javascript:void(0);" rel="<{$item.addr_id}>" class="jquery-delete button button-small bg-gray">删除</a>
+        
+        </span>
+	</div>
+	<div class="blank-10 bg"></div>
+    </volist>
+  
+  </ul>
+</div>
+	
+	<div class="container">
+		<div class="blank-30"></div>
+		<a href="javascript:void(0);" id="add_addr" class="button button-block button-big bg-blue text-center add_addr">新增服务小区</a>
+	</div>
+</ul>
+
+ <script>
+	$(document).ready(function () {
+		$(document).on('click', ".jquery-delete", function (e) {
+			var addr_id = $(this).attr('rel');
+			layer.confirm('您确定要删除该地址？', {
+				skin: 'layer-ext-demo', 
+				area: ['50%', 'auto'], //宽高
+				btn: ['是的', '不'], //按钮
+				shade: false //不显示遮罩
+			}, function () {
+				$.post("<{:U('addrs/delete')}>", {addr_id: addr_id}, function (result) {
+					if (result.status == "success") {
+						layer.msg(result.msg);
+						setTimeout(function () {
+							location.reload();
+						}, 1000);
+					} else {
+						layer.msg(result.msg);
+					}
+				}, 'json');
+			});
+		});
+	});
+</script>  
+<include  file='public:footer'/>  

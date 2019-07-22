@@ -70,8 +70,25 @@ class EleorderModel extends CommonModel {
 
  					D('Users')->Money($shop['user_id'], $money, '商户餐饮订单资金结算:' . $order_id);//写入金块
                 }
-                D('Users')->gouwu($detail['user_id'],$detail['total_price'],'外卖积分奖励');
             }
+
+            //用户添加物业费
+            D('Users')->AddWyFanxian($detail['user_id'], $detail['wuye_fanxian'], '外卖返物业费，订单ID:' . $order_id);
+            //用户添加水费
+            D('Users')->addMoney($detail['user_id'], $detail['shui_fanxian'], '外卖返水费，订单号:' . $order_id);
+            //物业分成信息
+            $community= D('Community')->where(array('business_id'=>$shop['business_id']))->find();
+            //项目经理分成比例
+            $community_manager=D('Communitymanager')->where(array('community_id'=>$community['community_id']))->find();
+            //第三方分成-物业分成
+            //项目经理分成比例
+            $ratio=$community_manager['third_profit']/10000;
+            //项目经理分成
+            $manager_profit=$detail['third_profit']/100*$ratio;
+            D('Users')->addMoney($community_manager['user_id'],$manager_profit*100, '小区项目经理分成：订单ID' . $order_id);
+            //小区物业分成
+            $community_profit=$detail['third_profit']/100-$manager_profit;
+            D('Admin')->Thirdgold($community_manager['wuye_id'], $community_manager['community_id'], $community_profit*100, '小区物业分成：订单ID' . $order_id,'ele', $detail['user_id']);
 
             //更新卖出数
             D('Eleorderproduct')->updateByOrderId($order_id);

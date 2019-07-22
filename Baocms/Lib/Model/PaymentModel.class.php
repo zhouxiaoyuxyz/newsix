@@ -4,20 +4,22 @@ class PaymentModel extends CommonModel{
     protected $tableName = 'payment';
     protected $token = 'payment';
     protected $types = array(
-		'goods' => '商城购物', 
-		'gold' => '金块充值', 
-		'tuan' => '生活购物', 
-		'money' => '余额充值', 
-		'ele' => '在线订餐', 
-		'ding' => '在线订座',
-		'booking'  => '订座', 
-		'fzmoney' => '冻结金充值', 
-		'breaks' => '优惠买单', 
-		'pintuan' => '拼团',
-		 'hotel' =>'酒店预订',
-		 'community' =>'物业缴费',
-		'farm'=>'农家乐预订'
-	);
+        'goods' => '商城购物',
+        'gold' => '金块充值',
+        'tuan' => '生活购物',
+        'money' => '余额充值',
+        'ele' => '在线订餐',
+        'ding' => '在线订座',
+        'booking'  => '订座',
+        'fzmoney' => '冻结金充值',
+        'breaks' => '优惠买单',
+        'pintuan' => '拼团',
+        'hotel' =>'酒店预订',
+        'community' =>'物业缴费',
+        'farm'=>'农家乐预订',
+        'activity'=>'活动经费',
+        'retail'=>'自动售货',
+    );
     protected $type = null;
     protected $log_id = null;
     public function getType(){
@@ -77,11 +79,11 @@ class PaymentModel extends CommonModel{
         unset($return['alipay']);
         return $return;
     }
-	
-	
-	
-	//订座关闭WAP扫码支付
-	 public function getPayments_booking($mobile = false) {
+
+
+
+    //订座关闭WAP扫码支付
+    public function getPayments_booking($mobile = false) {
         $datas = $this->fetchAll();
         $return = array();
         foreach ($datas as $val) {
@@ -98,12 +100,12 @@ class PaymentModel extends CommonModel{
         }
         if (!is_weixin()) {
             unset($return['weixin']);
-			unset($return['native']);
+            unset($return['native']);
         }
 
         if (is_weixin()) {
             unset($return['alipay']);
-			unset($return['native']);
+            unset($return['native']);
         }
         return $return;
     }
@@ -130,13 +132,13 @@ class PaymentModel extends CommonModel{
     public function getCode($logs){
         $CONFIG = D('Setting')->fetchAll();
         $datas = array(
-			'subject' => $CONFIG['site']['sitename'] . $this->types[$logs['type']], 
-			'logs_id' => $logs['log_id'], 
-			'logs_amount' => $logs['need_pay'] / 100
-		);
-      
-      	
-      
+            'subject' => $CONFIG['site']['sitename'] . $this->types[$logs['type']],
+            'logs_id' => $logs['log_id'],
+            'logs_amount' => $logs['need_pay'] / 100
+        );
+
+
+
         $payment = $this->getPayment($logs['code']);
         if ($logs['code'] == 'native' || $logs['code'] == 'micro') {
             require_cache(APP_PATH . 'Lib/Payment/' . $logs['code'] . '.weixin' . '.class.php');//扫码支付
@@ -181,14 +183,14 @@ class PaymentModel extends CommonModel{
     }
     public function logsPaid($logs_id){
         $this->log_id = $logs_id;
-      
-      $data2['logs']=D('Paymentlogs')->find($logs_id);
+
+        $data2['logs']=D('Paymentlogs')->find($logs_id);
         $data2['order'] = D('Breaksorder')->find($data2['logs']['order_id']);
         $data2['shop'] = D('Shop')->find($data2['order']['shop_id']);
         $data2['user'] = D('Users')->find($data2['shop']['user_id']);
-        $fp = fopen('before444.txt','w+'); 
-                    fwrite($fp,var_export($data2,true)); 
-                    fclose($fp); 
+        $fp = fopen('before444.txt','w+');
+        fwrite($fp,var_export($data2,true));
+        fclose($fp);
         //用于外层回调
         $logs = D('Paymentlogs')->find($logs_id);
         if (!empty($logs) && !$logs['is_paid']) {
@@ -209,27 +211,27 @@ class PaymentModel extends CommonModel{
                     D('Sms')->breaksTZshop($order['order_id']);//发送短信给商家
                     D('Sms')->breaksTZuser($order['order_id']);//发送短信给用户
                     D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
-					D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
-					
-					static $CONFIG;
-					if (empty($CONFIG)) {
-						$CONFIG = D('Setting')->fetchAll();
-					}
-					$total=$order['fx_money']/(1-$CONFIG['profit']['bonus_profit_rate'])*$CONFIG['profit']['bonus_profit_rate'];
-					if($CONFIG['profit']['profit_bonus'] && $total>0.08){
-					
-						$order['bonusID']=D('Bonus')->create_bonus($total,$CONFIG['profit']['bonus_profit_num'],0.01);
-						//通知付款用户同小区用户领取红包
-						$obj = D('Communityowner');
-						$community = $obj->where(array('user_id' => $order['user_id']))->find();
-						$communityowners = $obj->where(array('community_id' => $community['community_id']))->select();
-						
-						foreach($communityowners as $val){
-							D('Weixintmpl')->weixin_notice_bonus_user($val['user_id'],$order['bonusID'],'breaks');
-						}
-					
-					}
-					
+                    D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
+
+                    static $CONFIG;
+                    if (empty($CONFIG)) {
+                        $CONFIG = D('Setting')->fetchAll();
+                    }
+                    $total=$order['fx_money']/(1-$CONFIG['profit']['bonus_profit_rate'])*$CONFIG['profit']['bonus_profit_rate'];
+                    if($CONFIG['profit']['profit_bonus'] && $total>0.08){
+
+                        $order['bonusID']=D('Bonus')->create_bonus($total,$CONFIG['profit']['bonus_profit_num'],0.01);
+                        //通知付款用户同小区用户领取红包
+                        $obj = D('Communityowner');
+                        $community = $obj->where(array('user_id' => $order['user_id']))->find();
+                        $communityowners = $obj->where(array('community_id' => $community['community_id']))->select();
+
+                        foreach($communityowners as $val){
+                            D('Weixintmpl')->weixin_notice_bonus_user($val['user_id'],$order['bonusID'],'breaks');
+                        }
+
+                    }
+
                     //微信通知结束
                     return true;
                 }elseif($logs['type'] == 'hotel'){   //酒店预订
@@ -237,7 +239,7 @@ class PaymentModel extends CommonModel{
                     $room = D('Hotelroom')->find($order['room_id']);
                     $hotel = D('Hotel')->find($order['hotel_id']);
                     $shop = D('Shop')->find($hotel['shop_id']);
-                   
+
                     D('Hotelorder')->save(array('order_id' => $logs['order_id'], 'order_status' => 1)); //设置已付款
                     D('Sms')->sendSms('sms_hotel', $order['mobile'], array(
                         'hotel_name' => $hotel['hotel_name'],
@@ -249,9 +251,9 @@ class PaymentModel extends CommonModel{
                     ));
                     D('Sms')->sendSms('sms_shop_hotel', $shop['mobile'], array());
                     D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
-					D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
+                    D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
                     return true;
-                    
+
                 } elseif($logs['type'] == 'farm'){   //农家乐预订
                     $order = D('FarmOrder')->find($logs['order_id']);
                     $f = D('FarmPackage')->find($order['pid']);
@@ -267,19 +269,19 @@ class PaymentModel extends CommonModel{
                     ));
                     D('Sms')->sendSms('sms_shop_farm', $shop['mobile'], array());
                     D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
-					D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
+                    D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
                     return true;
-                    
+
                 }  elseif ($logs['type'] == 'money') {
                     D('Users')->updateCount($logs['user_id'], 'money', $logs['need_pay']);
-					D('Users')->Recharge_Full_Gvie_User_Money($logs['user_id'], $logs['need_pay']);//充值满送，忽略错误
+                    D('Users')->Recharge_Full_Gvie_User_Money($logs['user_id'], $logs['need_pay']);//充值满送，忽略错误
                     D('Usermoneylogs')->add(array(
-						'user_id' => $logs['user_id'], 
-						'money' => $logs['need_pay'], 
-						'create_time' => NOW_TIME, 
-						'create_ip' => $ip, 
-						'intro' => '余额充值，支付记录ID：' . $logs['log_id']
-					));
+                        'user_id' => $logs['user_id'],
+                        'money' => $logs['need_pay'],
+                        'create_time' => NOW_TIME,
+                        'create_ip' => $ip,
+                        'intro' => '余额充值，支付记录ID：' . $logs['log_id']
+                    ));
                     D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
                     return true;
                 }elseif ($logs['type'] == 'community') {
@@ -292,44 +294,80 @@ class PaymentModel extends CommonModel{
                     $obj = D('Tuancode');
                     $order = D('Tuanorder')->find($logs['order_id']);
                     $tuan = D('Tuan')->find($order['tuan_id']);
-					
-					D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
-					D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
+
+                    D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
+                    D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
                     //结束
-                    for ($i = 0; $i < $order['num']; $i++) {
-                        $local = $obj->getCode();
-                        $insert = array(
-							'user_id' => $logs['user_id'], 
-							'shop_id' => $tuan['shop_id'], 
-							'order_id' => $order['order_id'], 
-							'tuan_id' => $order['tuan_id'], 
-							'code' => $local, 
-							'price' => $tuan['price'], 
-							'real_money' => (int) ($order['need_pay'] / $order['num']), 
-							'real_integral' => (int) ($order['use_integral'] / $order['num']), 
-							'fail_date' => $tuan['fail_date'], 
-							'settlement_price' => $tuan['settlement_price'], 
-							'create_time' => NOW_TIME, 
-							'create_ip' => $ip
-						);
-                        $codes[] = $local;
-                        $obj->add($insert);
-                    }
+                    //  for ($i = 0; $i < $order['num']; $i++) {
+                    $local = $obj->getCode();
+                    $insert = array(
+                        'user_id' => $logs['user_id'],
+                        'shop_id' => $tuan['shop_id'],
+                        'order_id' => $order['order_id'],
+                        'tuan_id' => $order['tuan_id'],
+                        'code' => $local,
+                        'price' => $tuan['price']*$order['num'],
+                        'real_money' => (int) $order['need_pay'],
+                        'real_integral' => (int) $order['use_integral'],
+                        'fail_date' => $tuan['fail_date'],
+                        'settlement_price' => $tuan['settlement_price']*$order['num'],
+                        'create_time' => NOW_TIME,
+                        'create_ip' => $ip
+                    );
+                    $codes[] = $local;
+                    $obj->add($insert);
+                    //  }
                     D('Tuanorder')->save(array('order_id' => $order['order_id'], 'status' => 1)); //设置已付款
                     D('Tuan')->updateCount($tuan['tuan_id'], 'sold_num');//更新卖出产品
                     D('Tuan')->updateCount($tuan['tuan_id'], 'num', -$order['num']);
-					D('Sms') -> sms_tuan_user($member['user_id'],$order['order_id']);//团购商品通知用户
-					D('Sms')->tuanTZshop($tuan['shop_id']);//发送短信
+                    D('Sms') -> sms_tuan_user($member['user_id'],$order['order_id']);//团购商品通知用户
+                    D('Sms')->tuanTZshop($tuan['shop_id']);//发送短信
                     D('Users')->prestige($member['user_id'], 'tuan');
                     $tg = D('Users')->checkInvite($order['user_id'], $tuan['price']);
                     if ($tg !== false) {
                         D('Users')->addIntegral($tg['uid'], $tg['integral'], "分享获得积分！");
                     }
                     D('Tongji')->log(1, $logs['need_pay']);//统计//分销
-					$tuan_is_profit = D('Shop') -> find($order['shop_id']);
-					if($tuan_is_profit['is_profit'] == 1){
-						D('Userprofitlogs')->profitFusers(0, $logs['user_id'], $logs['order_id']);//单个抢购奖励分成和升级等级
-					}
+                    $tuan_is_profit = D('Shop') -> find($order['shop_id']);
+                    if($tuan_is_profit['is_profit'] == 1){
+                        D('Userprofitlogs')->profitFusers(0, $logs['user_id'], $logs['order_id']);//单个抢购奖励分成和升级等级
+                    }
+                    return true;
+                }  elseif ($logs['type'] == 'retail') {
+
+                    $member = D('Users')->find($logs['user_id']);
+
+                    $order = D('Retailorder')->find($logs['order_id']);
+                    $retail = D('Retail')->find($order['retail_id']);
+
+                    D('Retailorder')->settlement($logs['order_id']);
+
+                    D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
+                    D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
+
+                    D('Retailorder')->save(array('order_id' => $order['order_id'], 'status' => 1)); //设置已付款
+                    D('Retail')->updateCount($retail['retail_id'], 'sold_num');//更新卖出产品
+                    D('Retail')->updateCount($retail['retail_id'], 'num', -$order['num']);
+                   //D('Sms') -> sms_tuan_user($member['user_id'],$order['order_id']);//团购商品通知用户
+                   // D('Sms')->tuanTZshop($retail['shop_id']);//发送短信
+                    $tg = D('Users')->checkInvite($order['user_id'], $retail['price']);
+                    if ($tg !== false) {
+                        D('Users')->addIntegral($tg['uid'], $tg['integral'], "分享获得积分！");
+                    }
+
+                    return true;
+                } elseif ($logs['type'] == 'activity') {
+
+                    $member = D('Users')->find($logs['user_id']);
+
+                    $order = D('Activitylorder')->find($logs['order_id']);
+                    $activity = D('Activity')->find($order['activity_id']);
+
+                    D('Activityorder')->settlement($logs['order_id']);
+
+                    D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
+                    D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
+
                     return true;
                 } elseif ($logs['type'] == 'ele') {
                     //餐饮订餐
@@ -341,28 +379,28 @@ class PaymentModel extends CommonModel{
                     $dv = D('DeliveryOrder');
                     $uaddr = D('UserAddr')->where('addr_id =' . $order['addr_id'])->find();
                     D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
-					D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
+                    D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
                     //在线支付成功以后，进入配送员判断
                     if ($shops['is_pei'] == 0) {
                         $dv_data = array(
-							'type' => 1, 
-							'type_order_id' => $order['order_id'], 
-							'delivery_id' => 0, 
-							'shop_id' => $order['shop_id'], 
-							'city_id' => $shops['city_id'], 
-							'lat' => $shops['lat'], 
-							'lng' => $shops['lng'], 
-							'user_id' => $order['user_id'], 
-							'shop_name' => $shops['shop_name'], 
-							'shop_addr' => $shops['addr'], 
-							'shop_mobile' => $shops['tel'], 
-							'user_name' => $uaddr['name'], 
-							'user_addr' => $uaddr['addr'], 
-							'user_mobile' => $uaddr['mobile'], 
-							'create_time' => time(), 
-							'update_time' => 0, 
-							'status' => 1
-						);
+                            'type' => 1,
+                            'type_order_id' => $order['order_id'],
+                            'delivery_id' => 0,
+                            'shop_id' => $order['shop_id'],
+                            'city_id' => $shops['city_id'],
+                            'lat' => $shops['lat'],
+                            'lng' => $shops['lng'],
+                            'user_id' => $order['user_id'],
+                            'shop_name' => $shops['shop_name'],
+                            'shop_addr' => $shops['addr'],
+                            'shop_mobile' => $shops['tel'],
+                            'user_name' => $uaddr['name'],
+                            'user_addr' => $uaddr['addr'],
+                            'user_mobile' => $uaddr['mobile'],
+                            'create_time' => time(),
+                            'update_time' => 0,
+                            'status' => 1
+                        );
                         $dv->add($dv_data);
                     }
                     D('Tongji')->log(3, $logs['need_pay']);
@@ -377,17 +415,17 @@ class PaymentModel extends CommonModel{
                     }
                 } elseif ($logs['type'] == 'crowd') {//众筹
                     D('Crowdorder')->save(array('order_id' => $logs['order_id'],'status' => 1 ));
-					D('Sms')->sms_crowd_user($logs['order_id']);//短信通知会员
-					D('Sms')->sms_crowd_uid($logs['order_id']);//通知众筹发起人
-					return true;
+                    D('Sms')->sms_crowd_user($logs['order_id']);//短信通知会员
+                    D('Sms')->sms_crowd_uid($logs['order_id']);//通知众筹发起人
+                    return true;
                 } elseif ($logs['type'] == 'booking') {//订座定金
                     D('Bookingorder')->save(array('order_id' => $logs['order_id'],'order_status' => 1 ));
-	                D('Tongji')->log(3, $logs['need_pay']); //统计
-					D('Sms')->sms_booking_user($logs['order_id']);//短信通知会员
-					D('Sms')->sms_booking_shop($logs['order_id']);//通知商家
-					D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
-					D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
-					return true;
+                    D('Tongji')->log(3, $logs['need_pay']); //统计
+                    D('Sms')->sms_booking_user($logs['order_id']);//短信通知会员
+                    D('Sms')->sms_booking_shop($logs['order_id']);//通知商家
+                    D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
+                    D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
+                    return true;
                 } elseif ($logs['type'] == 'ding') {
                     //订座定金
                     $order_no = D('Shopdingorder')->where('order_id = ' . $logs['order_id'])->find();
@@ -408,50 +446,50 @@ class PaymentModel extends CommonModel{
                     $uid = $tuan['user_id'];
                     if ($tuan['tstatus'] == 0) {
                         $obj->save(array(
-							'id' => $logs['order_id'], 
-							'pay_time' => NOW_TIME, 
-							'order_no' => $logs_id, 
-							'pay_name' => $logs['code'], 
-							'tuan_status' => 3, 
-							'order_status' => 2
-						));
+                            'id' => $logs['order_id'],
+                            'pay_time' => NOW_TIME,
+                            'order_no' => $logs_id,
+                            'pay_name' => $logs['code'],
+                            'tuan_status' => 3,
+                            'order_status' => 2
+                        ));
                         include_once "Baocms/Lib/Net/Wxmesg.class.php";
                         $_data_order = array(
-							'url' => "http://" . $_SERVER['HTTP_HOST'] . "/mcenter/pintuan/order/id/" . $logs['order_id'] . ".html", 
-							'topcolor' => '#F55555', 
-							'first' => '亲,您的直接购买订单已经创建，我们将尽快为您发货！', 
-							'remark' => '更多信息,请登录http://' . $_SERVER['HTTP_HOST'] . '！再次感谢您的惠顾！', 
-							'money' => round($logs['need_pay'] / 100, 2) . '元', 
-							'goodsName' => $tuan['goods_name'], 
-							'payType' => $logs['code'], 
-							'orderNum' => $logs_id, 
-							'buyNum' => '点击查看详单'
-						);
+                            'url' => "http://" . $_SERVER['HTTP_HOST'] . "/mcenter/pintuan/order/id/" . $logs['order_id'] . ".html",
+                            'topcolor' => '#F55555',
+                            'first' => '亲,您的直接购买订单已经创建，我们将尽快为您发货！',
+                            'remark' => '更多信息,请登录http://' . $_SERVER['HTTP_HOST'] . '！再次感谢您的惠顾！',
+                            'money' => round($logs['need_pay'] / 100, 2) . '元',
+                            'goodsName' => $tuan['goods_name'],
+                            'payType' => $logs['code'],
+                            'orderNum' => $logs_id,
+                            'buyNum' => '点击查看详单'
+                        );
                         $order_data = Wxmesg::order($_data_order);
                         $return = Wxmesg::net($uid, 'OPENTM202297555', $order_data);
                     } else {
                         $obj->save(array(
-							'id' => $logs['order_id'], 
-							'pay_time' => NOW_TIME, 
-							'order_no' => $logs_id, 
-							'pay_name' => $logs['code'], 
-							'tuan_status' => 2, 
-							'order_status' => 2
-						));
+                            'id' => $logs['order_id'],
+                            'pay_time' => NOW_TIME,
+                            'order_no' => $logs_id,
+                            'pay_name' => $logs['code'],
+                            'tuan_status' => 2,
+                            'order_status' => 2
+                        ));
                         D('Ptuan')->save(array('id' => $tuan['tuan_id'], 'tuan_status' => 2));
                         D('Ptuanteam')->where(array('order_id' => $logs['order_id']))->setField('tuan_status', '2');
                         if ($tuan['tstatus'] == 1) {
                             $num = $tuan['renshu'] - 1;
                             include_once "Baocms/Lib/Net/Wxmesg.class.php";
                             $_data_kaituan = array(
-								'url' => "http://" . $_SERVER['HTTP_HOST'] . "/mobile/pintuan/tuan/id/" . $tuan['tuan_id'] . ".html", 
-								'topcolor' => '#F55555', 
-								'first' => '亲,您成功开启了一个新的拼团', 
-								'remark' => '还差' . $num . '人成团，快快邀请您的小伙伴们一起参团吧', 
-								'goodsName' => $tuan['goods_name'], 
-								'orderno' => $logs_id, 
-								'pintuannum' => $tuan['renshu']
-							);
+                                'url' => "http://" . $_SERVER['HTTP_HOST'] . "/mobile/pintuan/tuan/id/" . $tuan['tuan_id'] . ".html",
+                                'topcolor' => '#F55555',
+                                'first' => '亲,您成功开启了一个新的拼团',
+                                'remark' => '还差' . $num . '人成团，快快邀请您的小伙伴们一起参团吧',
+                                'goodsName' => $tuan['goods_name'],
+                                'orderno' => $logs_id,
+                                'pintuannum' => $tuan['renshu']
+                            );
                             $kaituan_data = Wxmesg::kaituan($_data_kaituan);
                             $return = Wxmesg::net($uid, 'OPENTM206953801', $kaituan_data);
                             //====================开团订单通知===============================
@@ -459,14 +497,14 @@ class PaymentModel extends CommonModel{
                             //====================参团订单通知===========================
                             include_once "Baocms/Lib/Net/Wxmesg.class.php";
                             $_data_cantuan = array(
-								'url' => "http://" . $_SERVER['HTTP_HOST'] . "/mobile/pintuan/tuan/id/" . $tuan['tuan_id'] . ".html", 
-								'topcolor' => '#F55555', 
-								'first' => '您已参团成功，请等待成团', 
-								'payprice' => round($logs['need_pay'] / 100, 2) . '元', 
-								'goodsName' => $tuan['goods_name'], 
-								'dizhi' => $tuan['address'], 
-								'remark' => '更多详情可点击查看'
-							);
+                                'url' => "http://" . $_SERVER['HTTP_HOST'] . "/mobile/pintuan/tuan/id/" . $tuan['tuan_id'] . ".html",
+                                'topcolor' => '#F55555',
+                                'first' => '您已参团成功，请等待成团',
+                                'payprice' => round($logs['need_pay'] / 100, 2) . '元',
+                                'goodsName' => $tuan['goods_name'],
+                                'dizhi' => $tuan['address'],
+                                'remark' => '更多详情可点击查看'
+                            );
                             $cantuan_data = Wxmesg::cantuan($_data_cantuan);
                             $return = Wxmesg::net($uid, 'OPENTM400890529', $cantuan_data);
                             //结束
@@ -483,33 +521,33 @@ class PaymentModel extends CommonModel{
                         //合并付款
                         $order_ids = explode(',', $logs['order_ids']);
                         $goods_order_profit = D('Order')->where(array('order_id'=>$logs['order_id']))->find();
-						$goods_is_profit = D('Shop') -> find($goods_order_profit['shop_id']);
-						if($goods_is_profit['is_profit'] == 1){
-							foreach ($order_ids as $order_id) {
-								D('Userprofitlogs')->profitFusers(1, $logs['user_id'], $order_id);//三级分销循环分成
-							}
-						}
+                        $goods_is_profit = D('Shop') -> find($goods_order_profit['shop_id']);
+                        if($goods_is_profit['is_profit'] == 1){
+                            foreach ($order_ids as $order_id) {
+                                D('Userprofitlogs')->profitFusers(1, $logs['user_id'], $order_id);//三级分销循环分成
+                            }
+                        }
                         D('Order')->save(array('status' => 1), array('where' => array('order_id' => array('IN', $order_ids))));
                         D('Sms')->mallTZshop($order_ids);
                         //通知商家
                         $this->mallSold($order_ids);
-						
+
                         $this->mallPeisong(array($order_ids), 0);
                     } else {
                         D('Order')->save(array('order_id' => $logs['order_id'], 'status' => 1));
                         $this->mallPeisong(array($logs['order_id']), 0);
                         $this->mallSold($logs['order_id']);
-						D('Coupon')->change_download_id_is_used($logs['order_id']);//如果有优惠劵就修改优惠劵的状态
+                        D('Coupon')->change_download_id_is_used($logs['order_id']);//如果有优惠劵就修改优惠劵的状态
                         //通知商家
                         D('Sms')->mallTZshop($logs['order_id']);
                         $goods_order = D('Order')->where(array('order_id'=>$logs['order_id']))->find();
-						$goods_order_shop = D('Shop') -> find($goods_order['shop_id']);
-						if($goods_order_shop['is_profit'] == 1){
-							D('Userprofitlogs')->profitFusers(1, $logs['user_id'], $logs['order_id']);//单个商品奖励分成和升级等级
-						}
+                        $goods_order_shop = D('Shop') -> find($goods_order['shop_id']);
+                        if($goods_order_shop['is_profit'] == 1){
+                            D('Userprofitlogs')->profitFusers(1, $logs['user_id'], $logs['order_id']);//单个商品奖励分成和升级等级
+                        }
                     }
                     D('Weixintmpl')->weixin_pay_balance_user($logs['log_id']);//会员账户余额变动通知全局
-					D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
+                    D('Weixintmpl')->weixin_pay_balance_shop($logs['log_id'],1);//微信通知商家
                     D('Tongji')->log(2, $logs['need_pay']);
                     //统计
                 }
@@ -560,24 +598,24 @@ class PaymentModel extends CommonModel{
                 $uaddr = $ua->where(array('addr_id' => $order['addr_id']))->find();
                 //在线支付成功以后，进入配送员判断
                 $dv_data = array(
-					'type' => 0, 
-					'type_order_id' => $order['order_id'], 
-					'delivery_id' => 0, 
-					'shop_id' => $order['shop_id'], 
-					'city_id' => $shops['city_id'], 
-					'user_id' => $order['user_id'], 
-					'shop_name' => $shops['shop_name'], 
-					'lat' => $shops['lat'], 
-					'lng' => $shops['lng'], 
-					'shop_addr' => $shops['addr'], 
-					'shop_mobile' => $mobile, 
-					'user_name' => $member['nickname'], 
-					'user_addr' => $uaddr['addr'], 
-					'user_mobile' => $member['mobile'], 
-					'create_time' => NOW_TIME, 
-					'update_time' => 0, 
-					'status' => $status
-					);
+                    'type' => 0,
+                    'type_order_id' => $order['order_id'],
+                    'delivery_id' => 0,
+                    'shop_id' => $order['shop_id'],
+                    'city_id' => $shops['city_id'],
+                    'user_id' => $order['user_id'],
+                    'shop_name' => $shops['shop_name'],
+                    'lat' => $shops['lat'],
+                    'lng' => $shops['lng'],
+                    'shop_addr' => $shops['addr'],
+                    'shop_mobile' => $mobile,
+                    'user_name' => $member['nickname'],
+                    'user_addr' => $uaddr['addr'],
+                    'user_mobile' => $member['mobile'],
+                    'create_time' => NOW_TIME,
+                    'update_time' => 0,
+                    'status' => $status
+                );
                 $dv->add($dv_data);
             }
         }
@@ -599,24 +637,24 @@ class PaymentModel extends CommonModel{
             $uaddr = $ua->where(array('addr_id' => $order['addr_id']))->find();
             //在线支付成功以后，进入配送员判断
             $dv_data = array(
-				'type' => 1, 
-				'type_order_id' => $order_id, 
-				'delivery_id' => 0, 
-				'shop_id' => $order['shop_id'], 
-				'city_id' => $shops['city_id'], 
-				'user_id' => $order['user_id'], 
-				'shop_name' => $shops['shop_name'], 
-				'lat' => $shops['lat'], 
-				'lng' => $shops['lng'], 
-				'shop_addr' => $shops['addr'], 
-				'shop_mobile' => $mobile, 
-				'user_name' => $member['nickname'], 
-				'user_addr' => $uaddr['addr'], 
-				'user_mobile' => $member['mobile'], 
-				'create_time' => NOW_TIME, 
-				'update_time' => 0, 
-				'status' => 1
-			);
+                'type' => 1,
+                'type_order_id' => $order_id,
+                'delivery_id' => 0,
+                'shop_id' => $order['shop_id'],
+                'city_id' => $shops['city_id'],
+                'user_id' => $order['user_id'],
+                'shop_name' => $shops['shop_name'],
+                'lat' => $shops['lat'],
+                'lng' => $shops['lng'],
+                'shop_addr' => $shops['addr'],
+                'shop_mobile' => $mobile,
+                'user_name' => $member['nickname'],
+                'user_addr' => $uaddr['addr'],
+                'user_mobile' => $member['mobile'],
+                'create_time' => NOW_TIME,
+                'update_time' => 0,
+                'status' => 1
+            );
             $dv->add($dv_data);
         }
         return true;
@@ -639,5 +677,5 @@ class PaymentModel extends CommonModel{
         }
         return array();
     }
-   
+
 }

@@ -161,11 +161,14 @@ class TuanAction extends CommonAction
 									if($config['integral']['tuan_return_integral'] == 1){
 										D('Users')->return_integral($shop['user_id'], $data['real_integral'] , '抢购用户消费积分返还给商家');
 									}
-								}								
+								}
+								
 								static $CONFIG;
 								if (empty($CONFIG)) {
 									$CONFIG = D('Setting')->fetchAll();
-								}								//合伙人结佣
+								}
+
+								//合伙人结佣
 								$fantuan = $data['real_money']*$CONFIG["profit"]["profit_tuan"]/100;
 								D('Users')->addMoney($this->uid, $fantuan, '合伙人结佣：订单ID' . $data['order_id']);
 								
@@ -237,6 +240,46 @@ class TuanAction extends CommonAction
         $this->assign('users', D('Users')->itemsByIds($user_ids));
         $this->assign('shops', D('Shop')->itemsByIds($shop_ids));
         $this->assign('tuans', D('Tuan')->itemsByIds($tuan_ids));
+        $this->display();// 输出模板
+    }
+    public function arrivalnotice()
+    {
+        $Tuanorder = D('Tuanorder');
+        import('ORG.Util.Page');// 导入分页类
+        $map = array('a.shop_id' => $this->shop_id, 'a.closed' => 0);//这里只显示 实物
+        $map['a.status']=1;
+        $shopworker = D('Shopworker')->where(array('user_id'=>$this->uid))->find();
+        //print_r($shopworker);
+        $map['a.business_id'] = $shopworker['business_id'];
+        $map['b.type']='tuan';
+        $list = $Tuanorder->alias('a')->Field('a.*,b.code')->join('left join bao_payment_logs b on b.order_id=a.order_id and b.user_id =a.user_id')->where($map)->order(array('a.order_id' => 'desc'))->select();
+
+        $tuan_ids = array();
+        foreach ($list as $k => $val) {
+            $tuan_ids[$val['tuan_id']] = $val['tuan_id'];
+        }//查询商家
+        $shop_ids = array();
+        foreach ($list as $k => $val) {
+            $shop_ids[$val['shop_id']] = $val['shop_id'];
+            $user_ids[$val['user_id']] = $val['user_id'];
+        }
+
+        if (!empty($user_ids)) {
+            $users=D('Users')->itemsByIds($user_ids);
+            $this->assign('users', $users);
+        }
+
+        $city = D('City')->fetchAll();
+        $this->assign('city', $city);
+        $areas = D('Area')->fetchAll();
+        $this->assign('areas', $areas);
+        $business = D('Business')->fetchAll();
+        $this->assign('business', $business);
+
+        $this->assign('tuans', D('Tuan')->itemsByIds($tuan_ids));
+        $this->assign('shops', D('Shop')->itemsByIds($shop_ids));//查询商家名字
+        $this->assign('list', $list);// 赋值数据集www.hatudou.com  二开开发qq  120585022
+
         $this->display();// 输出模板
     }
 }

@@ -188,6 +188,7 @@ class HuodongAction extends CommonAction {
         }
         if ($this->isPost()) {
             $data = $this->checkSign();
+            $need_pay=$this->_post('need_pay',htmlspecialchars);
 
             $data['activity_id'] = $activity_id;
             $data['create_time'] = NOW_TIME;
@@ -196,7 +197,31 @@ class HuodongAction extends CommonAction {
          	 $data['original_num'] =$subinfo['count'];
  			 $data['original_submoney'] =$subinfo['submoney'];
      		 $data['original_sales'] =$subinfo['sales'];
-          
+
+     		 //活动订单
+            $activity_order=array(
+                'user_id' => $this->uid,
+                'activity_id' => $activity_id,
+                'city_id' => $this->city_id,
+                'num' =>$data['num'],
+                'need_pay' => $need_pay,
+                'create_time' => NOW_TIME,
+                'create_ip' => get_client_ip()
+            );
+            $activity_order['order_id'] = D('Activityorder')->add($activity_order);
+
+            //支付记录订单
+            $logs = array(
+                'user_id' => $this->uid,
+                'type' => 'activity',
+                'code' => 'weixin',
+                'order_id' => $activity_order['order_id'],
+                'need_pay' => $need_pay,
+                'create_time' => NOW_TIME,
+                'create_ip' => get_client_ip()
+            );
+            $logs['log_id'] = D('Paymentlogs')->add($logs);
+
             $obj = D('Activitysign');
             if ($obj->add($data)) {
                 D('Activity')->updateCount($activity_id, 'sign_num');

@@ -1,0 +1,76 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">易水源</li>
+        <li class="li2">直饮机</li>
+        <li class="li2 li3">直饮机列表</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <p class="attention"><span>注意：</span>管理员请随时注意各直饮机水位，水位低于30%请及时到对应小区进行灌装补水！</p>
+    <div class="jsglNr">
+        <div class="selectNr" style="margin-top: 0px; border-top:none;">
+            <div class="left">
+                <{:BA('retailmachine/create','','添加自动售货机')}>
+            </div>
+              
+            <div class="right">
+                <form class="search_form" method="post" action="<{:U('retailmachine/index')}>">
+                    <div class="seleHidden" id="seleHidden">
+                      
+                       	<label>
+                            <span>名称:</span>
+                            <input type="text" name="m_name" value="<{$m_name}>" class="inptText" />
+                        </label>
+                      
+                        <label>
+                            <span>编号:</span>
+                            <input type="text" name="m_sn" value="<{$m_sn}>" class="inptText" />
+                            <input type="submit" value="搜索"  class="inptButton" />
+                        </label>
+                    </div>
+                </form>
+            </div>
+              
+        </div>
+        <form  target="baocms_frm" method="post">
+            <div class="tableBox">
+                <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                    <tr>
+                        <td class="w50"><input type="checkbox" class="checkAll" rel="machine_id" /></td>
+                        <td class="w50">ID</td>
+                        <td>编号</td>
+                        <td>名称</td>
+                        <td>二维码</td>
+                        <td>操作</td>
+                    </tr>
+                    <foreach name="list" item="var">
+                        <tr>
+                            <td><input class="child_grade_id" type="checkbox" name="machine_id[]" value="<{$var["machine_id"]}>" /></td>
+                            <td><{$var["machine_id"]}></td>
+                            <td><a style="color:#F00; font-size:18px; font-weight:bold"><{$var["m_sn"]}></a></td>
+                            <td><{$var["m_name"]}></td>
+                            <td><a href="https://cli.im/api/qrcode/code?text=http://www.enjoysix.cn/mobile/index/index.html?m_sn=<{$var['m_sn']}>" target="_blank"style="color:#F00; font-size:18px; font-weight:bold">点击下载</a></td>
+                            <td>
+                             <{:BA('retailmachine/edit',array("machine_id"=>$var["machine_id"]),'编辑','','remberBtn')}>
+                                <{:BA('retailmachine/delete',array("machine_id"=>$var["machine_id"]),'删除','act','remberBtn')}>
+                            </td>
+                        </tr>
+                    </foreach>
+					
+					
+                </table>
+                <{$page}>
+            </div>
+            <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+                <div class="left">
+                    <{:BA('retailmachine/delete','','批量删除','list',' a2')}>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<include  file='public:footer'/>  
+
+
+

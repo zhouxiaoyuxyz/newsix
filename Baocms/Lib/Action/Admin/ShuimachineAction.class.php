@@ -1,7 +1,7 @@
 <?php
 class ShuimachineAction extends CommonAction{
-    private $create_fields = array('m_sn', 'city_id', 'area_id', 'model', 'price', 'fanxian', 'tg_fanxian','wy_fanxian', 'command', 'pic', 'admin_id', 'lng', 'lat', 'orderby','create_time');
-    private $edit_fields = array('m_sn', 'city_id', 'area_id', 'model', 'price', 'fanxian', 'tg_fanxian', 'wy_fanxian', 'command', 'pic', 'admin_id', 'lng', 'lat', 'orderby');
+    private $create_fields = array('m_sn', 'city_id', 'area_id','business_id', 'model', 'price', 'fanxian', 'tg_fanxian','wy_fanxian','hhr_fanxian','third_profit', 'command', 'pic', 'admin_id','hhr_id', 'lng', 'lat', 'orderby','create_time');
+    private $edit_fields = array('m_sn', 'city_id', 'area_id','business_id', 'model', 'price', 'fanxian', 'tg_fanxian', 'wy_fanxian', 'hhr_fanxian','third_profit','command', 'pic', 'admin_id','hhr_id', 'lng', 'lat', 'orderby');
 	private $create_cards = array('c_sn', 'city_id', 'area_id', 'times', 'end_time', 'remark', 'closed',  'orderby','create_time');
 	private $edit_cards = array('c_sn', 'city_id', 'area_id', 'times', 'end_time', 'remark', 'closed',  'orderby');
 	public function index(){
@@ -71,10 +71,11 @@ class ShuimachineAction extends CommonAction{
              $this->baoError('返现金额不能为空');
         }
 		
-		if ($data['fanxian']+$data['tg_fanxian']+$data['wy_fanxian']>=$data['price']) {
+		if ($data['fanxian']+$data['tg_fanxian']+$data['wy_fanxian']+$data['hhr_fanxian']>=$data['price']) {
              $this->baoError('返现金额不得大于水单价！');
         }
-		
+        $data['third_profit'] = $data['third_profit'];
+
 		$data['command'] = htmlspecialchars($data['command']);
 		if (empty($data['command'])) {
             //$this->baoError('出水指令不能为空');
@@ -107,6 +108,7 @@ class ShuimachineAction extends CommonAction{
 				$map['closed']=0;
 				$admins = D('Admin')->where($map)->select();
 				$detail['admin']=D('Admin')->find($detail['admin_id']);
+                $detail['hhr']=D('Admin')->find($detail['hhr_id']);
 		
 				$this->assign('admins',$admins);
                 $this->assign('detail', $detail);
@@ -130,9 +132,10 @@ class ShuimachineAction extends CommonAction{
 		if (empty($data['fanxian'])) {
              $this->baoError('返现金额不能为空');
         }
-		if ($data['fanxian']+$data['tg_fanxian']+$data['wy_fanxian']>=$data['price']) {
+		if ($data['fanxian']+$data['tg_fanxian']+$data['wy_fanxian']+$data['hhr_fanxian']>=$data['price']) {
              $this->baoError('返现金额不得大于水单价！');
         }
+        $data['third_profit'] = $data['third_profit'];
 		$data['command'] = htmlspecialchars($data['command']);
 		if (empty($data['command'])) {
             //$this->baoError('出水指令不能为空');
@@ -175,7 +178,7 @@ class ShuimachineAction extends CommonAction{
         $count = $Shuicards->where($map)->count();
         $Page = new Page($count, 15);
         $show = $Page->show();
-        $list = $Shuicards->where($map)->order(array('orderby' => 'asc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        $list = $Shuicards->where($map)->order(array('card_id' => 'asc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
 		
         $this->assign('list', $list);
         $this->assign('page', $show);
@@ -291,6 +294,72 @@ class ShuimachineAction extends CommonAction{
             }
             $this->baoError('请选择要删除的饮水机');
         }
+    }
+    public function shuilocationmap(){
+        // $shuirecord=D('Fenzhangoldlogs');
+        //  $shuirecordarray=$shuirecord->where(array('type'=>'shui'))->limit(10)->select();
+        // foreach ($shuirecordarray as $key=>$item){
+        //    $shuirecordarray[$key]['order']=explode('：', $item['intro'])[1];
+        //  }
+        //echo '<pre>';echo print_r($shuirecordarray);echo'<pre>';
+        //区域搜索
+        $city_id = (int) $this->_param('city_id', 'htmlspecialchars');
+        $area_id = (int)$this->_param('area_id', 'htmlspecialchars');
+        //echo 'city_id'.$city_id;
+        //echo 'area_id'.$area_id;
+        if($city_id){
+            $map['city_id']=$city_id;
+            $shuimap['city_id']=$city_id;
+            $this->assign('city_id', $city_id);
+        }
+        if($area_id){
+            $map['area_id']=$area_id;
+            $shuimap['area_id']=$area_id;
+            $this->assign('area_id', $area_id);
+        }
+        //关键字搜索
+        $keyword = $this->_param('keyword', 'htmlspecialchars');
+        if($keyword){
+            $map['model']=array('LIKE', '%' . $keyword . '%');
+            $shuimap['model']=array('LIKE', '%' . $keyword . '%');
+            $this->assign('keyword', $keyword);
+        }
+        //时间搜索
+        if (($bg_date = $this->_param('bg_date', 'htmlspecialchars') ) && ($end_date = $this->_param('end_date', 'htmlspecialchars'))) {
+            $bg_time = strtotime($bg_date);
+            $end_time = strtotime($end_date);
+            $map['create_time'] = array(array('ELT', $end_time), array('EGT', $bg_time));
+            $this->assign('bg_date', $bg_date);
+            $this->assign('end_date', $end_date);
+        } else {
+            if ($bg_date = $this->_param('bg_date', 'htmlspecialchars')) {
+                $bg_time = strtotime($bg_date);
+                $this->assign('bg_date', $bg_date);
+                $map['create_time'] = array('EGT', $bg_time);
+            }
+            if ($end_date = $this->_param('end_date', 'htmlspecialchars')) {
+                $end_time = strtotime($end_date);
+                $this->assign('end_date', $end_date);
+                $map['create_time'] = array('ELT', $end_time);
+            }
+        }
+        $shuimap['closed']='0';
+        $shuimachine=D('Shuimachine')->where($shuimap)->select();
+        $shuilocation=D('Shuilocationmap');
+        foreach ($shuimachine as $k => $val) {
+            $map['machine_id']=$val['machine_id'];
+            $count=$shuilocation=D('Shuilocationmap')->where($map)->count();
+            $shuimachine[$k]['level'] = $count;
+        }
+        $shuijson = json_encode($shuimachine);
+        // echo '<pre>';echo print_r($shuijson);echo'<pre>';
+        $this->assign('shuijson', $shuijson);
+        $this->assign('areas', D('Area')->fetchAll());
+        // echo '<pre>';echo print_r(D('Area')->fetchAll());echo'<pre>';
+        $this->assign('business', D('Business')->fetchAll());
+        $this->assign('city_id', $this->city_id);
+        //    echo  "city_id".$this->city_id;
+        $this->display();
     }
 
 }

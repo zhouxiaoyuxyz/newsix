@@ -3,26 +3,76 @@ class ShuimachineAction extends CommonAction{
     private $create_fields = array('m_sn', 'city_id', 'area_id', 'model', 'price', 'fanxian', 'tg_fanxian','wy_fanxian', 'command', 'pic', 'admin_id', 'lng', 'lat', 'orderby','create_time');
     private $edit_fields = array('m_sn', 'city_id', 'area_id', 'model', 'price', 'fanxian', 'tg_fanxian', 'wy_fanxian', 'command', 'pic', 'admin_id', 'lng', 'lat', 'orderby');
 	public function index(){
+    $Shuimachine = D('Shuimachine');
+    import('ORG.Util.Page');
+    $map['closed'] = 0;
+    $map['admin_id|hhr_id'] = $this->_admin['admin_id'];
+    //print_r($map);
+    $count = $Shuimachine->where($map)->count();
+    $Page = new Page($count, 15);
+    $show = $Page->show();
+    $list = $Shuimachine->where($map)->order(array('orderby' => 'asc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
+   // echo "<pre>";echo print_r($list);echo"<pre>";
+    $admin_ids =  array();
+    foreach ($list as $key => $val) {
+        if($val['admin_id']==$this->_admin['admin_id']){
+            $admin_ids[$val['admin_id']] = $val['admin_id'];
+            echo "admin_id";
+            echo $val['admin_id'];
+        }else if($val['hhr_id']==$this->_admin['admin_id']){
+            $admin_ids[$val['hhr_id']] = $val['hhr_id'];
+            echo "hhr_id";
+            echo $val['hhr_id'];
+        }
+
+        /**if(D('Shuimachine')->checkonline($val['m_sn'])){
+        $list[$key]['online']="在线";
+        }else{
+        $list[$key]['online']="离线";
+        }**/
+    }
+    $admins=D('Admin')->itemsByIds($admin_ids);
+   // echo "$admins";
+   // echo "<pre>";echo print_r($admins);echo"<pre>";
+    $this->assign('admins', D('Admin')->itemsByIds($admin_ids));
+    $this->assign('list', $list);
+    $this->assign('page', $show);
+    $this->display();
+}
+     public function index20190509(){
         $Shuimachine = D('Shuimachine');
         import('ORG.Util.Page');
         $map['closed'] = 0;
-        $map['admin_id'] = $this->_admin['admin_id'];
-		//print_r($map);
+        $map['admin_id|hhr_id'] = $this->_admin['admin_id'];
+        //print_r($map);
         $count = $Shuimachine->where($map)->count();
         $Page = new Page($count, 15);
         $show = $Page->show();
         $list = $Shuimachine->where($map)->order(array('orderby' => 'asc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
-		$admin_ids =  array();
-		foreach ($list as $key => $val) {
-            $admin_ids[$val['admin_id']] = $val['admin_id'];
-			 /**if(D('Shuimachine')->checkonline($val['m_sn'])){				 
-				  $list[$key]['online']="在线";
-			 }else{
-				 $list[$key]['online']="离线";
-			 }**/
-			}
+      //  echo "<pre>";echo print_r($list);echo"<pre>";
+        $admin_ids =  array();
+        foreach ($list as $key => $val) {
+            if($val['admin_id']==$this->_admin['admin_id']){
+                $admin_ids[$val['admin_id']] = $val['admin_id'];
+                echo "admin_id";
+                echo $val['admin_id'];
+            }else if($val['hhr_id']==$this->_admin['admin_id']){
+                $admin_ids[$val['hhr_id']] = $val['hhr_id'];
+                echo "hhr_id";
+                echo $val['hhr_id'];
+            }
+
+            /**if(D('Shuimachine')->checkonline($val['m_sn'])){
+            $list[$key]['online']="在线";
+            }else{
+            $list[$key]['online']="离线";
+            }**/
+        }
+        $admins=D('Admin')->itemsByIds($admin_ids);
+      //  echo "$admins";
+      //  echo "<pre>";echo print_r($admins);echo"<pre>";
+        $this->assign('admins', D('Admin')->itemsByIds($admin_ids));
         $this->assign('list', $list);
-		$this->assign('admins', D('Admin')->itemsByIds($admin_ids));
         $this->assign('page', $show);
         $this->display();
     }

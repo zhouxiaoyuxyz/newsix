@@ -41,16 +41,16 @@ class LogsAction extends CommonAction {
                 $this->assign('type',999);
             }
         }
-        $count = $logs->where($map)->count(); // 查询满足要求的总记录数 
+        $count = $logs->where($map)->count(); // 查询满足要求的总记录数
         $Page = new Page($count, 16); // 实例化分页类 传入总记录数和每页显示的记录数
         $show = $Page->show(); // 分页显示输出
         $list = $logs->order(array('log_id' => 'desc'))->where($map)->select();
         $user_ids =  array();
         foreach ($list as $k => $val) {
-			$user_ids[$val['user_id']] = $val['user_id'];
-			if( $val['money']==0 &&  $val['user_id'] != $val['admin_id']){
-				$user_ids[$val['admin_id']] = $val['admin_id'];
-			}
+            $user_ids[$val['user_id']] = $val['user_id'];
+            if( $val['money']==0 &&  $val['user_id'] != $val['admin_id']){
+                $user_ids[$val['admin_id']] = $val['admin_id'];
+            }
         }
         $sum = $logs->where($map)->sum('money');
         $this->assign('sum',$sum);
@@ -175,5 +175,120 @@ class LogsAction extends CommonAction {
             $this->display();
         }
     }
+    public function moneylogs(){
+        $Usermoneylogs = D('Usermoneylogs');
+        import('ORG.Util.Page');
+        $map = array('user_id' => $this->uid);
+        $intro='小区项目经理分成';
+        $map['intro']= array('LIKE', '%' . $intro . '%');
+        if (($bg_date = $this->_param('bg_date', 'htmlspecialchars') ) && ($end_date = $this->_param('end_date', 'htmlspecialchars'))) {
+            $bg_date=str_replace('+',' ',$bg_date);
+            $end_date=str_replace('+',' ',$end_date);
+            $bg_time = strtotime($bg_date);
+            $end_time = strtotime($end_date);
+            $map['create_time'] = array(array('ELT', $end_time), array('EGT', $bg_time));
+            $this->assign('bg_date', $bg_date);
+            $this->assign('end_date', $end_date);
+        } else {
+            if ($bg_date = $this->_param('bg_date', 'htmlspecialchars')) {
+                $bg_date=str_replace('+',' ',$bg_date);
+                $bg_time = strtotime($bg_date);
+                $this->assign('bg_date', $bg_date);
+                $map['create_time'] = array('EGT', $bg_time);
+            }
+            if ($end_date = $this->_param('end_date', 'htmlspecialchars')) {
+                $end_date=str_replace('+',' ',$end_date);
+                $end_time = strtotime($end_date);
+                $this->assign('end_date', $end_date);
+                $map['create_time'] = array('ELT', $end_time);
+            }
+        }
+        $moneysum = $Usermoneylogs->where($map)->sum('money');
 
+        $count = $Usermoneylogs->where($map)->count();
+        $Page = new Page($count, 20);
+        $show = $Page->show();
+
+        $var = C('VAR_PAGE') ? C('VAR_PAGE') : 'p';
+        $p = $_GET[$var];
+        if ($Page->totalPages < $p) {
+            die('0');
+        }
+        $list = $Usermoneylogs->where($map)->order(array('log_id' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        $this->assign('list', $list);
+        $this->assign('page', $show);
+        $this->assign('moneysum', $moneysum);
+        $this->display();
+    }
+    public function tixian(){
+        $Users = D('Users');
+
+        $map = array('user_id' => $this->uid);
+        $intro='小区项目经理分成';
+        $map['intro']= array('LIKE', '%' . $intro . '%');
+        $list = $Users->where($map)->find();
+
+        $shop = D('Shop')->where(array('user_id' => $this->uid))->find();
+        if ($shop == '') {
+            $cash_money = $this->_CONFIG['cash']['user'];
+            $cash_money_big = $this->_CONFIG['cash']['user_big'];
+        } elseif ($shop['is_renzheng'] == 0) {
+            $cash_money = $this->_CONFIG['cash']['shop'];
+            $cash_money_big = $this->_CONFIG['cash']['shop_big'];
+        } elseif ($shop['is_renzheng'] == 1) {
+            $cash_money = $this->_CONFIG['cash']['renzheng_shop'];
+            $cash_money_big = $this->_CONFIG['cash']['renzheng_shop_big'];
+        } else {
+            $cash_money = $this->_CONFIG['cash']['user'];
+            $cash_money_big = $this->_CONFIG['cash']['user_big'];
+        }
+        if (IS_POST) {
+            $money = abs((int) ($_POST['money'] * 100));
+            if ($money == 0) {
+                $this->fengmiMsg('提现金额不能为0');
+            }
+            if ($money < $cash_money * 100) {
+                $this->fengmiMsg('提现金额小于最低提现额度');
+            }
+            if ($money > $cash_money_big * 100) {
+                $this->fengmiMsg('您单笔最多能提现' . $cash_money_big . '元');
+            }
+            if ($money > $this->member['money'] || $this->member['money'] == 0) {
+                $this->fengmiMsg('余额不足，无法提现');
+            }
+            if (!($data['bank_name'] = htmlspecialchars($_POST['bank_name']))) {
+                $this->fengmiMsg('开户行不能为空');
+            }
+            if (!($data['bank_num'] = htmlspecialchars($_POST['bank_num']))) {
+                $this->fengmiMsg('银行账号不能为空');
+            }
+            if (!($data['bank_realname'] = htmlspecialchars($_POST['bank_realname']))) {
+                $this->fengmiMsg('开户姓名不能为空');
+            }
+            $data['bank_branch'] = htmlspecialchars($_POST['bank_branch']);
+            $data['user_id'] = $this->uid;
+            $arr = array();
+            $arr['user_id'] = $this->uid;
+            $arr['money'] = $money;
+            $arr['type'] = user;
+            $arr['addtime'] = NOW_TIME;
+            $arr['account'] = $this->member['account'];
+            $arr['bank_name'] = $data['bank_name'];
+            $arr['bank_num'] = $data['bank_num'];
+            $arr['bank_realname'] = $data['bank_realname'];
+            $arr['bank_branch'] = $data['bank_branch'];
+            D('Userscash')->add($arr);
+            D('Usersex')->save($data);
+            //扣除余额
+            $Users->addMoney($this->member['user_id'], -$money, '申请提现，扣款');
+
+            $this->fengmiMsg('申请成功', U('logs/tixian'));
+        } else {
+            $this->assign('info', D('Usersex')->getUserex($this->uid));
+            $this->assign('money', $list['money'] / 100);
+            $this->assign('cash_money', $cash_money);
+            $this->assign('cash_money_big', $cash_money_big);
+            $this->display();
+        }
+    }
 }

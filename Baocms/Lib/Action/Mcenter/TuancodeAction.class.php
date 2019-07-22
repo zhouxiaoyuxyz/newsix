@@ -104,6 +104,10 @@ class TuancodeAction extends CommonAction
         $url = U('worker/weixin/tuan', array('code_id' => $code_id, 't' => NOW_TIME, 'sign' => md5($code_id . C('AUTH_KEY') . NOW_TIME)));
         $token = 'tuancode_' . $code_id;
         $file = baoQrCode($token, $url);
+        $tuan= D('Tuan')->find($detail['tuan_id']);
+        $tuanorder= D('Tuanorder')->where(array($detail['user_id'],$detail['order_id']))->find();
+        $this->assign('tuan_title',$tuan['title']);
+        $this->assign('num',$tuanorder['num']);
         $this->assign('file', $file);
         $this->assign('detail', $detail);
         $this->display();

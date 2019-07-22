@@ -1,8 +1,8 @@
 <?php
 
 class EleproductAction extends CommonAction {
-    private $create_fields = array('product_name','desc', 'cate_id', 'photo', 'price', 'is_new', 'is_hot', 'is_tuijian', 'create_time', 'create_ip');
-    private $edit_fields = array('product_name', 'desc','cate_id', 'photo', 'price', 'is_new', 'is_hot', 'is_tuijian');
+    private $create_fields = array('product_name','desc', 'cate_id', 'photo', 'price', 'shui_fanxian','wuye_fanxian','is_new', 'is_hot', 'is_tuijian', 'create_time', 'create_ip');
+    private $edit_fields = array('product_name', 'desc','cate_id', 'photo', 'price','shui_fanxian','wuye_fanxian', 'is_new', 'is_hot', 'is_tuijian');
      public function _initialize() {
         parent::_initialize();
         $getEleCate = D('Ele')->getEleCate();
@@ -164,9 +164,11 @@ class EleproductAction extends CommonAction {
         if (empty($data['price'])) {
             $this->baoError('价格不能为空');
 
-        } 
+        }
+        $data['shui_fanxian'] = (int) ($data['shui_fanxian']*100);
+        $data['wuye_fanxian'] = (int) ($data['wuye_fanxian']*100);
 
-        $data['settlement_price'] = (int)( $data['price'] - ($data['price'] *  $this->ele['rate'] /1000));
+        $data['settlement_price'] = (int)( $data['price'] - (($data['price']-$data['shui_fanxian']-$data['wuye_fanxian']) *  $this->ele['rate'] /1000));
 
         $data['is_new'] = (int) $data['is_new'];
 
@@ -283,8 +285,10 @@ class EleproductAction extends CommonAction {
             $this->baoError('价格不能为空');
 
         }
+        $data['shui_fanxian'] = (int) ($data['shui_fanxian']*100);
+        $data['wuye_fanxian'] = (int) ($data['wuye_fanxian']*100);
 
-        $data['settlement_price'] = (int)( $data['price'] - ($data['price'] *  $this->ele['rate'] /1000));
+        $data['settlement_price'] = (int)( $data['price'] - (($data['price']-$data['shui_fanxian']-$data['wuye_fanxian']) *  $this->ele['rate'] /1000));
 
         $data['is_new'] = (int) $data['is_new'];
 

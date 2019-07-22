@@ -30,8 +30,8 @@ class WeixinAction extends CommonAction {
 		$shopmoney = D('Shopmoney');
 		$data = $obj->find($code_id);
 		$shop = D('Shop')->find(array('where' => array('shop_id' => $data['shop_id'])));
-		
-		if(empty($worker) && $user_id!= $shop['user_id']){
+
+        if(empty($worker) && $user_id!= $shop['user_id']){
 			$this->error('您不属于任何一个店铺的授权员工，无权进行管理！', U('index/index'));
 		}
 		if((empty($worker['status']) || $worker['status'] !=1) && $user_id!= $shop['user_id'] ){
@@ -125,9 +125,24 @@ class WeixinAction extends CommonAction {
 				$fantuan = $order['total_price']*$CONFIG["profit"]["profit_tuan"]/100 / $order['num'];
                 D('Users')->addMoney($this->uid, $fantuan, '合伙人结佣：订单ID' . $order['order_id']);
 
+                //物业分成信息
+                $community= D('Community')->where(array('business_id'=>$order['business_id']))->find();
+                //项目经理分成
+                $community_manager=D('Communitymanager')->where(array('community_id'=>$community['community_id']))->find();
 
-				
-					$this->success('团购券'.$code_id.'消费成功！',U('/store/index/index'));
+                //第三方分成-物业分成
+                //项目经理分成比例
+                $ratio=$community_manager['third_profit']/10000;
+                //项目经理分成
+                $tuan=D('Tuan')->where(array('tuan_id'=>$order['tuan_id']))->find();;
+                $manager_profit=$tuan['third_profit']/100*$ratio;
+                D('Users')->addMoney($community_manager['user_id'],$manager_profit*100, '小区项目经理分成：团购订单ID' . $order['order_id']);
+                //小区物业分成
+                $community_profit=$tuan['third_profit']/100-$manager_profit;
+                D('Admin')->Thirdgold($community_manager['wuye_id'], $community_manager['community_id'], $community_profit*100, '小区物业分成：团购订单ID' . $order['order_id'],'tuan', $order['user_id']);
+
+
+                    $this->success('团购券'.$code_id.'消费成功！',U('/store/index/index'));
 				} else {
 					
 					$this->success('到店付团购券'.$code_id.'消费成功！',U('/store/index/index'));

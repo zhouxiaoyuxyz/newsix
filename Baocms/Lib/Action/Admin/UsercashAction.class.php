@@ -68,8 +68,8 @@ class UsercashAction extends CommonAction{
         $this->assign('page', $show);
         $this->display();
     }
-	
-	public function wuye(){
+
+    public function wuye(){
         $Userscash = D('Userscash');
         import('ORG.Util.Page');
         $map = array('type' => wuye);
@@ -103,8 +103,8 @@ class UsercashAction extends CommonAction{
         $this->assign('page', $show);
         $this->display();
     }
-	
-		public function fenzhan(){
+
+    public function fenzhan(){
         $Userscash = D('Userscash');
         import('ORG.Util.Page');
         $map = array('type' => fenzhan);
@@ -138,8 +138,75 @@ class UsercashAction extends CommonAction{
         $this->assign('page', $show);
         $this->display();
     }
-	
-	
+    public function thirdwuye(){
+        $Userscash = D('Userscash');
+        import('ORG.Util.Page');
+        $map = array('type' => thirdwuye);
+        if ($account = $this->_param('account', 'htmlspecialchars')) {
+            $map['account'] = array('LIKE', '%' . $account . '%');
+            $this->assign('account', $account);
+        }
+        $count = $Userscash->where($map)->count();
+        $Page = new Page($count, 25);
+        $show = $Page->show();
+        $list = $Userscash->where($map)->order(array('cash_id' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        $ids = array();
+        foreach ($list as $row) {
+            $ids[] = $row['admin_id'];
+        }
+        $Usersex = D('Usersex');
+        $map = array();
+        $map['admin_id'] = array('in', $ids);
+        $ex = $Usersex->where($map)->select();
+        $tmp = array();
+        foreach ($ex as $row) {
+            $tmp[$row['admin_id']] = $row;
+        }
+        foreach ($list as $key => $row) {
+            $list[$key]['bank_name'] = empty($list[$key]['bank_name']) ? $tmp[$row['admin_id']]['bank_name'] : $list[$key]['bank_name'];
+            $list[$key]['bank_num'] = empty($list[$key]['bank_num']) ? $tmp[$row['admin_id']]['bank_num'] : $list[$key]['bank_num'];
+            $list[$key]['bank_branch'] = empty($list[$key]['bank_branch']) ? $tmp[$row['admin_id']]['bank_branch'] : $list[$key]['bank_branch'];
+            $list[$key]['bank_realname'] = empty($list[$key]['bank_realname']) ? $tmp[$row['admin_id']]['bank_realname'] : $list[$key]['bank_realname'];
+        }
+        $this->assign('list', $list);
+        $this->assign('page', $show);
+        $this->display();
+    }
+    public function wuyeadmin(){
+        $Userscash = D('Userscash');
+        import('ORG.Util.Page');
+        $map = array('type' => wuyeadmin);
+        if ($account = $this->_param('account', 'htmlspecialchars')) {
+            $map['account'] = array('LIKE', '%' . $account . '%');
+            $this->assign('account', $account);
+        }
+        $count = $Userscash->where($map)->count();
+        $Page = new Page($count, 25);
+        $show = $Page->show();
+        $list = $Userscash->where($map)->order(array('cash_id' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        $ids = array();
+        foreach ($list as $row) {
+            $ids[] = $row['user_id'];
+        }
+        $Usersex = D('Usersex');
+        $map = array();
+        $map['user_id'] = array('in', $ids);
+        $ex = $Usersex->where($map)->select();
+        $tmp = array();
+        foreach ($ex as $row) {
+            $tmp[$row['user_id']] = $row;
+        }
+        foreach ($list as $key => $row) {
+            $list[$key]['bank_name'] = empty($list[$key]['bank_name']) ? $tmp[$row['user_id']]['bank_name'] : $list[$key]['bank_name'];
+            $list[$key]['bank_num'] = empty($list[$key]['bank_num']) ? $tmp[$row['user_id']]['bank_num'] : $list[$key]['bank_num'];
+            $list[$key]['bank_branch'] = empty($list[$key]['bank_branch']) ? $tmp[$row['user_id']]['bank_branch'] : $list[$key]['bank_branch'];
+            $list[$key]['bank_realname'] = empty($list[$key]['bank_realname']) ? $tmp[$row['user_id']]['bank_realname'] : $list[$key]['bank_realname'];
+        }
+        $this->assign('list', $list);
+        $this->assign('page', $show);
+        $this->display();
+    }
+
     public function audit($cash_id = 0, $status = 0){
         if (!$status) {
             $this->baoError('参数错误');
@@ -196,8 +263,8 @@ class UsercashAction extends CommonAction{
             }
         }
     }
-	
-	 //物业提现
+
+    //物业提现
     public function audit_wuye($cash_id = 0, $status = 0){
         if (!$status) {
             $this->baoError('参数错误');
@@ -216,8 +283,8 @@ class UsercashAction extends CommonAction{
             }
         }
     }
-	
-		 //分站提现
+
+    //分站提现
     public function audit_fenzhan($cash_id = 0, $status = 0){
         if (!$status) {
             $this->baoError('参数错误');
@@ -236,7 +303,47 @@ class UsercashAction extends CommonAction{
             }
         }
     }
-	
+
+    //第三方物业提现
+    public function audit_thirdwuye($cash_id = 0, $status = 0){
+        if (!$status) {
+            $this->baoError('参数错误');
+        }
+        $Userscash = D('Userscash');
+        if ($cash_id = (int) $cash_id) {
+            $data = $Userscash->find($cash_id);
+            if ($data['status'] == 0) {
+                $arr = array();
+                $arr['cash_id'] = $cash_id;
+                $arr['status'] = $status;
+                $Userscash->save($arr);
+                $this->baoSuccess('操作成功！', U('usercash/thirdwuye'));
+            } else {
+                $this->baoError('操作失败');
+            }
+        }
+    }
+    //物业管理员提现
+    public function audit_wuyeadmin($cash_id = 0, $status = 0){
+        if (!$status) {
+            $this->baoError('参数错误');
+        }
+        $Userscash = D('Userscash');
+        if ($cash_id = (int) $cash_id) {
+            $data = $Userscash->find($cash_id);
+            if ($data['status'] == 0) {
+                $arr = array();
+                $arr['cash_id'] = $cash_id;
+                $arr['status'] = $status;
+                $Userscash->save($arr);
+                D('Weixintmpl')->weixin_cash_user($data['user_id'],2);//申请提现：1会员申请，2商家同意，3商家拒绝
+                $this->baoSuccess('操作成功！', U('usercash/wuyeadmin'));
+            } else {
+                $this->baoError('操作失败');
+            }
+        }
+    }
+
     //拒绝用户提现
     public function jujue(){
         $status = (int) $_POST['status'];
@@ -276,8 +383,8 @@ class UsercashAction extends CommonAction{
             $this->ajaxReturn(array('status' => 'success', 'msg' => '拒绝退款操作成功', 'url' => U('usercash/gold')));
         }
     }
-	
-	 //拒绝商家提现
+
+    //拒绝商家提现
     public function jujue_wuye(){
         $status = (int) $_POST['status'];
         $cash_id = (int) $_POST['cash_id'];
@@ -295,8 +402,8 @@ class UsercashAction extends CommonAction{
             $this->ajaxReturn(array('status' => 'success', 'msg' => '拒绝退款操作成功', 'url' => U('usercash/wuye')));
         }
     }
-	
-	 //拒绝分站提现
+
+    //拒绝分站提现
     public function jujue_fenzhan(){
         $status = (int) $_POST['status'];
         $cash_id = (int) $_POST['cash_id'];
@@ -314,5 +421,42 @@ class UsercashAction extends CommonAction{
             $this->ajaxReturn(array('status' => 'success', 'msg' => '拒绝退款操作成功', 'url' => U('usercash/fenzhan')));
         }
     }
-    
+
+    //拒绝第三方物业提现
+    public function jujue_thirdwuye(){
+        $status = (int) $_POST['status'];
+        $cash_id = (int) $_POST['cash_id'];
+        $value = $this->_param('value', 'htmlspecialchars');
+        if (empty($value)) {
+            $this->ajaxReturn(array('status' => 'error', 'msg' => '拒绝理由请填写'));
+        }
+        if (empty($cash_id) || !($detail = D('Userscash')->find($cash_id))) {
+            $this->ajaxReturn(array('status' => 'error', 'msg' => '参数错误'));
+        }
+        $money = $detail['money'];
+        if ($status == 2) {
+            D('Admin')->Thirdgold($detail['admin_id'], 0, $money, '提现拒绝，退款');
+            D('Userscash')->save(array('cash_id' => $cash_id, 'status' => $status, 'reason' => $value));
+            $this->ajaxReturn(array('status' => 'success', 'msg' => '拒绝退款操作成功', 'url' => U('usercash/thirdwuye')));
+        }
+    }
+    //拒绝物业管理员提现
+    public function jujue_wuyeadmin(){
+        $status = (int) $_POST['status'];
+        $cash_id = (int) $_POST['cash_id'];
+        $value = $this->_param('value', 'htmlspecialchars');
+        if (empty($value)) {
+            $this->ajaxReturn(array('status' => 'error', 'msg' => '拒绝理由请填写'));
+        }
+        if (empty($cash_id) || !($detail = D('Userscash')->find($cash_id))) {
+            $this->ajaxReturn(array('status' => 'error', 'msg' => '参数错误'));
+        }
+        $money = $detail['money'];
+        if ($status == 2) {
+            D('Users')->addMoney($detail['user_id'], $money, '小区项目经理分成提现拒绝，退款');
+            D('Userscash')->save(array('cash_id' => $cash_id, 'status' => $status, 'reason' => $value));
+            $this->ajaxReturn(array('status' => 'success', 'msg' => '拒绝退款操作成功', 'url' => U('usercash/wuywadmin')));
+        }
+    }
+
 }

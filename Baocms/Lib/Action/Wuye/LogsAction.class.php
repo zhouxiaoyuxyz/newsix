@@ -172,5 +172,29 @@ class LogsAction extends CommonAction {
             $this->display();
         }
     }
+    public function moneylogs(){
+        $this->display();
+    }
+
+    public function money_data(){
+        $Usermoneylogs = D('Usermoneylogs');
+        import('ORG.Util.Page');
+        $map = array('user_id' => $this->uid);
+        $intro='小区项目经理分成';
+        $map['intro']= array('LIKE', '%' . $intro . '%');
+        $count = $Usermoneylogs->where($map)->count();
+        $Page = new Page($count, 10);
+        $show = $Page->show();
+
+        $var = C('VAR_PAGE') ? C('VAR_PAGE') : 'p';
+        $p = $_GET[$var];
+        if ($Page->totalPages < $p) {
+            die('0');
+        }
+        $list = $Usermoneylogs->where($map)->order(array('log_id' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        $this->assign('list', $list);
+        $this->assign('page', $show);
+        $this->display();
+    }
 
 }

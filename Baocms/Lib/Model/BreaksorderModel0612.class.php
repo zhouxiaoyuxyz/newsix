@@ -14,6 +14,10 @@ class BreaksorderModel extends CommonModel
         $shopyouhui = D('Shopyouhui')->find($order['shop_id']);
         //商家优惠信息
         $shop = D('Shop')->find($order['shop_id']);
+        //物业分成信息
+        $community= D('Community')->find($shop['business_id']);
+        //项目经理分成比例
+        $community_manager=D('Communitymanager')->find($community['community_id']);
         //商家信息
         $deduction = $this->get_deduction($shop['shop_id'], $order['amount'], $order['exception']);
 		//商家获得
@@ -80,7 +84,20 @@ class BreaksorderModel extends CommonModel
 		
 		D('Users')->addMoney($order['user_id'], $order['fx_money']*100, '买单返现：订单ID' . $order['order_id']);
 		//抵扣物业费
-		
+
+        //第三方分成-物业分成
+        //项目经理分成比例
+        $ratio=$community_manager['third_profit']/10000;
+        //项目经理分成
+        $manager_profit=$shopyouhui['third_profit']/100*$ratio;
+        D('Users')->addMoney($community_manager['user_id'],$manager_profit*100, '小区项目经理分成：订单ID' . $order['order_id']);
+        //小区物业分成
+        $community_profit=$shopyouhui['third_profit']/100-$manager_profit;
+        D('Admin')->Thirdgold($community_manager['wuye_id'], $community_manager['community_id'], $community_profit, '小区物业分成：订单ID' . $order['order_id'],'breaks', $order['user_id']);
+
+
+
+
 		//print_r($config['site']);
 		if(!empty($CONFIG['site']['cut'])){
 			 D('Communityorder')->orderpaid($order['user_id'], 5, $order['fx_money']*$CONFIG['site']['cut']*100);

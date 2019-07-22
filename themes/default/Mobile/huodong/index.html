@@ -1,130 +1,138 @@
 <include file="public:header"/>
 <link rel="stylesheet" href="/static/default/wap/css/shop.css">
-    <script>
-		$(function(){
-			$("#search-btn").click(function(){
-				if($(".top-search").css("display")=='block'){
-					$(".top-search").hide();
-					$(".top-title").show(200);
-				}
-				else{
-					$(".top-search").show();
-					$(".top-title").hide(200);
-				}
-			});
-			$("#search-bar li").each(function(e){
-				$(this).click(function(){
-					if($(this).hasClass("on")){
-						$(this).parent().find("li").removeClass("on");
-						$(this).removeClass("on");
-						$(".serch-bar-mask").hide();
-					}
-					else{
-						$(this).parent().find("li").removeClass("on");
-						$(this).addClass("on");
-						$(".serch-bar-mask").show();
-					}
-					$(".serch-bar-mask .serch-bar-mask-list").each(function(i){
-						
-						if(e==i){
-							$(this).parent().find(".serch-bar-mask-list").hide();
-							$(this).show();
-						}
-						else{
-							$(this).hide();
-						}
-						$(this).find("li").click(function(){
-							$(this).parent().find("li").removeClass("on");
-							$(this).addClass("on");
-						});
-					});
-				});
-			});
-		});
-    </script>
+<link rel="stylesheet" href="__TMPL__statics/css/slide.css">
+<script src="__TMPL__statics/js/slide.js"></script>
+<script>
+    $(function(){
+    });
+</script>
 
-	<header class="top-fixed bg-yellow bg-inverse">
-		<div class="top-back">
-			<a class="top-addr" href="<{:U('index/index')}>"><i class="icon-angle-left"></i></a>
-		</div>
-		<div class="top-title">
-			活动列表
-		</div>
-		
-		<div class="top-signed">
-			<a id="search-btn" href="javascript:void(0);"><i class="icon-search"></i></a>
-		</div>
-	</header>
-	 <style>
+<header>
+    <!--<div class="top-back">
+        <a class="top-addr" href="<{:U('index/index')}>"><i class="icon-angle-left"></i></a>
+    </div>
+    <div class="top-title">
+        活动列表
+    </div>
+
+    <div class="top-signed">
+        <a id="search-btn" href="javascript:void(0);"><i class="icon-search"></i></a>
+    </div>-->
+</header>
+<style>
+    body{margin:0;padding:0; background: rgb(244, 244, 244);}
+    html,body{font-family:Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;}
     .dealcard{position: relative;box-sizing: border-box; margin: -.08rem 0;}
     .dealcard .dealcard-nobooking {position: absolute;overflow: hidden;width:4rem;height:4rem;z-index: 1;}
     .dealcard .dealcard-nobooking:after {font-size:12px;background: #06c1ae;color: #fff;padding: .15rem;position: absolute;width:5.8rem; text-align: center; -webkit-transform: rotateZ(-45deg);left: -1.35rem; top:0.8rem;}
-    </style>   
-        
-    <div id="filter2" class="filter2">
-    <ul class="tab clearfix">
-      <li class="item">
-        <a href="javascript:void(0);"><span id="str_b_node">选择分类</span><em></em>
-        </a>
-      </li>
+    .ck-slide {
+        z-index: -1;
+        width: 100vw;
+        height: 21vh;
+    }
+    body{margin:0;padding:0; background: rgb(244, 244, 244);}
+    html,body{font-family:"Myriad Set Pro","Helvetica Neue",Helvetica,Arial,Verdana,sans-serif;}
+    .ck-slide ul.ck-slide-wrapper {
+        height: 21vh;
+    }
+    .item-list .desc{ font-size:0.9em;color:#777777;/* max-height:36px; */overflow:hidden;margin:5px 0;}
+    .grid-nav{border-radius:8px;margin:0 12px 1px;border-radius:8px;overflow:hidden}
+    .grid-nav .grid-nav-common{display:-webkit-box;display:-ms-flexbox;display:flex;-ms-flex-line-pack:start;align-content:flex-start;-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;color:#fff;border-bottom:1px solid #fff;font-family:PingFangSC-Medium,Tahoma,"Lucida Grande",Verdana,"Microsoft Yahei",STXihei,hei}
+    .grid-nav .grid-nav-common .grid-nav-items{border-left:1px solid #f2f2f2;-webkit-box-sizing:border-box;box-sizing:border-box;color:#fff;-webkit-box-flex:0;-ms-flex:0 1 28%;flex:0 1 28%;padding:1.6rem 0;display:-webkit-box;display:-ms-flexbox;display:flex;-ms-flex-line-pack:start;align-content:flex-start;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;background-repeat:no-repeat;background-position:left bottom;font-size:14px;line-height:1;width:28%}
+    .grid-nav .grid-nav-common .grid-nav-items .grid-nav-jhj-text{position:relative}.grid-nav .grid-nav-common .grid-nav-items .grid-nav-item-tag{color:#fff;font-size:.63rem;background:#f54c45;border-radius:7px;border-bottom-left-radius:0;position:absolute;top:-14px;right:0;padding:2px 5px;line-height:1}
+    .grid-nav .grid-nav-common .grid-nav-items:first-child{padding-left:12px;-webkit-box-flex:0;-ms-flex:0 1 31%;flex:0 1 31%;-webkit-box-pack:start;-ms-flex-pack:start;justify-content:flex-start;background-position:right bottom;width:31%}
+    .grid-nav .grid-nav-common .grid-nav-items.grid-nav-items-jhj{-webkit-box-flex:0;-ms-flex:0 1 41%;flex:0 1 41%;background:-webkit-gradient(linear,left top,right top,from(#ffbc49),to(#ffd252));background:linear-gradient(to right,#ffbc49,#ffd252);padding:0;width:42%}
+    .grid-nav .grid-nav-common .grid-nav-items.grid-nav-items-jhj .grid-nav-jhj{padding:1.6rem 0;background:url(//pic.c-ctrip.com/platform/h5/home/grid-nav-items-jhj@v7.15.png);background-repeat:no-repeat;background-size:86px auto;background-position:right bottom;text-align:center;position:relative;width:100%;color:#a05416;display:block}
+    .grid-nav .grid-nav-common .grid-nav-items.grid-nav-items-hotel{background-image:url(//pic.c-ctrip.com/platform/h5/home/grid-nav-items-hotel@v7.15.png);background-size:73px auto;border-top-left-radius:8px}
+    .grid-nav .grid-nav-common .grid-nav-items.grid-nav-items-minsu{background-image:url(//pic.c-ctrip.com/platform/h5/home/grid-nav-items-minsu@v7.15.png);background-size:37px auto}
+    .grid-nav .grid-nav-common .grid-nav-items.grid-nav-items-flight{background-image:url(//pic.c-ctrip.com/platform/h5/home/grid-nav-items-flight@v7.15.png);background-size:79px auto}
+    .grid-nav .grid-nav-common .grid-nav-items.grid-nav-items-train{background-image:url(//pic.c-ctrip.com/platform/h5/home/grid-nav-items-train.png);background-size:37px auto}
+    .grid-nav .grid-nav-common .grid-nav-items.grid-nav-items-travel{background-image:url(//pic.c-ctrip.com/platform/h5/home/grid-nav-items-travel@v7.15.png);background-size:94px auto;border-bottom-left-radius:8px}
+    .grid-nav .grid-nav-common .grid-nav-items.grid-nav-items-dingzhi{background-image:url(//pic.c-ctrip.com/platform/h5/home/grid-nav-items-dingzhi@v7.15.png);background-size:61px auto}
+    .grid-nav .grid-nav-common.grid-nav-hotel{border-top-left-radius:8px;border-top-right-radius:8px;background:-webkit-gradient(linear,left top,right top,from(#fa5956),color-stop(54%,#fb8650));background:linear-gradient(to right,#fa5956,#fb8650 54%)}
+    .grid-nav .grid-nav-common.grid-nav-flight{background:-webkit-gradient(linear,left top,right top,from(#4b8fed),to(#53bced));background:linear-gradient(to right,#4b8fed,#53bced)}
+    .grid-nav .grid-nav-common.grid-nav-travel{border-bottom-left-radius:8px;border-bottom-right-radius:8px;background:-webkit-gradient(linear,left top,right top,from(#34c2aa),to(#6cd557));background:linear-gradient(to right,#34c2aa,#6cd557);border-bottom:0}
+    header.jsmodule .img_wrap_mask{width:101%}
+    .img_mask_svgPath{fill:rgb(244, 244, 244);width:100%}
+    .masked {
+        display: block;
+        font-weight:bold;
+        /*渐变背景*/
+        background-image: -webkit-linear-gradient(left, #3498db, #f47920 10%, #d71345 20%, #f7acbc 30%,
+        #ffd400 40%, #3498db 50%, #f47920 60%, #d71345 70%, #f7acbc 80%, #ffd400 90%, #3498db);
+        color: transparent; /*文字填充色为透明*/
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;          /*背景剪裁为文字，只将文字显示为背景*/
+        background-size: 200% 100%;            /*背景图片向水平方向扩大一倍，这样background-position才有移动与变化的空间*/
+        /* 动画 */
+        animation: masked-animation 4s infinite linear;
+    }
+    @keyframes masked-animation {
+        0% {
+            background-position: 0 0;   /*background-position 属性设置背景图像的起始位置。*/
+        }
+        100% {
+            background-position: -100% 0;
+        }
+</style>
 
-      <li class="item">
-        <a href="javascript:void(0);"><span id="str_e_node">选择排序</span><em></em>
-        </a>
-      </li>
+<div class="ck-slide">
+    <ul class="ck-slide-wrapper" id="slideimg">
+        <li><img class="ck-slide" src="__TMPL__statics/img/huodong/zhoumo.png"/></li>
+        <li style="display:none"><img class="ck-slide" src="__TMPL__statics/img/huodong/zhaomu.jpg"/></li>
+        <li style="display:none"><img class="ck-slide" src="__TMPL__statics/img/huodong/tuanzhang.jpg"/></li>
     </ul>
-    
-    <div class="inner" style=" display:none">
-        <ul>
-          <li class="on"><a <if condition='empty($cat)'>on</if> href="<{:LinkTo('huodong/index',$linkArr,array('cat'=>0))}>" >全部分类</a></li>
-                <volist name="cates" id="item">
-                    <li <if condition="$item['cate_id'] eq $cat">style="color:red;"</if> ><a href="<{:LinkTo('huodong/index',$linkArr,array('cat'=>$item['cate_id']))}>"><{$item.cate_name}></a></li>
-                </volist>
-               
-
+    <!-- <a href="javascript:;" class="ctrl-slide ck-prev">上一张</a>
+     <a href="javascript:;" class="ctrl-slide ck-next">下一张</a>-->
+    <div class="ck-slidebox">
+        <div class="slideWrap">
+            <ul class="dot-wrap">
+                <li class="current"><em>1</em></li>
+                <li><em>2</em></li>
+                <li><em>3</em></li>
             </ul>
-    
+        </div>
     </div>
-    
-    
-    
-    <div class="inner" style="display:none;">
-              <ul>
-              
-                <li <if condition="empty($bg_time)">style="color:red;"</if> ><a href="<{:LinkTo('huodong/index',$linkArr,array('bg_time'=>0))}>">全部</a></li>
-                <li <if condition="$bg_time eq 1">style="color:red;"</if> ><a href="<{:LinkTo('huodong/index',$linkArr,array('bg_time'=>1))}>">今天</a></li>
-                <li <if condition="$bg_time eq 2">style="color:red;"</if> ><a href="<{:LinkTo('huodong/index',$linkArr,array('bg_time'=>2))}>">昨天</a></li>
-                <li <if condition="$bg_time eq 3">style="color:red;"</if> ><a href="<{:LinkTo('huodong/index',$linkArr,array('bg_time'=>3))}>">一周内</a></li>
-                <li <if condition="$bg_time eq 4">style="color:red;"</if> ><a href="<{:LinkTo('huodong/index',$linkArr,array('bg_time'=>4))}>">一月内</a></li>
-                <li <if condition="$bg_time eq 5">style="color:red;"</if> ><a href="<{:LinkTo('huodong/index',$linkArr,array('bg_time'=>5))}>">一月前</a></li>
-
-          
-
-            </ul>
-      </div>
-      
-      <div id="parent_container" class="inner_parent" style="display:none;">
-        <div class="innercontent"></div>
-      </div>
-      <div id="inner_container" class="inner_child" style="display:none;">
-        <div class="innercontent"></div>
-      </div>
-    
 </div>
-<!--end-->    
-
-<div id="fullbg" class="fullbg" style="display: none; height: 250px;">
-<i class="pull2"></i>
+<div style="margin-top:-23px;">
+    <svg viewBox="0 0 750 50" class="img_wrap_mask" >
+        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <path class="img_mask_svgPath" d="M750,1.70530257e-13 L750,50 L0,50 L0,1.70530257e-13 C107.666667,33.3333333 232.666667,50 375,50 C517.333333,50 642.333333,33.3333333 750,1.70530257e-13 Z">
+            </path>
+        </g>
+    </svg>
+</div>
+<div id="nav" class="nav-entry grid-nav">
+    <div class="grid-nav-common grid-nav-hotel">
+        <a id="c_hotel" class="grid-nav-items grid-nav-items-hotel"  title="招募"   href="<{:LinkTo('huodong/index',$linkArr,array('cat'=>10))}>"><span>招募</span></a>
+        <a id="c_hotel_inn" class="grid-nav-items grid-nav-items-minsu"  title="近郊游"  href="<{:LinkTo('huodong/index',$linkArr,array('cat'=>11))}>"><span>近郊游</span></a>
+        <a id="c_package_b" class="grid-nav-items grid-nav-items-jhj" title="周末去哪儿" href="<{:LinkTo('huodong/index',$linkArr,array('cat'=>6))}>" ><span class="grid-nav-jhj"><span class="grid-nav-jhj-text">周末去哪儿 </span></span></a>
+    </div>
+    <!--<div class="grid-nav-common grid-nav-flight">
+        <a id="c_flight" class="grid-nav-items grid-nav-items-flight" title="机票" data-href="https://dp.ctrip.com/html5/flight/swift/index"  href="/html5/flight/swift/index"><span>机票</span></a>
+        <a id="c_train_ticket" class="grid-nav-items grid-nav-items-train"  title="火车票" data-href="https://dp.ctrip.com/webapp/train/"  href="/webapp/train/"><span>火车票</span></a>
+        <a id="c_bus_ticket" class="grid-nav-items"  title="汽车·船票" data-href="https://dp.ctrip.com/webapp/bus/"  href="/webapp/bus/"><span>汽车·船票</span></a>
+        <a id="c_car" class="grid-nav-items"  title="专车·租车" data-href="https://dp.ctrip.com/webapp/car/"  href="/webapp/car/"><span>专车·租车</span></a>
+    </div>-->
+    <div class="grid-nav-common grid-nav-travel">
+        <a id="c_vacation" class="grid-nav-items grid-nav-items-travel"  title="推广比赛"  href="<{:LinkTo('huodong/index',$linkArr,array('cat'=>9))}>"><span>推广比赛</span></a>
+        <a id="c_crh_travel" class="grid-nav-items grid-nav-items-dingzhi"  title="充电学习"  href="<{:LinkTo('huodong/index',$linkArr,array('cat'=>8))}>"><span>充电学习</span></a>
+        <a id="c_cruise" class="grid-nav-items" style="-ms-flex:0 1 41%;flex:0 1 41%;width:42%;" title="交友茶座"  href="<{:LinkTo('huodong/index',$linkArr,array('cat'=>7))}>"><span>交友茶座</span></a>
+        <!--<a id="c_custom" class="grid-nav-items"  title="定制游" data-href="https://dp.ctrip.com/webapp/dingzhi/index?ctm_ref=C_vac_custom" href="/webapp/dingzhi/index?ctm_ref=C_vac_custom"><span>定制游</span></a>-->
+    </div>
 </div>
 
-    
-	<div class="blank-10 bg"></div>
-	<div id="item-list" class="item-list"></div>
-	<script>
-		$(document).ready(function () {
-			showFilter({ibox:'filter2',content1:'parent_container',content2:'inner_container',fullbg:'fullbg'});
-			loaddata('<{$nextpage}>', $("#item-list"), true);
-		});
-	</script>
+<div id="item-list" class="item-list"></div>
+<script>
+    $(document).ready(function () {
+        $('.ck-slide').ckSlide({
+            autoPlay: true,
+            dir: 'x',
+            isAnimate: true,
+            interval: 6000
+        });
+        loaddata('<{$nextpage}>', $("#item-list"), true);
+    });
+</script>
 
 <include file="public:footer"/>

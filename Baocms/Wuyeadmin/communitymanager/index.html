@@ -1,0 +1,88 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">设置</li>
+        <li class="li2">区域设置</li>
+        <li class="li2 li3">小区管理</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <div class="jsglNr">
+        <div class="selectNr" style="margin-top: 0px; border-top:none;">
+            <div class="left">
+                <{:BA('communitymanager/create','','添加小区分成')}>
+            </div>
+            <div class="right">
+                <form class="search_form" method="post" action="<{:U('communitymanager/index')}>">
+                    <div class="seleHidden" id="seleHidden">
+                        <span>小区名称:</span>
+                        <input type="text" name="keyword" value="<{$keyword}>" class="inptText" /><input type="submit" value="   搜索"  class="inptButton" />
+                    </div>
+                </form>
+                <a href="javascript:void(0);" class="searchG">高级搜索</a>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <form method="post" action="<{:U('communitymanager/index')}>">
+            <div class="selectNr selectNr2">
+                <div class="left">
+                    <div class="seleK">
+                        <label>
+                            <span>物业管理员</span>
+                            <input type="hidden" id="user_id" name="user_id" value="<{$user_id|default=''}>" />
+                            <input class="text" type="text" name="nickname" id="nickname"  value="<{$nickname}>" />
+                            <a mini="select"  w="800" h="600" href="<{:U('user/select')}>" class="sumit">选择用户</a>
+                        </label>
+                        <label>
+                            <span>关键字:</span>
+                            <input type="text" name="keyword" value="<{$keyword}>" class="inptText" />
+                        </label>
+                    </div>
+                </div>
+                <div class="right">
+                    <input type="submit" value="   搜索"  class="inptButton" />
+                </div>
+        </form>
+        <div class="clear"></div>
+    </div>
+    <form  target="baocms_frm" method="post">
+        <div class="tableBox">
+            <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;"  >
+                <tr>
+                    <td><input type="checkbox" class="checkAll" rel="community_id" /></td>
+                    <td>ID</td>
+                    <td>物业管理员</td>
+                    <td>小区名称</td>
+                    <td>物业公司</td>
+                    <td>项目经理分成</td>
+                    <td>操作</td>
+                </tr>
+                <foreach name="list" item="var">
+                    <tr>
+                        <td><input class="child_community_id" type="checkbox" name="id[]" value="<{$var.id}>" /></td>
+                        <td><{$var.id}></td>
+                        <td><{$users[$var['user_id']]['nickname']}></td>
+                        <td><{$var.community_name}></td>
+                        <td><{$var.wuye_name}></td>
+                        <td><{:round($var['third_profit']/100,2)}>%</td>
+                        <td>
+                            <{:BA('communitymanager/edit',array("id"=>$var["id"]),'编辑','','remberBtn')}>
+                            <{:BA('communitymanager/delete',array("id"=>$var["id"]),'删除','act','remberBtn')}>
+                        </td>
+
+                    </tr>
+                </foreach>
+            </table>
+            <{$page}>
+        </div>
+        <div class="selectNr" style="margin-bottom: 0px; border-bottom: none;">
+            <div class="left">
+                <{:BA('communitymanager/delete','','批量删除','list',' a2')}>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+<include  file='public:footer'/>
+

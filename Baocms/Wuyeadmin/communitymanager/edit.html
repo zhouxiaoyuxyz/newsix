@@ -1,0 +1,70 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">设置</li>
+        <li class="li2">小区管理</li>
+        <li class="li2 li3">编辑小区</li>
+    </ul>
+</div>
+<form target="baocms_frm" action="<{:U('communitymanager/edit',array('id'=>$detail['id']))}>" method="post">
+    <div class="mainScAdd">
+        <div class="tableBox">
+            <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+
+                <tr>
+                    <td class="lfTdBt">小区名称：</td>
+                    <td class="rgTdBt">
+                        <select name="data[community_id]" id="community_id">
+                            <if condition="$detail.community_id gt 0"><option value="<{$detail.community_id}>"><{$detail.community_name}></option><else/> <option value="0">请选择.....</option> </if>
+
+                            <volist name="community" id="vo" key="k">
+                                <option value="<{$vo.community_id}>"><{$vo.name}></option>
+                            </volist>
+                        </select>
+                        <input type="hidden" name="data[community_name]" value="<{$detail.community_name}>" id="community_name" />
+                    </td>
+                </tr>
+
+
+                <script>
+                    $("#community_id").change(function(){
+                        console.log($(this).find("option:selected").text());
+                        //$(this).option.attr("selected",true);
+                        $("#community_name").val($(this).find("option:selected").text());
+                    });
+                </script>
+
+
+                <tr>
+                    <td class="lfTdBt">物业管理员：</td>
+                    <td class="rgTdBt">
+                        <div class="lt">
+                            <input type="hidden" id="user_id" name="data[user_id]" value="<{$detail.user_id|default=''}>" class="scAddTextName" />
+                            <input class="scAddTextName" type="text" name="nickname" id="nickname"  value="<{$users.nickname}>" />
+                        </div>
+                        <a mini="select"  w="800" h="600" href="<{:U('user/select')}>" class="seleSj">选择用户</a>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="lfTdBt">物业公司：</td>
+                    <td class="rgTdBt"><input type="text" name="data[wuye_name]" value="<{$detail.wuye_name|default=''}>" readonly class="scAddTextName" />
+
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td class="lfTdBt">项目经理分成：</td>
+                    <td class="rgTdBt"><input type="text" name="data[third_profit]" value="<{:round($detail['third_profit']/100,2)}>" class="scAddTextName" />
+                        <code>如90，项目经理分成占比90%</code>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="smtQr"><input type="submit" value="确认编辑" class="smtQrIpt" /></div>
+    </div>
+</form>
+<include  file='public:footer'/>

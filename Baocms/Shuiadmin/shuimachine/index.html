@@ -35,19 +35,24 @@
                             <td><{$var["machine_id"]}></td>
                             <td><a style="color:#F00; font-size:18px; font-weight:bold"><{$var["m_sn"]}></a></td>
                             <td><{$var["model"]}></td>
-                            <td><{$admins[$var["admin_id"]]['username']}></td>
+                            <td> <php>if(!empty($admins[$var["admin_id"]]['username'])){  </php>
+                                <{$admins[$var["admin_id"]]['username']}>
+                                <php>}else if(!empty($admins[$var["hhr_id"]]['username'])){</php>
+                                <{$admins[$var["hhr_id"]]['username']}>
+                                <php>}</php>
+                            </td>
                             <td> &yen; <{$var["price"]}>元</td>
                             <td>&yen; <{$var["fanxian"]}>元</td>
-                           <td><a href="https://cli.im/api/qrcode/code?text=http://www.enjoysix.cn/shui/index/control.html?sn=<{$var['m_sn']}>" target="_blank"style="color:#F00; font-size:18px; font-weight:bold">点击下载</a></td>
+                            <td><a href="https://cli.im/api/qrcode/code?text=http://www.enjoysix.cn/shui/index/control.html?sn=<{$var['m_sn']}>" target="_blank"style="color:#F00; font-size:18px; font-weight:bold">点击下载</a></td>
                             <td><{$var["online"]}></td>
                             <td>
-                             <{:BA('shuimachine/edit',array("machine_id"=>$var["machine_id"]),'编辑','','remberBtn')}>
+                                <{:BA('shuimachine/edit',array("machine_id"=>$var["machine_id"]),'编辑','','remberBtn')}>
                                 <{:BA('shuimachine/delete',array("machine_id"=>$var["machine_id"]),'删除','act','remberBtn')}>
                             </td>
                         </tr>
                     </foreach>
-					
-					
+
+
                 </table>
                 <{$page}>
             </div>
@@ -59,7 +64,7 @@
         </form>
     </div>
 </div>
-<include  file='public:footer'/>  
+<include  file='public:footer'/>
 
 
 

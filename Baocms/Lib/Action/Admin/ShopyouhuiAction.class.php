@@ -1,6 +1,6 @@
 <?php
 class ShopyouhuiAction extends CommonAction{
-    private $create_fields = array('yh_id','shop_id', 'type_id', 'discount','deduction', 'min_amount', 'amount', 'is_open','vacuum');
+    private $create_fields = array('yh_id','shop_id', 'type_id', 'discount','deduction','third_profit', 'min_amount', 'amount', 'is_open','vacuum');
     public function index(){
         $Shopyouhui = D('Shopyouhui');
         import('ORG.Util.Page');

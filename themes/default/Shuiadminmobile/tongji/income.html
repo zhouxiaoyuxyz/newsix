@@ -1,0 +1,234 @@
+
+<include  file='public:header'/>
+<style>
+  body{padding:0;}
+  table.table1{
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    font-style: normal;
+    border-collapse:separate;
+    width:96vw;
+    margin:1em auto;
+   /* word-break:break-all; word-wrap:break-all;*/
+}
+.table1 thead th{
+    padding:5px;
+    color:#fff;
+    text-shadow:1px 1px 1px #568F23;
+    border:1px solid #93CE37;
+    border-bottom:3px solid #9ED929;
+    background-color:#9DD929;
+    background:-webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.02, rgb(123,192,67)),
+        color-stop(0.51, rgb(139,198,66)),
+        color-stop(0.87, rgb(158,217,41))
+        );
+    background: -moz-linear-gradient(
+        center bottom,
+        rgb(123,192,67) 2%,
+        rgb(139,198,66) 51%,
+        rgb(158,217,41) 87%
+        );
+    -webkit-border-top-left-radius:5px;
+    -webkit-border-top-right-radius:5px;
+    -moz-border-radius:5px 5px 0px 0px;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+}
+
+.table1 tbody td{
+    padding:10px;
+    text-align:center;
+    background-color:#DEF3CA;
+    border: 2px solid #E7EFE0;
+    -moz-border-radius:2px;
+    -webkit-border-radius:2px;
+    border-radius:2px;
+    color:#666;
+    text-shadow:1px 1px 1px #fff;
+}
+ body {
+            /* These styles have nothing to do with the ribbon */
+             background:url(/Baocms/Fenzhan/statics/images/b.gif) 0 0 repeat;
+            padding:10px 0 0;
+            margin:auto;
+            text-align:center;
+        }
+        .ribbon {
+            display:inline-block;
+        }
+
+        .ribbon:after, .ribbon:before {
+            content: "";
+            float:left;
+            border:1.25em solid rgb(136,232,196);
+            margin-top:0.3em;
+        }
+
+        .ribbon:after {
+            border-right-color:transparent;
+        }
+
+        .ribbon:before {
+            border-left-color:transparent;
+        }
+
+        .ribbon a:link, .ribbon a:visited {
+            color:#000;
+            text-decoration:none;
+            float:left;
+            height:2.8em;
+            overflow:hidden;
+        }
+
+        .ribbon span {
+            background:rgb(136,232,196);
+            display:inline-block;
+            line-height:2.5em;
+            padding:0 0.5em;
+            position:relative;
+            margin-top:0.3em;
+            -webkit-transition: background-color 0.2s, margin-top 0.2s;  /* Saf3.2+, Chrome */
+            -moz-transition: background-color 0.2s, margin-top 0.2s;  /* FF4+ */
+            -ms-transition: background-color 0.2s, margin-top 0.2s;  /* IE10 */
+            -o-transition: background-color 0.2s, margin-top 0.2s;  /* Opera 10.5+ */
+            transition: background-color 0.2s, margin-top 0.2s;
+        }
+
+        .ribbon a:hover span {
+            background:#FFD204;
+            margin-top:0;
+        }
+
+        .ribbon span:before {
+            content: "";
+            position:absolute;
+            top:2.7em;
+            left:0;
+            border-right:0.5em solid #9B8651;
+            border-bottom:0.5em solid #fff;
+        }
+
+        .ribbon span:after {
+            content: "";
+            position:absolute;
+            top:2.7em;
+            right:0;
+            border-left:0.5em solid #9B8651;
+            border-bottom:0.5em solid #fff;
+        }
+</style>
+<div style="display:flex;flex-direction:row;">
+    <div style="margin:0 auto;">
+        <div class='ribbon'style="height:4rem;font-size: 1rem;">
+            <a href="<{:U('shuimachine/index')}>" style="font-size:1em;" ><span>易水源</span></a>
+            <a href="<{:U('tongji/income')}>"  style="font-size:1em;"  ><span>收入统计</span></a>
+            <a href="<{:U('logs/tixian')}>" style="font-size:1em;"  ><span>分站提现</span></a>
+        </div>
+    </div>
+    <div style="margin-right:10px;padding-top:2px;font-size:0.8em;">
+        <a href="<{:U('login/logout')}>"><img src="__TMPL__statics/images/logout.png" style="display:block;width:30px;"/>
+            退出</a>
+    </div>
+</div>
+
+<div class="main-jsgl main-sc">
+    <p class="attention" style="height:2em;font-size:1.1em;"><span>注意：</span>这里查询的是平台收入明细。</p>
+    <div class="jsglNr">
+        <div class="selectNr" style="margin-top: 0px;border-top:none; padding-bottom: 0px;width:90vw;margin:0 auto;">
+            <div class="right" >
+               <!-- <form class="search_form" method="post" action="<{:U('tongji/income')}>"> 
+                    <div class="seleHidden" id="seleHidden">
+                        <div class="seleK"> -->
+                           
+                            <!--<label>
+                                <span>类型</span>
+                                <select name="type" class="select w100">
+                                    <option value="999">请选择</option>
+                                    <foreach name="types" key="key" item="item">
+                                        <option <eq name="type" value="$key">selected="selected"</eq>  value="<{$key}>"><{$item}></option>
+                                    </foreach>
+                                </select>
+                            </label>-->
+                          <!--  <label>
+								<input type="hidden" id="user_id" name="user_id" value="<{$user_id|default=''}>"/>
+                                 <a mini="select"  w="1000" h="600" href="<{:U('user/select')}>" class="seleSj">选择用户</a>
+							 </label>
+							 <label>
+                                <input type="submit" value="   搜索"  class="inptButton" />
+                            </label>
+                        </div>
+                    </div> 
+                </form>-->
+                <a href="javascript:void(0);" class="searchG" style="color:#fff;">高级搜索</a>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <form method="post" action="<{:U('tongji/income')}>">
+            <div class="selectNr selectNr2" style="height:5em;margin-bottom: 0px; padding-bottom: 0px;">
+                <div class="left" style="width:65vw;">
+                    <div class="seleK">
+                        
+                        <!--<label>
+                            <span>类型</span>
+                            <select name="type" class="select w80">
+                                <option value="999">请选择</option>
+                                <foreach name="types" key="key" item="item">
+                                    <option <eq name="type" value="$key">selected="selected"</eq>  value="<{$key}>"><{$item}></option>
+                                </foreach>
+
+                            </select>
+                        </label>-->
+                        <label>
+                            <span>开始时间</span>
+                            <input type="text" name="bg_date" value="<{$bg_date|default=''}>"  onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"  class="text w150" />
+                        </label>
+                        <label>
+                            <span>结束时间</span>
+                            <input type="text" name="end_date" value="<{$end_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"  class="text w150" />
+                        </label>
+                       
+                    </div>
+                </div>
+                <div class="right" style="margin-top:1em;width:27vw;">
+                    <input type="submit" value="   搜索"  class="inptButton" />
+                </div>
+                <div class="clear"></div>
+            </div>
+        </form>
+       
+         <div>
+            <form  target="baocms_frm" method="post">
+                <table class="table1">
+                   <thead> 
+                      <tr>                        
+                          <th>用户</th>
+                          <th>金额</th>
+                          <th>备注</th>
+                          <th>日志时间</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                          <td colspan="8">总计：<{:round($sum/100,2)}>元</td>
+                      </tr>
+
+                      <foreach name="list" item="var">
+                          <tr>
+                              <td><{$users[$var['user_id']]['nickname']}></td>
+                              <td><{:round($var['gold']/100,2)}></td>
+                              <td><{$var.intro}></td>
+                              <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+                          </tr>
+                      </foreach>
+                   </tbody>
+                </table>
+                <{$page}>
+          </form>
+        </div>
+        <include  file='public:footer'/>       

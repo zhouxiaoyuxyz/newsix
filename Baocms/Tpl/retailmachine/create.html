@@ -1,0 +1,35 @@
+<include  file='public:header'/>
+<div class="mainBt">
+    <ul>
+        <li class="li1">易水源</li>
+        <li class="li2">饮水机管理</li>
+        <li class="li2 li3">添加自动售货机</li>
+    </ul>
+</div>
+<form  target="baocms_frm" action="<{:U('retailmachine/create')}>" method="post">
+    <div class="mainScAdd">
+        <div class="tableBox">
+            <table bordercolor="#e1e6eb" cellspacing="0" width="100%" border="1px"  style=" border-collapse: collapse; margin:0px; vertical-align:middle; background-color:#FFF;" >
+
+                <tr>
+                    <td class="lfTdBt">自动售货机编号：</td>
+                    <td class="rgTdBt"><input type="text" name="data[m_sn]" value="<{$detail.m_sn|default=''}>" class="scAddTextName" />
+
+                    </td>
+                </tr>    
+
+
+                <tr>
+                    <td class="lfTdBt">自动售货机名称：</td>
+                    <td class="rgTdBt">
+                        <input type="text" name="data[m_name]" value="<{$detail.m_name|default=''}>" class="scAddTextName" />
+                    </td>
+                </tr>
+
+
+            </table>
+        </div>
+        <div class="smtQr"><input type="submit" value="确认添加" class="smtQrIpt" /></div>
+    </div>
+</form>
+<include  file='public:footer'/>   

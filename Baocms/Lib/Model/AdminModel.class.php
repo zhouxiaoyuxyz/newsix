@@ -37,7 +37,7 @@ class AdminModel extends CommonModel{
 					'admin_id' => $admin_id, 
 					'city_id' => $id, 
 					'type' => $type, 
-					'user_id' => $user_id, 
+					'user_id' => $user_id,
 					'gold' => $num, 
 					'intro' => $intro, 
 					'create_time' => NOW_TIME, 
@@ -57,6 +57,25 @@ class AdminModel extends CommonModel{
 					'create_ip' => get_client_ip()
 				));
 			}
+        }
+        return false;
+    }
+
+    //写入第三方分成-物业分成金块
+    public function Thirdgold($admin_id, $community_id, $num, $intro = '',$type, $user_id){
+        if ($this->updateCount($admin_id, 'third_profit', $num)) {
+
+                return D('Thirdgoldlogs')->add(array(
+                    'admin_id' => $admin_id,
+                    'community_id' => $community_id,
+                    'user_id' => $user_id,
+                    'gold' => $num,
+                    'type' => $type,
+                    'intro' => $intro,
+                    'create_time' => NOW_TIME,
+                    'create_ip' => get_client_ip()
+                ));
+
         }
         return false;
     }

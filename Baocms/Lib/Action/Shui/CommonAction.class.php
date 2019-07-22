@@ -7,7 +7,9 @@ class CommonAction extends Action{
     protected $areas = array();
     protected $city_id = 0;
     protected $city = array();
+   // protected $_admin = array();
     protected function _initialize(){
+       // $this->_admin = session('admin');
         define('__HOST__', 'https://' . $_SERVER['HTTP_HOST']);
         $this->_CONFIG = D('Setting')->fetchAll();
         $this->citys = D('City')->fetchAll();

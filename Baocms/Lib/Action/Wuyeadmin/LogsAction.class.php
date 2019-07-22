@@ -48,11 +48,11 @@ class LogsAction extends CommonAction {
             }
         }
         // var_dump($map);die();
-		$communitys =  D('Community')->where(array('uid'=> $this->_admin['admin_id']))->getField('community_id',true);
-		//print_r($communitys);
-		$map['community_id']=array('IN', $communitys);
-		
-        $count = $logs->where($map)->count(); // 查询满足要求的总记录数 
+        $communitys =  D('Community')->where(array('uid'=> $this->_admin['admin_id']))->getField('community_id',true);
+        //print_r($communitys);
+        $map['community_id']=array('IN', $communitys);
+
+        $count = $logs->where($map)->count(); // 查询满足要求的总记录数
         $sum = $logs->where($map)->sum('money');
         $Page = new Page($count, 10); // 实例化分页类 传入总记录数和每页显示的记录数
         $show = $Page->show(); // 分页显示输出
@@ -61,9 +61,9 @@ class LogsAction extends CommonAction {
         foreach ($list as $key => $val) {
             $user_ids[$val['user_id']] = $val['user_id'];
             $community_ids[$val['community_id']] = $val['community_id'];
-			if( $val['money']==0 &&  $val['user_id'] != $val['admin_id']){
-				$user_ids[$val['admin_id']] = $val['admin_id'];
-			}
+            if( $val['money']==0 &&  $val['user_id'] != $val['admin_id']){
+                $user_ids[$val['admin_id']] = $val['admin_id'];
+            }
         }
         $this->assign('sum',$sum);
         $this->assign('communitys',D('Community')->itemsByIds($community_ids));
@@ -73,7 +73,9 @@ class LogsAction extends CommonAction {
         $this->assign('page', $show); // 赋值分页输出
         $this->display(); // 输出模板
     }
-		public function wuyemoney() {		$Wuyegoldlogs = D('Wuyegoldlogs');
+
+    public function wuyemoney() {
+        $Wuyegoldlogs = D('Wuyegoldlogs');
         import('ORG.Util.Page'); // 导入分页类
         $map = array();
 
@@ -105,28 +107,29 @@ class LogsAction extends CommonAction {
             $map['intro'] = array('LIKE', '%' . $keyword . '%');
             $this->assign('keyword', $keyword);
         }
-		$map['admin_id']=$this->_admin['admin_id'];
-        $count = $Wuyegoldlogs->where($map)->count(); // 查询满足要求的总记录数 
+        $map['admin_id']=$this->_admin['admin_id'];
+        $count = $Wuyegoldlogs->where($map)->count(); // 查询满足要求的总记录数
         $Page = new Page($count, 25); // 实例化分页类 传入总记录数和每页显示的记录数
         $show = $Page->show(); // 分页显示输出
         $list = $Wuyegoldlogs->where($map)->order(array('log_id' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
-		//print_r($list);
+        //print_r($list);
         $user_ids = array();
         foreach ($list as $k => $val) {
 
             $communities[$val['community_id']] = $val['community_id'];
         }
-		//print_r($communities);
+        //print_r($communities);
         $this->assign('communities', D('Community')->itemsByIds($communities));
         $this->assign('list', $list); // 赋值数据集www.hatudou.com  二开开发qq  120585022
         $this->assign('page', $show); // 赋值分页输出
-        $this->display(); // 输出模板	}
-	
-	
-	    public function tixian(){
-			
-		$admin=D('Admin')->where(array('admin_id' => $this->_admin['admin_id']))->find();
-		//print_r($admin);
+        $this->display(); // 输出模板
+    }
+
+
+    public function tixian(){
+
+        $admin=D('Admin')->where(array('admin_id' => $this->_admin['admin_id']))->find();
+        //print_r($admin);
         $admin_id = $admin['admin_id'];
         $userscash = D('Userscash')->where(array('admin_id' => $admin_id))->find();
         $shop = D('Shop')->where(array('user_id' => $user_id))->find();
@@ -177,13 +180,13 @@ class LogsAction extends CommonAction {
             $s_mobile = session('mobile');
             $cash_code = session('cash_code');
             if (empty($yzm)) {
-                $this->baoSuccess('请输入短信验证码', U('logs/tixian'));
+            $this->baoSuccess('请输入短信验证码', U('logs/tixian'));
             }
             if ($users['mobile'] != $s_mobile) {
-                $this->baoSuccess('手机号码和收取验证码的手机号不一致！', U('logs/tixian'));
+            $this->baoSuccess('手机号码和收取验证码的手机号不一致！', U('logs/tixian'));
             }
             if ($yzm != $cash_code) {
-                $this->baoSuccess('短信验证码不正确', U('logs/tixian'));
+            $this->baoSuccess('短信验证码不正确', U('logs/tixian'));
             }**/
             $data['bank_branch'] = htmlspecialchars($_POST['bank_branch']);
             $data['admin_id'] = $admin_id;
@@ -202,12 +205,12 @@ class LogsAction extends CommonAction {
             $arr['bank_realname'] = $data['bank_realname'];
             $arr['bank_branch'] = $data['bank_branch'];
             D("Userscash")->add($arr);
-			$usersex=D('Usersex')->where(array('admin_id' => $admin_id))->find();
-			if($usersex){
-				D('Usersex')->save($data);
-			}else{
-				D('Usersex')->add($data);
-			}
+            $usersex=D('Usersex')->where(array('admin_id' => $admin_id))->find();
+            if($usersex){
+                D('Usersex')->save($data);
+            }else{
+                D('Usersex')->add($data);
+            }
             D('Admin')->Money($admin_id, 0, -$gold, '物业申请提现，扣款');
             $this->baoSuccess('申请提现成功', U('logs/tixian'));
         } else {
@@ -218,7 +221,104 @@ class LogsAction extends CommonAction {
             $this->assign('userscash', $userscash);
             $this->display();
         }
-    }	
+    }
+    public function thirdtixian(){
+
+        $admin=D('Admin')->where(array('admin_id' => $this->_admin['admin_id']))->find();
+        //print_r($admin);
+        $admin_id = $admin['admin_id'];
+        $userscash = D('Userscash')->where(array('admin_id' => $admin_id))->find();
+        $shop = D('Shop')->where(array('user_id' => $user_id))->find();
+        if ($shop == '') {
+            $cash_money = $this->_CONFIG['cash']['user'];
+            $cash_money_big = $this->_CONFIG['cash']['user_big'];
+        } elseif ($shop['is_renzheng'] == 0) {
+            $cash_money = $this->_CONFIG['cash']['shop'];
+            $cash_money_big = $this->_CONFIG['cash']['shop_big'];
+        } elseif ($shop['is_renzheng'] == 1) {
+            $cash_money = $this->_CONFIG['cash']['renzheng_shop'];
+            $cash_money_big = $this->_CONFIG['cash']['renzheng_shop_big'];
+        } else {
+            $cash_money = $this->_CONFIG['cash']['user'];
+            $cash_money_big = $this->_CONFIG['cash']['user_big'];
+        }
+        //对比手机号码，验证码
+        $shop = D('Shop')->where(array('shop_id' => $this->shop_id))->find();
+        $users = D('Users')->where(array('user_id' => $shop['user_id']))->find();
+        $s_mobile = session('mobile');
+        $cash_code = session('cash_code');
+        //获取life_code
+        if (IS_POST) {
+            $gold = (int) ($_POST['money'] * 100);
+            if ($gold <= 0) {
+                $this->baoSuccess('提现金额不合法', U('logs/thirdtixian'));
+            }
+            if ($gold < $cash_money * 100) {
+                $this->baoSuccess('提现金额小于最低提现额度', U('logs/thirdtixian'));
+            }
+            if ($gold > $cash_money_big * 100) {
+                $this->baoSuccess('您单笔最多能提现' . $cash_money_big . '元', U('logs/thirdtixian'));
+            }
+            if ($gold > $admin['gold'] || $admin['gold'] == 0) {
+                $this->baoSuccess('商户资金不足，无法提现', U('logs/thirdtixian'));
+            }
+            if (!($data['bank_name'] = htmlspecialchars($_POST['bank_name']))) {
+                $this->baoSuccess('开户行不能为空', U('logs/thirdtixian'));
+            }
+            if (!($data['bank_num'] = htmlspecialchars($_POST['bank_num']))) {
+                $this->baoSuccess('银行账号不能为空', U('logs/thirdtixian'));
+            }
+            if (!($data['bank_realname'] = htmlspecialchars($_POST['bank_realname']))) {
+                $this->baoSuccess('开户姓名不能为空', U('logs/thirdtixian'));
+            }
+            //获取手机，验证码
+            /**$yzm = $this->_post('yzm');
+            $s_mobile = session('mobile');
+            $cash_code = session('cash_code');
+            if (empty($yzm)) {
+            $this->baoSuccess('请输入短信验证码', U('logs/tixian'));
+            }
+            if ($users['mobile'] != $s_mobile) {
+            $this->baoSuccess('手机号码和收取验证码的手机号不一致！', U('logs/tixian'));
+            }
+            if ($yzm != $cash_code) {
+            $this->baoSuccess('短信验证码不正确', U('logs/tixian'));
+            }**/
+            $data['bank_branch'] = htmlspecialchars($_POST['bank_branch']);
+            $data['admin_id'] = $admin_id;
+            $arr = array();
+            $arr['admin_id'] = $admin_id;
+            //$arr['shop_id'] = $this->shop_id;
+            //提现商家
+            //$arr['city_id'] = $shop['city_id'];
+            //$arr['area_id'] = $shop['area_id'];
+            $arr['money'] = $gold;
+            $arr['type'] = thirdwuye;
+            $arr['addtime'] = NOW_TIME;
+            $arr['account'] = $admin['username'];
+            $arr['bank_name'] = $data['bank_name'];
+            $arr['bank_num'] = $data['bank_num'];
+            $arr['bank_realname'] = $data['bank_realname'];
+            $arr['bank_branch'] = $data['bank_branch'];
+            D("Userscash")->add($arr);
+            $usersex=D('Usersex')->where(array('admin_id' => $admin_id))->find();
+            if($usersex){
+                D('Usersex')->save($data);
+            }else{
+                D('Usersex')->add($data);
+            }
+            D('Admin')->Thirdgold($admin_id, 0, -$gold, '物业申请提现，扣款');
+            $this->baoSuccess('申请提现成功', U('logs/thirdtixian'));
+        } else {
+            $this->assign('info', D('Usersex')->where(array('admin_id' => $admin_id))->find());
+            $this->assign('money', $admin['third_profit']/100);
+            $this->assign('cash_money', $cash_money);
+            $this->assign('cash_money_big', $cash_money_big);
+            $this->assign('userscash', $userscash);
+            $this->display();
+        }
+    }
+
     public function select() {
         $Community = D('Community');
         import('ORG.Util.Page'); // 导入分页类
@@ -235,7 +335,7 @@ class LogsAction extends CommonAction {
             $map['area_id'] = $area_id;
             $this->assign('area_id', $area_id);
         }
-        $count = $Community->where($map)->count(); // 查询满足要求的总记录数 
+        $count = $Community->where($map)->count(); // 查询满足要求的总记录数
         $Page = new Page($count, 10); // 实例化分页类 传入总记录数和每页显示的记录数
         $show = $Page->show(); // 分页显示输出
         $list = $Community->where($map)->limit($Page->firstRow . ',' . $Page->listRows)->select();

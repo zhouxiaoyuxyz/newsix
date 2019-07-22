@@ -116,8 +116,8 @@ class TuanAction extends CommonAction
         $this->assign('nextpage', LinkTo('tuan/loaddata', array('cat' => $cat, 'area' => $area, 'business' => $business, 'order' => $order, 't' => NOW_TIME, 'keyword' => $keyword, 'p' => '0000')));
         $this->display();
     }
-  
-  	public function index_aibox()
+
+    public function index_aibox()
     {
         $keyword = $this->_param('keyword', 'htmlspecialchars');
         $this->assign('keyword', $keyword);
@@ -136,7 +136,7 @@ class TuanAction extends CommonAction
         $this->assign('nextpage', LinkTo('tuan/loaddata', array('cat' => $cat, 'area' => $area, 'business' => $business, 'order' => $order, 't' => NOW_TIME, 'keyword' => $keyword, 'p' => '0000')));
         $this->display();
     }
-  
+
     public function loaddata()
     {
         $Tuan = D('Tuan');
@@ -173,12 +173,12 @@ class TuanAction extends CommonAction
                 $orderby = array('create_time' => 'desc');
                 break;
             case 2:
-           		 $orderby = array('sold_num' => 'desc');
-               
+                $orderby = array('sold_num' => 'desc');
+
                 break;
             default:
                 // $orderby = array('orderby' => 'asc', 'tuan_id' => 'desc');
-            $orderby = " (ABS(lng - '{$lng}') +  ABS(lat - '{$lat}') ) asc, create_time desc";
+                $orderby = " (ABS(lng - '{$lng}') +  ABS(lat - '{$lat}') ) asc, create_time desc";
                 break;
         }
         $count = $Tuan->where($map)->count();
@@ -200,12 +200,12 @@ class TuanAction extends CommonAction
             $val['end_time'] = strtotime($val['end_date']) - NOW_TIME + 86400;
             $list[$k] = $val;
         }
-     
+
         if ($shop_ids) {
-          foreach ($shop_ids as $k) {                
-               $shops[$k] = D('Shop')->getShopById($k);
+            foreach ($shop_ids as $k) {
+                $shops[$k] = D('Shop')->getShopById($k);
             }
-         
+
             //$shops = D('Shop')->itemsByIds($shop_ids);
             $ids = array();
             foreach ($shops as $k => $val) {
@@ -220,10 +220,10 @@ class TuanAction extends CommonAction
                     $showshops[$val] = $shops[$val];
                 }
             }
-          // print_r($shops);
+            // print_r($shops);
             $this->assign('shops', $shops);
         }
-       
+
         $this->assign('list', $list);
         // 赋值数据集www.hatudou.com  二开开发qq  120585022
         $this->assign('page', $show);
@@ -391,16 +391,16 @@ class TuanAction extends CommonAction
             $this->fengmiMsg('该商品已经结束');
         }
         $num = (int) $this->_post('num');
-        
+
         if ($num <= 0 || $num > 99) {
             $this->fengmiMsg('请输入正确的购买数量');
         }
-		
-		if ($num > $detail['num']) {
+
+        if ($num > $detail['num']) {
             $this->fengmiMsg('亲，您最多购买' . $detail['num'] . '份哦！');
         }
-		
-		
+
+
         if ($num > $detail['xiangou'] && $detail['xiangou'] > 0) {
             $this->fengmiMsg('亲，每人只能购买' . $detail['xiangou'] . '份哦！');
         }
@@ -433,25 +433,25 @@ class TuanAction extends CommonAction
                 }
             }
         }
-		
-		$business_id=$this->_post('business_id');
-		
-		if (empty($business_id)) {
-                $this->fengmiMsg('请选择自提地址!');
-            }
-		
-			session('city_id',(int) $this->_post('city_id'));
-			session('area_id', (int) $this->_post('area_id'));
-			session('business_id', (int) $this->_post('business_id'));
-		
-		
+
+        $business_id=$this->_post('business_id');
+
+        if (empty($business_id)) {
+            $this->fengmiMsg('请选择自提地址!');
+        }
+
+        session('city_id',(int) $this->_post('city_id'));
+        session('area_id', (int) $this->_post('area_id'));
+        session('business_id', (int) $this->_post('business_id'));
+
+
         $data = array(
             'tuan_id' => $tuan_id,
             'num' => $num,
-			'mobile' => $this->_post('mobile'),
-			'city_id' => (int) $this->_post('city_id'),
-			'area_id' => (int) $this->_post('area_id'),
-			'business_id' => (int) $this->_post('business_id'),
+            'mobile' => $this->_post('mobile'),
+            'city_id' => (int) $this->_post('city_id'),
+            'area_id' => (int) $this->_post('area_id'),
+            'business_id' => (int) $this->_post('business_id'),
             'user_id' => $this->uid,
             'shop_id' => $detail['shop_id'],
             'create_time' => NOW_TIME,
@@ -460,6 +460,7 @@ class TuanAction extends CommonAction
             'mobile_fan' => $detail['mobile_fan'] * $num,
             //'need_pay' => $detail['tuan_price'] * $num - $detail['mobile_fan'] * $num,
             'need_pay' => $detail['tuan_price'] * $num,
+            'settlement_price'=>$detail['settlement_price']* $num,
             'status' => 0,
             'is_mobile' => 1
         );
@@ -500,6 +501,19 @@ class TuanAction extends CommonAction
         $detail['city_id']=$orderlist[0]['city_id'];
         $detail['area_id']=$orderlist[0]['area_id'];
         $detail['business_id']=$orderlist[0]['business_id'];
+        //爆款是否以前购买，如果是禁止下单
+
+        //爆款限购
+        $Tuan = D('Tuan');
+        $hot_tuan_map = array('audit' => 1, 'closed' => 0, 'city_id' => $this->city_id, 'end_date' => array('EGT', TODAY));
+        $hottuanlist = $Tuan->where($hot_tuan_map)->order('hot_time desc')->limit(0 . ',' . 2)->select();
+        $id_arr = array($hottuanlist[0]['tuan_id'], $hottuanlist[1]['tuan_id']);
+        foreach ($id_arr as $var) {
+            if($tuan_id==$var){
+                $this->assign('hotproduct', 'hot');
+            }
+        }
+
         $this->assign('detail', $detail);
         $this->mobile_title = '支付订单';
         $this->display();
@@ -569,19 +583,19 @@ class TuanAction extends CommonAction
                 for ($i = 0; $i < $order['num']; $i++) {
                     $local = $obj->getCode();
                     $insert = array(
-						'user_id' => $this->uid, 
-						'shop_id' => $tuan['shop_id'], 
-						'order_id' => $order['order_id'], 
-						'tuan_id' => $order['tuan_id'], 
-						'code' => $local, 
-						'price' => 0, 
-						'real_money' => 0, 
-						'real_integral' => 0, 
-						'fail_date' => $tuan['fail_date'], 
-						'settlement_price' => 0, 
-						'create_time' => NOW_TIME, 
-						'create_ip' => $ip
-					);
+                        'user_id' => $this->uid,
+                        'shop_id' => $tuan['shop_id'],
+                        'order_id' => $order['order_id'],
+                        'tuan_id' => $order['tuan_id'],
+                        'code' => $local,
+                        'price' => 0,
+                        'real_money' => 0,
+                        'real_integral' => 0,
+                        'fail_date' => $tuan['fail_date'],
+                        'settlement_price' => 0,
+                        'create_time' => NOW_TIME,
+                        'create_ip' => $ip
+                    );
                     $codes[] = $local;
                     $obj->add($insert);
                 }
@@ -591,21 +605,21 @@ class TuanAction extends CommonAction
                 //发送团购劵
                 if ($this->_CONFIG['sms']['dxapi'] == 'dy') {
                     D('Sms')->DySms($this->_CONFIG['site']['sitename'], 'sms_tuan_user', $this->member['mobile'], array(
-						'code' => $codestr, 
-						'user' => $this->member['nickname'], 
-						'shop_name' => $tuan['title']
-					));
+                        'code' => $codestr,
+                        'user' => $this->member['nickname'],
+                        'shop_name' => $tuan['title']
+                    ));
                 } else {
                     D('Sms')->sendSms('sms_tuan', $this->member['mobile'], array(
-						'code' => $codestr, 
-						'nickname' => $this->member['nickname'], 
-						'tuan' => $tuan['title']
-					));
+                        'code' => $codestr,
+                        'nickname' => $this->member['nickname'],
+                        'tuan' => $tuan['title']
+                    ));
                 }
                 //更新贡献度
                 D('Users')->prestige($this->uid, 'tuan');
                 D('Sms')->tuanTZshop($tuan['shop_id']);
-               // D('Weixintmpl')->weixin_notice_tuan_user($order_id,$this->uid,0);
+                // D('Weixintmpl')->weixin_notice_tuan_user($order_id,$this->uid,0);
                 $this->fengmiMsg('恭喜您下单成功！', U('mcenter/tuan/index'));
             } else {
                 $this->fengmiMsg('您已经设置过该抢购为到店付了！');
@@ -634,12 +648,12 @@ class TuanAction extends CommonAction
                     }
                     D('Users')->save(array('user_id' => $this->uid, 'integral' => $member['integral']));
                     D('Userintegrallogs')->add(array(
-						'user_id' => $this->uid, 
-						'integral' => -$used, 
-						'intro' => '订单' . $order_id . '积分抵用', 
-						'create_time' => NOW_TIME, 
-						'create_ip' => get_client_ip()
-					));
+                        'user_id' => $this->uid,
+                        'integral' => -$used,
+                        'intro' => '订单' . $order_id . '积分抵用',
+                        'create_time' => NOW_TIME,
+                        'create_ip' => get_client_ip()
+                    ));
                     $order['use_integral'] = $used;
                     //$order['need_pay'] = $order['total_price'] - $order['mobile_fan'] - ($used*$this->_CONFIG['integral']['buy']);
                     $order['need_pay'] = $order['total_price']  - ($used*$this->_CONFIG['integral']['buy']);
@@ -649,15 +663,15 @@ class TuanAction extends CommonAction
             $logs = D('Paymentlogs')->getLogsByOrderId('tuan', $order_id);
             if (empty($logs)) {
                 $logs = array(
-					'type' => 'tuan', 
-					'user_id' => $this->uid, 
-					'order_id' => $order_id, 
-					'code' => $code, 
-					'need_pay' => $order['need_pay'], 
-					'create_time' => NOW_TIME, 
-					'create_ip' => get_client_ip(), 
-					'is_paid' => 0
-				);
+                    'type' => 'tuan',
+                    'user_id' => $this->uid,
+                    'order_id' => $order_id,
+                    'code' => $code,
+                    'need_pay' => $order['need_pay'],
+                    'create_time' => NOW_TIME,
+                    'create_ip' => get_client_ip(),
+                    'is_paid' => 0
+                );
                 $logs['log_id'] = D('Paymentlogs')->add($logs);
             } else {
                 $logs['need_pay'] = $order['need_pay'];
@@ -665,8 +679,8 @@ class TuanAction extends CommonAction
                 D('Paymentlogs')->save($logs);
             }
             $codestr = join(',', $codes);
-			
-			//D('Weixintmpl')->weixin_notice_tuan_user($order_id,$this->uid,1);
+
+            //D('Weixintmpl')->weixin_notice_tuan_user($order_id,$this->uid,1);
             $this->fengmiMsg('订单设置完毕，即将进入付款。', U('payment/payment', array('log_id' => $logs['log_id'])));
             die;
         }
@@ -683,6 +697,8 @@ class TuanAction extends CommonAction
             }
         }
     }
+
+
     public function near()
     {
         $lat = addslashes(cookie('lat'));

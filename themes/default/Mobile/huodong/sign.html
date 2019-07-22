@@ -37,7 +37,7 @@
 			总人数
 		</div>
 		<div class="x9">
-			<select name="data[num]"  class="text-select" >
+			<select id="numselect" name="data[num]"  class="text-select" onchange="getnum();">
 				<option value="0">请选择...</option>
 				                <option value="1">1</option>
                                 <option value="2">2</option>
@@ -53,7 +53,47 @@
 		</div>
 	</div>
 	</if>
-
+	<script>
+		function getnum(){
+			var num=$("#numselect option:selected").val();
+			var price= <{$detail.price}>;
+			var needpay=num*price;
+			$("#needpay").val(needpay);
+		};
+	</script>
+	<div class="line padding border-bottom">
+		<div class="x3">
+			活动价
+		</div>
+		<div class="x9">
+			<input type="text" name="data[price]" value="<{$detail.price|default=''}>"  class="text-input datepicker" />
+		</div>
+	</div>
+	<div class="line padding border-bottom">
+		<div class="x3">
+			支付金额
+		</div>
+		<div class="x9">
+			<input id="needpay" type="text" name="need_pay" value=""  class="text-input datepicker" />
+		</div>
+	</div>
+	<ul id="pay-method" class="pay-method">
+			<li data-rel="" class="media media-x payment active">
+			<a class="float-left"  href="javascript:;">
+				<img src="/static/default/wap/image/pay/weixin_mobile.png">
+			</a>
+			<div class="media-body">
+				<div class="line">
+					<div class="x10">
+						微信支付<p>推荐已安装微信支付客户端的用户使用</p>
+					</div>
+					<div class="x2">
+						<span class="radio txt txt-small radius-circle bg-green"><i class="icon-check"></i></span>
+					</div>
+				</div>
+			</div>
+			</li>
+	</ul>
     <div class="blank-30"></div>
     <php>if(empty($MEMBER)){</php>
     <div class="container text-center"><a href="<{:u('mobile/passport/login')}>" class="button button-block button-big bg-black" type="submit">立即登录</a></div>

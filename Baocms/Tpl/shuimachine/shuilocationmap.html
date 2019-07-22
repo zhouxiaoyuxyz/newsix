@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <include  file='public:header'/>
+    <style type="text/css">
+        html,body{margin:0;padding:0;}
+        .iw_poi_title {color:#CC5522;font-size:14px;font-weight:bold;overflow:hidden;padding-right:13px;white-space:nowrap}
+        .iw_poi_content {font:12px arial,sans-serif;overflow:visible;padding-top:4px;white-space:-moz-pre-wrap;word-wrap:break-word}
+        .area{display:block;float:left;height:40px;width:60px;line-height:40px;margin-right:10px;}
+        .areaselect{display:block;float:left;height:40px;width:120px;line-height:40px;margin-right:10px;}
+        .arealabel{display:block;float:left;height:40px;width:20px;line-height:40px;margin-right:10px;}
+        .timespan{display:block;float:left;line-height:40px;height:40px;margin-right:10px;}
+        .timeinput{display:block;float:left;height:38px;width:130px;margin-right:10px;}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.1&services=true"></script>
+</head>
+<body>
+<div class="mainBt">
+    <ul>
+        <li class="li1">易水源</li>
+        <li class="li2">直饮机</li>
+        <li class="li2 li3">水站分布</li>
+    </ul>
+</div>
+<div class="main-jsgl main-sc">
+    <form method="post" action="<{:U('shuimachine/shuilocationmap')}>">
+        <div style="display:block;float:right;margin-bottom:10px;">
+            <div style="display:block;float:left;">
+                <div class="area">所在区域</div>
+                <div style="display:block;float:left;">
+                    <select name="city_id" id="city_id"  value="<{$city_id|default=''}>" class="areaselect" style="width:100px;"></select>
+                    <label class="arealabel">市</label>
+                    <select name="area_id" id="area_id"  value="<{$area_id|default=''}>" class="areaselect"></select>
+                    <label class="arealabel">区</label>
+                </div>
+            </div>
+            <script src="<{:U('app/datas/cityarea')}>"></script>
+            <script>
+                var city_id ='<{$city_id}>';
+                var area_id ='<{$area_id}>';
+                function changeCity(cid){
+                    var area_str = '<option value="0">请选择.....</option>';
+                    for(a in cityareas.area){
+                        if(cityareas.area[a].city_id ==cid){
+                            if(area_id == cityareas.area[a].area_id){
+                                area_str += '<option selected="selected" value="'+cityareas.area[a].area_id+'">'+cityareas.area[a].area_name+'</option>';
+                            }else{
+                                area_str += '<option value="'+cityareas.area[a].area_id+'">'+cityareas.area[a].area_name+'</option>';
+                            }
+                        }
+                    }
+                    $("#area_id").html(area_str);
+                }
+                $(document).ready(function(){
+                    var city_str = '<option value="0">请选择.....</option>';
+                    for(a in cityareas.city){
+                        if(city_id == cityareas.city[a].city_id){
+                            city_str += '<option selected="selected" value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+                        }else{
+                            city_str += '<option value="'+cityareas.city[a].city_id+'">'+cityareas.city[a].name+'</option>';
+                        }
+                    }
+                    $("#city_id").html(city_str);
+                    if(city_id){
+                        changeCity(city_id);
+                    }
+                    $("#city_id").change(function(){
+                        city_id = $(this).val();
+                        changeCity($(this).val());
+                    });
+                });
+            </script>
+
+            <div style="display:block;float:left;">
+                <label>
+                    <span class="timespan"> 开始时间</span>
+                    <input type="text" name="bg_date" value="<{$bg_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"  class="timeinput" />
+                </label>
+                <label>
+                    <span class="timespan">结束时间</span>
+                    <input type="text" name="end_date" value="<{$end_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"  class="timeinput"  />
+                </label>
+            </div>
+            <div style="display:block;float:left;">
+                <label>
+                    <span class="timespan"> 关键字</span>
+                    <input type="text" name="keyword" value="<{$keyword|default=''}>" class="timeinput" style="width:100px;"/>
+                </label>
+            </div>
+            <div style="display:block;float:left;margin-left:20px;">
+                <input type="submit" value="   搜索"  class="inptButton" />
+            </div>
+        </div>
+    </form>
+
+    <!--百度地图容器-->
+    <div style="width:100%;float:left;height:600px;border:#ccc solid 1px;" id="dituContent"></div>
+</div>
+</body>
+<script type="text/javascript">
+    var markerArrstr=JSON.stringify(<{$shuijson}>);
+    var markerArr = JSON.parse(markerArrstr);
+    // alert(markerArr.length);
+    //  console.log(markerArr);
+    //  alert(markerArr);
+    //创建和初始化地图函数：
+    function initMap(){
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMarker();//向地图中添加marker
+    }
+
+    //创建地图函数：
+    function createMap(){
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        if(markerArr){
+            var point = new BMap.Point(markerArr[0].lng,markerArr[0].lat);//定义一个中心点坐标
+        }else{
+            var point = new BMap.Point(119.473797,35.432224);//定义一个中心点坐标
+        }
+        map.centerAndZoom(point,15);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent(){
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl(){
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+        map.addControl(ctrl_sca);
+    }
+
+    //标注点数组
+    /* var markerArr = [{title:"时代嘉园小区",content:"謿晗论坛",point:"118.119282|31.731236",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ,{title:"银河华庭",content:"謿晗论坛",point:"118.125723|31.722436",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ,{title:"锦绣华城",content:"謿晗论坛",point:"118.104343|31.739543",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ,{title:"凤凰城",content:"謿晗论坛",point:"118.104218|31.736779",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ,{title:"学府佳苑",content:"謿晗论坛",point:"118.099439|31.74461",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ,{title:"美之国",content:"謿晗论坛",point:"118.095468|31.739282",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ,{title:"水景花园",content:"謿晗论坛",point:"118.097049|31.735904",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ,{title:"四季花城",content:"謿晗论坛",point:"118.116794|31.740787",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ,{title:"滨河小区",content:"謿晗论坛",point:"118.119291|31.73919",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ,{title:"滨河安置房",content:"謿晗论坛",point:"118.121932|31.739712",isOpen:0,icon:{w:21,h:21,l:0,t:0,x:6,lb:5}}
+                  ];*/
+
+    //创建marker
+    function addMarker(){
+        for(var i=0;i<markerArr.length;i++){
+            var json = markerArr[i];
+            var p0 = json.lng;
+            var p1 = json.lat;
+            var point = new BMap.Point(p0,p1);
+            // var iconImg = createIcon({w:21,h:21,l:0,t:0,x:6,lb:5});
+            var iconImg = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {
+                // 指定定位位置
+                offset: new BMap.Size(10, 25),
+                // 当需要从一幅较大的图片中截取某部分作为标注图标时，需要指定大图的偏移位置
+                imageOffset: new BMap.Size(0, 0 - 11 * 25) // 设置图片偏移
+            });
+            var marker = new BMap.Marker(point,{icon:iconImg});
+            var iw = createInfoWindow(i);
+            var label = new BMap.Label(json.model,{"offset":new BMap.Size(5-6+10,-20)});
+            marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                borderColor:"#808080",
+                color:"#333",
+                cursor:"pointer"
+            });
+
+            (function(){
+                var index = i;
+                var _iw = createInfoWindow(i);
+                var _marker = marker;
+                _marker.addEventListener("click",function(){
+                    this.openInfoWindow(_iw);
+                });
+                _iw.addEventListener("open",function(){
+                    _marker.getLabel().hide();
+                })
+                _iw.addEventListener("close",function(){
+                    _marker.getLabel().show();
+                })
+                label.addEventListener("click",function(){
+                    _marker.openInfoWindow(_iw);
+                })
+                if(!!json.isOpen){
+                    label.hide();
+                    _marker.openInfoWindow(_iw);
+                }
+            })()
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i){
+        var json = markerArr[i];
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.m_sn + "'>" + json.m_sn + "</b><div class='iw_poi_content'>"+json.model+"</div>"+"<div class='iw_poi_content'>出水量:"+json.level+"桶</div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json){
+        var icon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(21,21),{imageOffset: new BMap.Size(0,0),infoWindowOffset:new BMap.Size(5+5,1),offset:new BMap.Size(6,21)})
+        return icon;
+    }
+
+    initMap();//创建和初始化地图
+</script>
+<include  file='public:footer'/>
+</html>

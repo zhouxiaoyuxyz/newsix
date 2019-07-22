@@ -1,8 +1,8 @@
 <?php  
 class ActivityAction extends CommonAction
 {
-    private $create_fields = array('cate_id', 'shop_id', 'tuan_id', 'city_id', 'area_id', 'business_id', 'title', 'intro', 'photo', 'thumb', 'details', 'price', 'bg_date', 'end_date', 'time', 'sign_end', 'addr', 'orderby', 'sign_num');
-    private $edit_fields = array('cate_id', 'shop_id', 'tuan_id', 'city_id', 'area_id', 'business_id', 'title', 'intro', 'photo', 'thumb', 'details', 'price', 'bg_date', 'end_date', 'time', 'sign_end', 'addr', 'orderby', 'sign_num');
+    private $create_fields = array('cate_id', 'shop_id', 'tuan_id', 'city_id', 'area_id', 'business_id', 'title', 'intro', 'photo', 'thumb', 'details', 'price', 'bg_date', 'end_date', 'time', 'sign_end', 'addr', 'orderby', 'sign_num','wuye_fanxian','shui_fanxian','third_profit');
+    private $edit_fields = array('cate_id', 'shop_id', 'tuan_id', 'city_id', 'area_id', 'business_id', 'title', 'intro', 'photo', 'thumb', 'details', 'price', 'bg_date', 'end_date', 'time', 'sign_end', 'addr', 'orderby', 'sign_num','wuye_fanxian','shui_fanxian','third_profit');
     public function index()
     {
         $Activity = D('Activity');
@@ -102,6 +102,18 @@ class ActivityAction extends CommonAction
         if (empty($data['price'])) {
             $this->baoError('价格不能为空');
         }
+        $data['wuye_fanxian'] = (int) ($data['wuye_fanxian'] * 100);
+        if($data['wuye_fanxian'] < 0 || $data['wuye_fanxian'] >= $data['price']*100){
+            $this->baoError('物业返现金额不正确！');
+        }
+        $data['shui_fanxian'] = (int) ($data['shui_fanxian'] * 100);
+        if($data['shui_fanxian'] < 0 || $data['shui_fanxian'] >= $data['price']*100){
+            $this->baoError('水费返现金额不正确！');
+        }
+        $data['third_profit'] = (int) ($data['third_profit'] * 100);
+        if($data['third_profit'] < 0 || $data['third_profit'] >= $data['price']*100){
+            $this->baoError('第三方分成金额不正确！');
+        }
         $data['bg_date'] = htmlspecialchars($data['bg_date']);
         if (empty($data['bg_date'])) {
             $this->baoError('活动开始时间不能为空');
@@ -176,6 +188,7 @@ class ActivityAction extends CommonAction
         $data['orderby'] = (int) $data['orderby'];
         $data['shop_id'] = (int) $data['shop_id'];
         $data['tuan_id'] = (int) $data['tuan_id'];
+        $data['sign_num'] = (int) $data['sign_num'];
         $shop = D('Shop')->find($data['shop_id']);
         $data['city_id'] = $shop['city_id'];
         $data['area_id'] = $shop['area_id'];
@@ -210,6 +223,19 @@ class ActivityAction extends CommonAction
         if (empty($data['price'])) {
            // $this->baoError('价格不能为空');
         }
+        $data['wuye_fanxian'] = (int) ($data['wuye_fanxian'] * 100);
+        if($data['wuye_fanxian'] < 0 || $data['wuye_fanxian'] >= $data['price']*100){
+            $this->baoError('物业返现金额不正确！');
+        }
+        $data['shui_fanxian'] = (int) ($data['shui_fanxian'] * 100);
+        if($data['shui_fanxian'] < 0 || $data['shui_fanxian'] >= $data['price']*100){
+            $this->baoError('水费返现金额不正确！');
+        }
+        $data['third_profit'] = (int) ($data['third_profit'] * 100);
+        if($data['third_profit'] < 0 || $data['third_profit'] >= $data['price']*100){
+            $this->baoError('第三方分成金额不正确！');
+        }
+
         $data['bg_date'] = htmlspecialchars($data['bg_date']);
         if (empty($data['bg_date'])) {
             $this->baoError('活动开始时间不能为空');

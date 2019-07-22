@@ -239,7 +239,7 @@ class TuancodeAction extends CommonAction{
                                 $obj->addMoney($detail['user_id'],$detail['real_money'],'抢购券退款:'.$detail['code']);
                             }
                             if($detail['real_integral'] >0){
-                                $obj->addIntegral($detail['user_id'],$detail['real_integral'],'抢购券退款:'.$detail['code']);
+                              feifa   $obj->addIntegral($detail['user_id'],$detail['real_integral'],'抢购券退款:'.$detail['code']);
                             }
                         }                
                     }

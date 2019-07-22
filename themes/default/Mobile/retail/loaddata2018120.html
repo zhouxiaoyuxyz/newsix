@@ -1,0 +1,204 @@
+<script>
+    function daojishi(id) {
+        var t = Math.floor($("#" + id).attr('rel'));
+        t--;
+        var d = Math.floor(t / 60 / 60 / 24);
+        var h = Math.floor(t / 60 / 60 % 24);
+        var m = Math.floor(t / 60 % 60);
+        var s = Math.floor(t % 60);
+        if (d < 10) {
+            d = '0' + d;
+        }
+        if (h < 10) {
+            h = '0' + h;
+        }
+        if (m < 10) {
+            m = '0' + m;
+        }
+        if (s < 10) {
+            s = '0' + s;
+        }
+        $("#" + id).attr('rel', t);
+        $("#" + id).html(d + '天' + h + '时' + m + '分' + s);
+    }
+</script>
+
+
+
+<foreach name="shops" item="var" key="k">
+    <div class="tuan-shop">
+        <div class="shop-con">
+            <div class="shop-name">
+
+                <a title="<{$var.shop_name}>" href="<{:U('shop/detail',array('shop_id'=>$var['shop_id']))}>">
+                    <!--<span class="triangle_border_right"></span>-->
+                    <{$var.shop_name}>
+                    <!--<span class="triangle_border_left"></span>-->
+                </a>
+
+            </div>
+            <div class="shop-tags">
+                <img class="distance_icon" src="/static/default/wap/image/tuan/distance.png" alt="" draggable="false">
+                <dis class="shop-local"><{$var.d}></dis>
+            </div>
+        </div>
+
+        <div class="main-tuan">
+            <ul>
+                <div class="carousel slide">
+
+
+                    <!-- 轮播（Carousel）项目 -->
+                    <div class="carousel-inner">
+                        <foreach name="list" item="item" key="key">
+                            <eq name="item.shop_id" value="$var['shop_id']">
+                                <div class="item temp-tuan-product">
+                                    <php>
+                                        if($item['bg_date'] <= $today && $item['end_date'] > $today){
+                                        $tt = strtotime($item['end_date'])-time();
+                                        $item['djs_time'] = $tt;
+                                        $item['djs_str'] = '距结束';
+
+                                        }elseif($item['bg_date'] >$today){
+                                        $tt = strtotime($item['bg_date'])-time();
+                                        $item['djs_time'] = $tt;
+                                        $item['djs_str'] = '距开始';
+
+                                        }
+                                    </php>
+                                    <script type="text/javascript" language="javascript">
+                                        setInterval(function () {
+                                            daojishi("daojishi_<{$item.tuan_id}>");
+                                        }, 1000);
+                                    </script>
+
+                                    <li>
+                                        <a class="line" href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+
+                                            <div class="container">
+                                                <img class="x4" src="__ROOT__/attachs/<{$item.photo}>"/>
+                                                <div class="des x8">
+                                                    <if condition="$item['mobile_fan'] gt 0">
+                                                        <img class="tuan_zaijian" src="/static/default/wap/image/tuan/zaijian.png" alt="" >
+                                                        <span class="zaijian_text">再减<br><{$item['mobile_fan']/100}>元</span>
+
+                                                    </if>
+                                                    <h5><{$item.title}></h5>
+
+                                                    <p class="intro">
+                                                        <{$item['djs_str']}>
+                                                        <span id="daojishi_<{$item.tuan_id}>" rel="<{$item['djs_time']}>">00天00时00分00</span>
+
+                                                    </p>
+                                                    <p class="info">
+                                                        <span><em><{:round($item['tuan_price']/100,2)}>元</em></span>
+                                                        <!--<del>¥<{:round($item['price']/100,2)}></del>-->
+                                                        <if condition="$item['num'] gt 0">
+                                                            <span class="text-little float-right badge bg-yellow margin-small-top padding-right remaining-percent">剩余<{:round($item['num']/($item['sold_num'] + $item['num']),2)*100}>%</span>
+                                                            <else/>
+                                                            <span class="text-little float-right badge bg-yellow margin-small-top padding-right remaining-percent">已售罄</span>
+                                                        </if>
+
+                                                        <!--
+                                                        <if condition="$item['mobile_fan'] gt 0">
+                                                            <span class="text-little float-right badge bg-yellow margin-small-top padding-right another-cut">再减<{$item['mobile_fan']/100}>元</span>
+                                                            <else/>
+                                                        </if>
+
+                                                        -->
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                        </a>
+                                    </li>
+                                </div>
+                            </eq>
+
+                        </foreach>
+                    </div>
+
+
+                    <!-- 轮播（Carousel）导航 -->
+                    <a class="carousel-control left prev-slide">&lsaquo;
+                    </a>
+                    <a class="carousel-control right next-slide">&rsaquo;
+                    </a>
+                    <script>
+                        $(".carousel-inner .temp-tuan-product:first-child").addClass("active");
+                        // 循环轮播到上一个项目
+
+                        // 循环轮播到下一个项目
+                        $(".next-slide").click(function(){
+                            $(this).parent('.carousel').carousel('next')
+                        });
+                        $(".prev-slide").click(function(){
+                            $(this).parent('.carousel').carousel('prev')
+                        });
+                    </script>
+
+                    <!--
+                    <php>
+                        if($item['bg_date'] <= $today && $item['end_date'] > $today){
+
+                        $tt = strtotime($item['end_date'])-time();
+                        $item['djs_time'] = $tt;
+                        $item['djs_str'] = '距结束';
+
+                        }elseif($item['bg_date'] >$today){
+                        $tt = strtotime($item['bg_date'])-time();
+                        $item['djs_time'] = $tt;
+                        $item['djs_str'] = '距开始';
+
+                        }
+                    </php>
+                    <script type="text/javascript" language="javascript">
+                        setInterval(function () {
+                            daojishi("daojishi_<{$item.tuan_id}>");
+                        }, 1000);
+                    </script>
+
+
+                    <li>
+                        <a class="line" href="<{:U('tuan/detail',array('tuan_id'=>$item['tuan_id']))}>">
+
+                            <div class="container">
+                                <img class="x4" src="__ROOT__/attachs/<{$item.photo}>"/>
+                                <div class="des x8">
+                                    <h5><{$item.title}></h5>
+                                    <p class="intro">
+                                        <{$item['djs_str']}>
+                                        <span id="daojishi_<{$item.tuan_id}>" rel="<{$item['djs_time']}>">00:00:00:00</span>
+
+                                        <if condition="$item['num'] gt 0">
+                                            <span class="text-little float-right badge bg-yellow margin-small-top padding-right remaining-percent">剩余<{:round($item['num']/($item['sold_num'] + $item['num']),2)*100}>%</span>
+                                            <else/>
+                                            <span class="text-little float-right badge bg-yellow margin-small-top padding-right remaining-percent">已售罄</span>
+                                        </if>
+
+                                    </p>
+                                    <p class="info">
+                                        <span>￥<em><{:round($item['tuan_price']/100,2)}></em></span>
+                                        <del>¥<{:round($item['price']/100,2)}></del>
+
+                                        <if condition="$item['mobile_fan'] gt 0">
+                                            <span class="text-little float-right badge bg-yellow margin-small-top padding-right another-cut">再减<{$item['mobile_fan']/100}>元</span>
+                                            <else/>
+                                        </if>
+
+                                    </p>
+                                </div>
+                            </div>
+
+                        </a>
+                    </li>
+                    -->
+
+
+                </div>
+
+
+            </ul>
+        </div>
+    </div>
+</foreach>

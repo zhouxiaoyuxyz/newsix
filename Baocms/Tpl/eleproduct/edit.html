@@ -59,12 +59,33 @@
 
                         </script>
                     </td>
-                </tr><tr>
+                </tr>
+                <tr>
                     <td class="lfTdBt">价格：</td>
                     <td class="rgTdBt">
                         <input type="text" name="data[price]" value="<{:round($detail['price']/100,2)}>" class="manageInput" />
 
                     </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">物业费：</td>
+                    <td class="rgTdBt">
+                        <input type="text" name="data[wuye_fanxian]" value="<{:round($detail['wuye_fanxian']/100,2)}>" class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">水费：</td>
+                    <td class="rgTdBt">
+                        <input type="text" name="data[shui_fanxian]" value="<{:round($detail['shui_fanxian']/100,2)}>" class="manageInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lfTdBt">第三方分成比例：</td>
+                    <td class="rgTdBt">
+                        <input type="text" name="data[third_profit]" value="<{:round($detail['third_profit']/100,2)}>" class="manageInput" />
+                        <code>如90，物业收入占比90%</code>
+                    </td>
+
                 </tr>
                 
                 <tr>

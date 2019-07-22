@@ -19,14 +19,14 @@ class MoneyAction extends CommonAction
             $this->error('该支付方式不存在');
         }
         $logs = array(
-			'user_id' => $this->uid, 
-			'type' => 'money', 
-			'code' => $code, 
-			'order_id' => 0, 
-			'need_pay' => $money, 
-			'create_time' => NOW_TIME, 
-			'create_ip' => get_client_ip()
-		);
+            'user_id' => $this->uid,
+            'type' => 'money',
+            'code' => $code,
+            'order_id' => 0,
+            'need_pay' => $money,
+            'create_time' => NOW_TIME,
+            'create_ip' => get_client_ip()
+        );
         $logs['log_id'] = D('Paymentlogs')->add($logs);
         $this->assign('button', D('Payment')->getCode($logs));
         $this->assign('money', $money);

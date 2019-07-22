@@ -97,6 +97,18 @@ class MoneyAction extends CommonAction{
         $Page = new Page($count, 16);
         $show = $Page->show();
         $list = $Usermoneylogs->where($map)->order(array('log_id' => 'desc'))->limit($Page->firstRow . ',' . $Page->listRows)->select();
+        foreach ($list as $key=>$item ){
+                $intro=mb_substr( $item['intro'], 0, 6, 'utf-8' );
+                echo 'intro'.$intro;
+                if($intro=='用户买单结算'){
+                    $datas=explode(":",$item['intro']);
+                    $order_id=$datas[1];
+                    $breaks=D('Breaksorder')->find($order_id);
+                    $user=D('Users')->find($breaks['user_id']);
+                    $list[$key]['user']=$user['nickname'];
+                }
+
+        }
         $this->assign('list', $list);
         $this->assign('page', $show);
         $this->display();

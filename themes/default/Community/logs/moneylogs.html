@@ -1,0 +1,45 @@
+<include  file='public:header'/>
+<script src="__PUBLIC__/js/my97/WdatePicker.js"></script>
+<style>
+    td{border:solid 1px #e1e6eb;}
+</style>
+<div class="sjgl_lead">
+    <ul>
+        <li><a href="javascript:void(0);">物业分成明细--包括水、优惠买单、团购、智能零售、周末去哪及其他活动。</a></li>
+    </ul>
+</div>
+<div class="tuan_content">
+    <form method="post" action="<{:U('logs/moneylogs')}>">
+        <div class="radius5 tuan_top">
+            <div class="tuan_top_t">
+                <div class="left tuan_topser_l">
+                    开始时间：<input type="text" class="radius3 tuan_topser"  name="bg_date" value="<{$bg_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+                    结束时间：<input type="text" class="radius3 tuan_topser"  name="end_date" value="<{$end_date|default=''}>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'});"/>
+                    <input type="submit" style="margin-left:10px;" class="radius3 sjgl_an tuan_topbt" value="搜 索"/>
+                </div>
+            </div>
+        </div>
+    </form>
+    <table class="tuan_table" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr style="background-color:#eee;">
+            <td>日志编号</td>
+            <td>备注</td>
+            <td>金额(单位：元)</td>
+            <td>订单时间</td>
+        </tr>
+        <tr>
+            <td colspan="6">总计：<{:round($moneysum/100,2)}>元</td>
+        </tr>
+        <foreach name="list" item="var">
+            <tr>
+                <td><{$var.log_id}></td>
+                <td><{$var.intro}></td>
+                <td><{:round($var['money']/100,2)}></td>
+                <td><{$var.create_time|date='Y-m-d H:i:s',###}></td>
+            </tr>
+        </foreach>
+    </table>
+    <{$page}>
+</div>
+
+<include  file='public:footer'/>
